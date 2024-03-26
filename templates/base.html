@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon appli</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+
+    {% block css %}{% endblock %}
+</head>
+<body>
+
+    <nav id="navbar">
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" width="50">
+        <ul id="navbar-items">
+            <li class="navbar-item">
+                <a href="{{ url_for('index') }}">Accueil</a>
+            </li>
+
+            <li class="navbar-item login-logout">
+                {% if session['username'] %}
+                    <a href="{{ url_for('logout') }}">Se déconnecter</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}">Se connecter</a>
+                {% endif %}
+            </li>
+        </ul> 
+    </nav>
+
+    
+    <div id="container">
+        {% block content %}{% endblock %}
+    </div>
+
+<!-- <footer>
+    <ul>
+        <li>Liens rapides vers les pages principales du site.</li>
+        <li>Partenaires</li>
+        <li>Données réglementées ("Conforme au RGPD")</li>
+    </ul>
+</footer> -->
+<div class="footer-dark">
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-md-4 item">
+                    <h3>Vous & Nous</h3>
+                    <ul>
+                        <li>Besoin d'un peu d'aide ?</li>
+                    </ul>
+                </div>
+                <div class="col-sm-6 col-md-4 item">
+                        <h3>Navigation</h3>
+                    <ul>
+                        <li><a href="{{ url_for('index') }}">Accueil</a></li>
+                        <li><a href="{{ url_for('dashboard') }}">Espace Membre</a></li>
+                        <li><a href="{{ url_for('recherche') }}">Rechercher une école</a></li>
+                        <li><a href="{{ url_for('partenaires') }}">Partenaires</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-6 col-md-4 item">
+                    <h3>Légal</h3>
+                    <ul>
+                        <li><a href="#">Protection des données</a></li>
+                        <li><a href="#">Mentions légales</a></li>
+                        <li><a href="#">Conditions générales d'utilisation</a></li>
+                    </ul>
+                </div>
+                <div class="col-6d-6 item te4t">
+                    <h3>OpenEduc</h3>
+                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est repellendus libero, minus consectetur quam nesciunt corrupti? Hic iste, blanditiis quis recusandae omnis perspiciatis nesciunt quaerat ea possimus, perferendis eius quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam vitae ad, aliquam porro mollitia dolor dolorem aperiam ratione voluptas commodi minima vel. Ducimus fugiat quia provident alias mollitia, tempore beatae? lorem</p>
+                </div>
+                <div class="col item social"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-snapchat"></i></a><a href="#"><i class="icon ion-social-instagram"></i></a></div>
+            </div>
+            <p class="copyright">AlsaNum © 1981-2024</p>
+        </div>
+    </footer>
+</div>
+
+
+</body>
+</html>

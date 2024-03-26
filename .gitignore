@@ -1,0 +1,35 @@
+# Fichiers de cache Python
+__pycache__/
+
+# Fichier d'environnement
+.env
+
+# Répertoire virtuel Python
+env/
+
+# Fichiers de logs
+*.log
+
+# Fichiers de configuration spécifiques à votre environnement
+instance/
+
+# Fichiers générés à l'exécution
+*.pyc
+
+# Répertoire contenant les fichiers statiques générés à l'exécution
+static/uploads/
+
+# Répertoire contenant les fichiers temporaires générés à l'exécution
+static/tmp/
+
+# Répertoire contenant les fichiers de cache frontend
+static/.webassets-cache/
+
+# Fichiers générés par votre IDE ou éditeur de texte
+.idea/
+.vscode/
+*.pyc
+
+# Fichiers de sauvegarde
+*~
+*.bak

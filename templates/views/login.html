@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="login-container">
+        <h2>Connexion</h2>
+        <form method="POST" action="{{ url_for('login') }}">
+            <input type="text" name="username" class="login-input" placeholder="Nom d'utilisateur" required>
+            <input type="password" name="password" class="login-input" placeholder="Mot de passe" required>
+            <button type="submit" class="login-button">Se Connecter</button>
+        </form>
+    </div>
+
+
+    <br><br><br><br><br><hr>
+    <h4>TÂCHES</h4>
+    <ul>
+        <li>identifiant + mdp</li>
+        <li> Accès :
+            <ul>
+                <li>secrétaire général</li>
+                <li>référent local</li>
+            </ul>
+        </li>
+    </ul>
+    <p>Créer un compte ? Veuillez nous contactez ici : devenir-referent@openeduc.fr</p>
+    <p>(formulaire de contact ?)</p>
+
+{% endblock %}

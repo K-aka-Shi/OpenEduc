@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <!-- GARDER CA POUR LE DASHBOARD
+    <p>Bonjour {{ session['username']|title if session['username'] else 'invité'}}, bienvenue sur mon site !</p> -->
+    
+    <h1>Accueil</h1>
+
+    <p>Bonjour <strong>{{ session['username']|title if session['username'] else 'invité'}}</strong> !</p>
+
+    <hr>
+
+    <h2>Introduction à la mission de l'APEA et du projet</h2>
+    
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque culpa repudiandae sint quaerat id beatae debitis tempora cumque animi aliquid, quidem repellendus nostrum quis! Ad, veniam! Nesciunt provident nobis nostrum.
+    Atque expedita sint, sit magnam commodi eveniet consequatur amet nihil perferendis iure non distinctio asperiores corporis aliquid nesciunt quas? Ea, repellendus corporis magni atque numquam nulla architecto eligendi ullam voluptatibus.
+    Facilis eveniet molestiae tempora maxime qui quo fuga quibusdam, sit ad quidem! Molestias itaque, velit explicabo repellendus illo, fuga perspiciatis a laudantium asperiores iure alias dolorum eligendi! Asperiores, quidem architecto?
+    Earum, accusantium quaerat suscipit sunt cumque quis fugit eius doloribus provident doloremque atque mollitia voluptatem facilis minima, iure esse debitis. Dolor impedit iure, cumque deserunt aut exercitationem itaque reiciendis repellat!</p>
+
+    <br><br>
+    <h2>Présentation de la plateforme</h2>
+
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio officiis ex hic iure veniam voluptates, rerum amet ipsum totam repudiandae cupiditate a natus molestias similique quasi porro consectetur. Expedita, molestiae.
+    Accusantium adipisci provident consequatur id. Placeat similique saepe eaque officiis nobis laborum ab itaque a. Fugiat sapiente eos quos laudantium, quod, eveniet cum, tempora expedita perferendis possimus beatae saepe alias.
+
+    <br><br>
+    <h3>Sous-Titre 1</h3>
+
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore, mollitia architecto inventore beatae esse harum praesentium accusamus, enim explicabo incidunt quasi assumenda odit a dolore dignissimos aut laudantium, qui natus!
+    Tempora dignissimos similique pariatur praesentium consectetur, laboriosam adipisci! Tempore natus quibusdam perferendis aut omnis ipsam, reprehenderit, dolorem cupiditate facilis voluptatem eaque vitae maxime, exercitationem dolore et possimus labore dolorum molestias.
+    Eius assumenda veniam eligendi, minima quas harum eveniet dicta aut, dolor dolorum eum? Sequi facilis itaque enim magnam quasi sunt dolorem, nulla ducimus, nam delectus dicta animi unde vero ipsam.
+    Animi quasi officia dolor odit veniam. Ipsa doloremque laboriosam ratione aperiam suscipit, in provident quae delectus! Quia assumenda asperiores laboriosam ratione, eaque, earum animi aspernatur sit eligendi, ut nulla magnam.
+
+    <br><br>
+    <h3>Sous-Titre 2</h3>
+
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto a laboriosam quae sit soluta, odio exercitationem voluptate, repudiandae totam ut odit quisquam quos? Repudiandae recusandae nobis cumque. Itaque, reprehenderit at!
+    Voluptatum illum, necessitatibus possimus ab animi nemo quam et quisquam? Rerum voluptates, assumenda expedita voluptas enim quos id architecto quaerat inventore, mollitia pariatur nam, ab tempora nihil possimus magnam quisquam.
+    Non dolore fugit inventore minima, nesciunt suscipit quis voluptates repellendus et soluta obcaecati sunt ab, asperiores, aspernatur quo hic mollitia accusamus error! Nihil aspernatur repudiandae iusto rerum, non velit omnis?
+    Eos necessitatibus odio veritatis recusandae facilis sed maiores omnis harum ratione, numquam, repellendus quos reprehenderit. Debitis odio ad repellendus itaque animi quis, tenetur ullam dolor voluptatem rerum soluta ab numquam!
+{% endblock %}

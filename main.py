@@ -54,8 +54,6 @@ def search_user(nom, mdp) :
 
 
 
-
-
 @app.route("/dashboard")
 def dashboard() :
     print(session)

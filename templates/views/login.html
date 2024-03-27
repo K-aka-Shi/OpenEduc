@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
 {% block content %}
 
     <div class="login-container">
@@ -12,7 +16,7 @@
     </div>
 
 
-    <br><br><br><br><br><hr>
+    <br><br><br><br><br><br><br><br><br><br><br><br><hr>
     <h4>TÂCHES</h4>
     <ul>
         <li>identifiant + mdp</li>

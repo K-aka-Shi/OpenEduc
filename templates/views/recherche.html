@@ -1,11 +1,34 @@
 {% extends "base.html" %}
 
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/recherche.css') }}">
+{% endblock %}
+
+
 {% block content %}
 
     <h1>Rechercher une école</h1>
 
-    <p>champ de saisie</p>
-    <p>(voir sur <mark>notion > tâches > page recherche</mark> des exemples d'organisation du champ)</p>
+    <form action="{{url_for('recherche')}}" method="POST">
+        <p>
+            <label for="nom">Saisir un nom : </label>
+            <input type="text" name="nom" id="nom" required autofocus>
+            <input type="submit" value="Chercher">
+        </p>
+    </form>
+
+    {% if eleves is not none %}
+        {% if eleves|length == 0 %}
+            <p>Aucun élève ne correspond à la recherche.</p>
+        {% else %}
+            <p>Voici les élèves trouvés :</p>
+            <ul>
+                {% for eleve in eleves %}
+                    <li>{{ eleve }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endif %}
 
 
     <br><br><br><br><br><br><br><br><br><b><b></b></b>

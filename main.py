@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, redirect, request, session, flash
 from dotenv import load_dotenv
 import os
+from db_requetes import *
 
 
 app = Flask(__name__)
@@ -73,10 +74,20 @@ def logout() :
 #    RECHERCHE    #
 ###################
 
-@app.route("/recherche")
+@app.route("/recherche", methods=["POST", "GET"])
 def recherche() :
-    return render_template("views/recherche.html")
+    if request.method == "POST":
+        # si le formulaire est envoyé
+        data = request.form
+        saisie = data.get('nom')
+        print("Saisie :",saisie)
+        resultat = chercher_ecole(saisie)
+        print(resultat)
 
+    else:
+        # méthode GET
+        resultat = None
+    return render_template("views/recherche.html", eleves=resultat)
 
 ###################
 #    RECHERCHE    #

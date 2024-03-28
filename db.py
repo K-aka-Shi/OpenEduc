@@ -22,7 +22,7 @@ cur.execute("""
 INSERT INTO Ecole (nomEcole, Adresse, Ville, CodePostal, nbEleves, Telephone, Email, cycleScolaire)
 VALUES ('ecole guynemer 2', '123 Rue de l Ecole', 'VilleABC', '12345', 300, '0123456789', 'ecoleabc@example.com', 'elementaire');
             """)
-conn.commit()            
+conn.commit()
     
 
 conn.close()

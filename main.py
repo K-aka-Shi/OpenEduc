@@ -81,13 +81,15 @@ def recherche() :
         data = request.form
         saisie = data.get('nom')
         print("Saisie :",saisie)
-        resultat = chercher_ecole(saisie)
-        print(resultat)
-
+        resultats = chercher_ecole(saisie)
+        tab = [res for res in resultats]
+        print(tab)
+        # resultats = [1:]
+        print(resultats)
     else:
         # méthode GET
-        resultat = None
-    return render_template("views/recherche.html", eleves=resultat)
+        resultats = None
+    return render_template("views/recherche.html", resultats=resultats)
 
 ###################
 #    RECHERCHE    #

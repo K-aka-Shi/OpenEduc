@@ -17,14 +17,14 @@
         </p>
     </form>
 
-    {% if eleves is not none %}
-        {% if eleves|length == 0 %}
+    {% if resultats is not none %}
+        {% if resultats|length == 0 %}
             <p>Aucun élève ne correspond à la recherche.</p>
         {% else %}
             <p>Voici les élèves trouvés :</p>
             <ul>
-                {% for eleve in eleves %}
-                    <li>{{ eleve }}</li>
+                {% for resultat in resultats %}
+                    <li>{{ resultat }}</li>
                 {% endfor %}
             </ul>
         {% endif %}

@@ -1,13 +1,63 @@
 body {
-    background-color:aliceblue;
-    margin: 0;
+  background-color:aliceblue;
+  margin: 0;
 }
+
+/* Style du titre */
+h1 {
+  font-size: 40px;
+  margin-bottom: 20px;
+  color: #0A4191;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Style des sous-titres */
+h2 {
+  font-size: 30px;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  color: #F9A825;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h3 {
+  font-size: 25px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Style des paragraphes */
+p {
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+/* Style des éléments forts */
+strong {
+  font-weight: bold;
+}
+
+/* Style de la séparation */
+hr {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  border: 0;
+  border-top: 1px solid #ccc;
+}
+
+/* _________________________ */
+/*          FOOTER           */
+/* _________________________ */
 
 #navbar {
     padding: 10px;
     display: flex;
     align-items: center;
-    background-color: #F9A825;
+    background-color: black;
     font-size: 1.1em;
     color: #333;
 }
@@ -31,7 +81,7 @@ body {
 .navbar-item a {
     text-decoration: none;
     display: block;
-    color: #333;
+    color: #F9A825;
     font-weight: bold;
 }
 

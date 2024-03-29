@@ -2,6 +2,21 @@ import sqlite3
 
 bdd_name = "openeduc.db"
 
+
+def init_database() :
+    # Tables
+    creer_ecole()
+    creer_utilisateur()
+    creer_HistoriqueModification()
+    creer_personnel()
+    creer_classe()
+    # Triggers
+    creer_triggers_utilisateur()
+    creer_triggers_personnel()
+    creer_triggers_classe()
+    creer_triggers_ecole()
+
+
 # ____________________________________________________________________________________________________
 #                                       CREATE TABLE
 # ____________________________________________________________________________________________________
@@ -14,7 +29,7 @@ def creer_ecole():
     cur.execute("DROP TABLE IF EXISTS Ecole")
     cur.execute("""
 CREATE TABLE IF NOT EXISTS Ecole (
-idEcole INT AUTO_INCREMENT PRIMARY KEY,
+idEcole INTEGER PRIMARY KEY,
 nomEcole VARCHAR(255),
 Adresse VARCHAR(255),
 Ville VARCHAR(288),
@@ -36,11 +51,11 @@ def creer_utilisateur():
     cur.execute("DROP TABLE IF EXISTS Utilisateur")
     cur.execute("""
 CREATE TABLE IF NOT EXISTS Utilisateur (
-idUtilisateur INT AUTO_INCREMENT NOT NULL PRIMARY KEY ,
+idUtilisateur INTEGER PRIMARY KEY ,
 Identifiant VARCHAR(255),
 MotDePasse VARCHAR(255),
 isAdmin BOOLEAN,
-idEcole INT NOT NULL,
+idEcole INT,
 FOREIGN KEY (idEcole) REFERENCES Ecole(idEcole)
 );
                 """)
@@ -57,9 +72,9 @@ def creer_HistoriqueModification():
     cur.execute("DROP TABLE IF EXISTS HistoriqueModification")
     cur.execute("""
 CREATE TABLE IF NOT EXISTS HistoriqueModification (
-idHistorique INT AUTO_INCREMENT NOT NULL  PRIMARY KEY,
+idHistorique INTEGER PRIMARY KEY,
 idUtilisateur INT,
-idEcole INT NOT NULL,
+idEcole INT,
 dateModification TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 champsModifies VARCHAR(255),
 ancienneValeur VARCHAR(255),
@@ -79,7 +94,7 @@ def creer_personnel():
     cur.execute("DROP TABLE IF EXISTS Personnel")
     cur.execute("""
 CREATE TABLE Personnel (
-idPersonnel INT AUTO_INCREMENT PRIMARY KEY ,
+idPersonnel INTEGER PRIMARY KEY ,
 Nom VARCHAR(50),
 Prenom VARCHAR(50),
 Sexe TEXT CHECK( Sexe IN ('H','F') ),
@@ -104,7 +119,7 @@ def creer_classe():
     cur.execute("DROP TABLE IF EXISTS Classe")
     cur.execute("""
 CREATE TABLE Classe (
-idClasse INT AUTO_INCREMENT PRIMARY KEY,
+idClasse INTEGER PRIMARY KEY,
 Effectif INT,
 Moyenne FLOAT,
 cycleScolaire TEXT CHECK( cycleScolaire IN ('CP','CE1','CE2','CM1','CM2','6E','5E','4E','3E','1RE','2NDE','TALE') ),
@@ -151,7 +166,7 @@ def creer_triggers_utilisateur():
     AFTER INSERT ON Utilisateur
     BEGIN
         INSERT INTO HistoriqueModification (idUtilisateur, idEcole, champsModifies, ancienneValeur, nouvelleValeur)
-        VALUES (NEW.idUtilisateur, NEW.idEcole, 'Insertion Utilisateur', NULL, NULL);
+        VALUES (NEW.idUtilisateur, NEW.idEcole, 'Insertion Utilisateur', NULL, NEW.identifiant || ' ' || NEW.MotDePasse);
     END;
     """)
     # Trigger pour la mise à jour

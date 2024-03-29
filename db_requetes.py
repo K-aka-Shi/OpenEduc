@@ -2,9 +2,9 @@ import sqlite3
 
 bdd_name = "openeduc.db"
 
-# ____________________
-#     REQUETES
-# ____________________
+# ____________________________________________________________________________________________________
+#                                       CREATE TABLE
+# ____________________________________________________________________________________________________
 
 # ECOLE
 
@@ -117,13 +117,16 @@ FOREIGN KEY (cycleScolaire) REFERENCES Ecole(cycleScolaire)
                 """)
     conn.close()
 
+# ____________________________________________________________________________________________________
+#                                       SELECT                                                       |
+# ___________________________________________________________________________________________________|
 
 def chercher_ecole(saisie) :
     conn = sqlite3.connect(bdd_name)
     cur = conn.cursor()
     res = cur.execute("""
-        SELECT nomEcole,Adresse,Ville,CodePostal,nbEleves,Telephone,Email,cycleScolaire FROM Ecole WHERE nomEcole LIKE ?
-        """, ('%' + saisie + '%',)
+        SELECT nomEcole,Adresse,Ville,CodePostal,nbEleves,Telephone,Email,cycleScolaire
+        FROM Ecole WHERE nomEcole LIKE ?""", ('%' + saisie + '%',)
     )
     ecole = res.fetchall()
     print("Resultat requete :",ecole)
@@ -131,9 +134,11 @@ def chercher_ecole(saisie) :
     return ecole
 
 
-# ____________________
-#     TRIGGERS
-# ____________________
+
+
+# ____________________________________________________________________________________________________
+#                                         TRIGGERS
+# ____________________________________________________________________________________________________
     
 
 # Utilisateur

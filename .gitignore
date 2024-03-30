@@ -2,7 +2,7 @@
 __pycache__/
 
 # Fichier d'environnement
-.env
+# .env
 
 # Répertoire virtuel Python
 env/

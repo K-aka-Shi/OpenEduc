@@ -12,8 +12,11 @@ init_database()
 # Ecole
 cur.execute("""
 INSERT INTO Ecole (nomEcole, Adresse, Ville, CodePostal, nbEleves, Telephone, Email, cycleScolaire)
-VALUES ('ecole guynemer 2', '123 Rue de l Ecole', 'VilleABC', '12345', 300, '0123456789', 'ecoleabc@example.com', 'elementaire');
+VALUES ('École Guynemer II', '16 Rue de Châteauroux', 'Strasbourg', '67000', 1000, '0388344130', 'ce.0670384D@ac-strasbourg.fr', 'elementaire'),
+        ('Ecole du Centre', "4 rue de l'Ecole", 'Lingolsheim', '67380', 200, '0388780432', 'ce.0671418C@ac-strasbourg.fr', 'elementaire');
             """)
+
+
 # Admin
 cur.execute("""
 INSERT INTO Utilisateur (identifiant, MotDePasse, isAdmin) 

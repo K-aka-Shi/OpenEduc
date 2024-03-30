@@ -16,11 +16,9 @@ def index():
 #                   NAVIGATION                    
 # _________________________________________________
 
-
-# utilisateurs = [
-#     {"nom" : "admin", "password" : "admin"},
-#     {"nom" : "nidal", "password" : "azerty"}
-#     ]
+###################
+#    CONNEXION    #
+###################
 
 @app.route("/login", methods=["POST", "GET"])
 def login() :
@@ -29,30 +27,17 @@ def login() :
         username = data.get("username")
         password = data.get("password")
         utilisateur = chercher_utilisateur(username,password)
-        print("RESULTAT RECHERCHE :",utilisateur)
         if utilisateur != [] :
             utilisateur = utilisateur[0]
             session["username"] = utilisateur[1]
-            print(session["username"])
-            return render_template("views/dashboard.html", isAdmin=utilisateur[3])
-            # return redirect(url_for('dashboard'))
+            session["statut"] = utilisateur[3]
+            print(session.get("username"), session.get("statut"))
+            return redirect(url_for('dashboard'))
         else :
             print("utilisateur inconnu")
             return redirect(request.url)
     else :
         return render_template("views/login.html")
-
-
-
-
-
-@app.route("/dashboard")
-def dashboard() :
-    print(session)
-    if session.get("username") is not None :
-        return render_template("views/dashboard.html")
-    return redirect(url_for('login'))
-
 
 @app.route("/logout")
 def logout() :
@@ -60,6 +45,26 @@ def logout() :
     return redirect(url_for('index'))
 
 
+###################
+#    DASHBOARD    #
+###################
+
+@app.route("/dashboard")
+def dashboard() :
+    username = session.get("username")
+    statut = session.get("statut")
+    if username is not None :
+        if statut == 1 :
+            ecoles = chercher_ecole_formCreerReferent()
+            print(ecoles)
+        return render_template("views/dashboard.html",
+                               isAdmin=statut,
+                               ecoles = ecoles)
+    return redirect(url_for('login'))
+
+@app.route("/ajouter_referent", methods=["POST"])
+def addReferent() :
+    return redirect(url_for('dashboard'))
 
 ###################
 #    RECHERCHE    #
@@ -108,3 +113,10 @@ def mentionsLegales() :
 def cgu() :
     return render_template("views/legal/cgu.html")
 
+
+
+
+
+@app.errorhandler(404)
+def not_found(e):
+  return render_template('error404.html'), 404

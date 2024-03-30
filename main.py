@@ -82,9 +82,6 @@ def recherche() :
         resultats = None
     return render_template("views/recherche.html", resultats=resultats)
 
-###################
-#    RECHERCHE    #
-###################
 
 @app.route("/partenaires")
 def partenaires() :
@@ -95,3 +92,19 @@ def partenaires() :
 # _________________________________________________
 #                   LEGAL                    
 # _________________________________________________
+
+
+@app.route("/protection-des-donnees")
+def protectionDesDonnees() :
+    return render_template("views/legal/protection-des-donnees.html")
+
+
+@app.route("/mentions-legales")
+def mentionsLegales() :
+    return render_template("views/legal/mentions-legales.html")
+
+
+@app.route("/cgu")
+def cgu() :
+    return render_template("views/legal/cgu.html")
+

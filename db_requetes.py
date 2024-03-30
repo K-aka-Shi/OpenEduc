@@ -22,7 +22,7 @@ def init_database() :
 # ____________________________________________________________________________________________________
 
 # ECOLE
-
+# TODO: école publique/privé ?
 def creer_ecole():
     conn = sqlite3.connect(bdd_name)
     cur = conn.cursor()
@@ -178,8 +178,36 @@ def chercher_ecole_formCreerReferent():
 # ____________________________________________________________________________________________________
 #                                       INSERT                                                       |
 # ___________________________________________________________________________________________________|
+def generer_mdp() :
+    import secrets, string, random
+
+    letters = string.ascii_letters
+    digits = string.digits
+    special_chars = string.punctuation
+    selection_list = letters + digits + special_chars
+    password_len = 10
+
+    while True:
+        password = ''
+        for i in range(password_len):
+            password += ''.join(secrets.choice(selection_list))
+        if (any(char in special_chars for char in password) and 
+        sum(char in digits for char in password)>=2):
+            break
+    print(password)
+    return(password)
 
 
+def inserer_referent(identifiant, idEcole):
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    password = generer_mdp()
+    cur.execute("""
+        INSERT INTO Utilisateur (identifiant, MotDePasse, isAdmin, idEcole) 
+        VALUES (:identifiant, :mdp, false, :idEcole);
+            """, {'identifiant':identifiant,'mdp':password,'idEcole':idEcole})
+    conn.commit()
+    conn.close()
 
 # ____________________________________________________________________________________________________
 #                                         TRIGGERS

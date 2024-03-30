@@ -64,6 +64,10 @@ def dashboard() :
 
 @app.route("/ajouter_referent", methods=["POST"])
 def addReferent() :
+    data = request.form
+    identifiant = data.get("identifiant")
+    idEcole = data.get("idEcole")
+    inserer_referent(identifiant,idEcole)
     return redirect(url_for('dashboard'))
 
 ###################

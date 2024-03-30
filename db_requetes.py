@@ -137,14 +137,12 @@ FOREIGN KEY (cycleScolaire) REFERENCES Ecole(cycleScolaire)
 # ___________________________________________________________________________________________________|
 
 
-def chercher_utilisateur() :
+def chercher_utilisateur(username,password) :
     conn = sqlite3.connect(bdd_name)
     cur = conn.cursor()
-    res = cur.execute("""
-        SELECT *
-        FROM Utilisateur
-                      """
-    )
+    res = cur.execute("""SELECT * FROM Utilisateur
+                      WHERE Identifiant = :identifiant and MotDePasse = :mdp""",
+                      {'identifiant':username, 'mdp':password})
     ecole = res.fetchall()
     print("Resultat requete :",ecole)
     conn.close()
@@ -162,6 +160,9 @@ def chercher_ecole(saisie) :
     conn.close()
     return ecole
 
+# ____________________________________________________________________________________________________
+#                                       INSERT                                                       |
+# ___________________________________________________________________________________________________|
 
 
 

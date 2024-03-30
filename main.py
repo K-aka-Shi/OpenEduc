@@ -17,10 +17,10 @@ def index():
 # _________________________________________________
 
 
-utilisateurs = [
-    {"nom" : "admin", "password" : "admin"},
-    {"nom" : "nidal", "password" : "azerty"}
-    ]
+# utilisateurs = [
+#     {"nom" : "admin", "password" : "admin"},
+#     {"nom" : "nidal", "password" : "azerty"}
+#     ]
 
 @app.route("/login", methods=["POST", "GET"])
 def login() :
@@ -28,28 +28,19 @@ def login() :
         data = request.form
         username = data.get("username")
         password = data.get("password")
-        utilisateur = search_user(username, password)
-        if utilisateur is not None :
-            session["username"] = utilisateur["nom"]
+        utilisateur = chercher_utilisateur(username,password)
+        print("RESULTAT RECHERCHE :",utilisateur)
+        if utilisateur != [] :
+            utilisateur = utilisateur[0]
+            session["username"] = utilisateur[1]
             print(session["username"])
-            return redirect(url_for('dashboard'))
+            return render_template("views/dashboard.html", isAdmin=utilisateur[3])
+            # return redirect(url_for('dashboard'))
         else :
             print("utilisateur inconnu")
             return redirect(request.url)
     else :
         return render_template("views/login.html")
-
-# --------- #
-# Fonctions #
-# --------- #
-
-
-def search_user(nom, mdp) :
-    for user in utilisateurs :
-        if user["nom"] == nom and user["password"] == mdp :
-            return user
-    return None
-
 
 
 

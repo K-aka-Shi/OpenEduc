@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
+{% block js %}
+<script src"{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}
+
+
+
 {% block content %}
 
     <h1>Dashboard</h1>
@@ -8,31 +14,37 @@
     {% if isAdmin == 1 %}
     <!-- ADMINISTRATEUR -->
         <p><strong>ADMIN</strong></p>
-        <p>Référent</p>
-        <ul>
-            <li><strong>Créer un référent</strong></li>
-                <p>- identifiant, mdp => à générer</p>
-            <li>Gérer un référent </li>
-            <li></li>
-        </ul>
-        <p>Ecole</p>
+<!--
+Référent
+    - Créer un référent : 
+        identifiant, mdp => à générer
+    - Gérer un référent :
+
+Ecole
+    - Créer une école :
+        nom, adresse, codePostal, telephone, email, cycleScolaire
+-->
         <h2>Ajouter un Référent</h2>
-        <form action="{{url_for('addReferent')}}" method="POST">
-            <label for="identifiant">Identifiant:</label><br>
-            <input type="text" id="identifiant" name="identifiant" required><br><br>
+        <button id="toggleForm">Afficher/cacher le formulaire</button>
+        <div id="formContainer" class="hidden">
+            <form action="{{url_for('addReferent')}}" method="POST">
+                <label for="identifiant">Identifiant:</label><br>
+                <input type="text" id="identifiant" name="identifiant" required><br><br>
+            
+                <label for="idEcole">École:</label><br>
+                <select id="idEcole" name="idEcole" required>
+                    <option value="" disabled selected aria-required="true">Choisissez une école</option>
+                    {% for ecole in ecoles %}
+                    <option value={{ecole[0]}}>{{ ecole[1] }}, {{ ecole[2] }}, {{ ecole[3] }}, {{ ecole[4] }}</option>
+                    {% endfor %}
+                    <!-- Ajoutez ici les autres écoles disponibles -->
+                </select><br><br>
         
-            <label for="idEcole">École:</label><br>
-            <select id="idEcole" name="idEcole" required>
-                <option value="" disabled selected aria-required="true">Choisissez une école</option>
-                {% for ecole in ecoles %}
-                <option value={{ecole[0]}}>{{ ecole[1] }}, {{ ecole[2] }}, {{ ecole[3] }}, {{ ecole[4] }}</option>
-                {% endfor %}
-                <!-- Ajoutez ici les autres écoles disponibles -->
-            </select><br><br>
-    
-            <input type="submit" value="Créer">
-        </form>
-        
+                <input type="submit" value="Créer">
+            </form>
+        </div>
+
+
     {% else %}
     <!-- REFERENT -->
         <p>REFERENT</p>

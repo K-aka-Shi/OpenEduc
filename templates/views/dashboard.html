@@ -3,9 +3,38 @@
 {% block content %}
 
     <h1>Dashboard</h1>
+    
+    
     {% if isAdmin == 1 %}
-        <p>ADMIN</p>
+    <!-- ADMINISTRATEUR -->
+        <p><strong>ADMIN</strong></p>
+        <p>Référent</p>
+        <ul>
+            <li><strong>Créer un référent</strong></li>
+                <p>- identifiant, mdp => à générer</p>
+            <li>Gérer un référent </li>
+            <li></li>
+        </ul>
+        <p>Ecole</p>
+        <h2>Ajouter un Référent</h2>
+        <form action="{{url_for('addReferent')}}" method="POST">
+            <label for="identifiant">Identifiant:</label><br>
+            <input type="text" id="identifiant" name="identifiant" required><br><br>
+        
+            <label for="idEcole">École:</label><br>
+            <select id="idEcole" name="idEcole" required>
+                <option value="" disabled selected aria-required="true">Choisissez une école</option>
+                {% for ecole in ecoles %}
+                <option value={{ecole[0]}}>{{ ecole[1] }}, {{ ecole[2] }}, {{ ecole[3] }}, {{ ecole[4] }}</option>
+                {% endfor %}
+                <!-- Ajoutez ici les autres écoles disponibles -->
+            </select><br><br>
+    
+            <input type="submit" value="Créer">
+        </form>
+        
     {% else %}
+    <!-- REFERENT -->
         <p>REFERENT</p>
     {% endif %}
     <br><br><br><br><br><br><br><br><br><b><b></b></b>

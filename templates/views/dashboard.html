@@ -3,6 +3,10 @@
 {% block content %}
 
     <h1>Dashboard</h1>
-
+    {% if isAdmin == 1 %}
+        <p>ADMIN</p>
+    {% else %}
+    <p>REFERENT</p>
+    {% endif %}
     <br><br><br><br><br><br><br><br><br><b><b></b></b>
 {% endblock %}

@@ -148,6 +148,7 @@ def chercher_utilisateur(username,password) :
     conn.close()
     return ecole
 
+# Ecole
 def chercher_ecole(saisie) :
     conn = sqlite3.connect(bdd_name)
     cur = conn.cursor()
@@ -159,6 +160,20 @@ def chercher_ecole(saisie) :
     print("Resultat requete :",ecole)
     conn.close()
     return ecole
+
+
+def chercher_ecole_formCreerReferent():
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    res = cur.execute("""
+                      SELECT idEcole,nomEcole,cycleScolaire,Ville,CodePostal
+                      FROM Ecole
+                      """)
+    ecole = res.fetchall()
+    print("Resultat requete :",ecole)
+    conn.close()
+    return ecole
+
 
 # ____________________________________________________________________________________________________
 #                                       INSERT                                                       |

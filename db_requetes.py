@@ -143,10 +143,10 @@ def chercher_utilisateur(username,password) :
     res = cur.execute("""SELECT * FROM Utilisateur
                       WHERE Identifiant = :identifiant and MotDePasse = :mdp""",
                       {'identifiant':username, 'mdp':password})
-    ecole = res.fetchall()
-    print("Resultat requete :",ecole)
+    utilisateur = res.fetchall()
+    print("Resultat requete :",utilisateur)
     conn.close()
-    return ecole
+    return utilisateur
 
 # Ecole
 def chercher_ecole(saisie) :

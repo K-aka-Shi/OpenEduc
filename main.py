@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect, request, session, flash
+from flask import Flask, render_template, url_for, redirect, request, session
 from dotenv import load_dotenv
 import os
 from db_requetes import *
@@ -28,6 +28,7 @@ def login() :
         password = data.get("password")
         utilisateur = chercher_utilisateur(username,password)
         if utilisateur != [] :
+            print(utilisateur)
             utilisateur = utilisateur[0]
             session["username"] = utilisateur[1]
             session["statut"] = utilisateur[3]
@@ -57,9 +58,11 @@ def dashboard() :
         if statut == 1 :
             ecoles = chercher_ecole_formCreerReferent()
             print(ecoles)
-        return render_template("views/dashboard.html",
+            return render_template("views/dashboard.html",
                                isAdmin=statut,
                                ecoles = ecoles)
+        return render_template("views/dashboard.html",
+                               isAdmin=statut)
     return redirect(url_for('login'))
 
 @app.route("/ajouter_referent", methods=["POST"])

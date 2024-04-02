@@ -78,11 +78,22 @@ def addReferent() :
 @app.route('/recherche_referents', methods=['POST'])
 def recherche_referents():
     term = request.form['term']
+    # Utilisez le terme pour effectuer la recherche dans la base de données
     results = chercher_utilisateurLike(term)
     print(results)
-    # Utilisez le terme pour effectuer la recherche dans la base de données
     # Renvoyez les résultats à la page HTML
-    return render_template('views/dashboard.html', isAdmin=session.get("statut"), referents=results)
+    return render_template('views/dashboard.html', isAdmin=session.get("statut"), referents=referent_search_like)
+
+@app.route('/supprimer_referents', methods=['POST'])
+def supprimer_referents():
+    referents_a_supprimer = request.form.getlist('referents[]')
+    print("referent a supp",referents_a_supprimer)
+    # Effectuer les opérations de suppression dans la base de données
+    supprimer_utilisateurByID(referents_a_supprimer)
+    # Rediriger vers une page de confirmation ou de retour à la page d'accueil
+    return redirect(url_for('dashboard'))
+
+
 
 ###################
 #    RECHERCHE    #
@@ -138,7 +149,12 @@ def cgu() :
 #                   ERREURS                    
 # _________________________________________________
 
-
+# Page not found
 @app.errorhandler(404)
 def not_found(e):
   return render_template('error404.html'), 404
+
+# Page not allowed
+@app.errorhandler(405)
+def not_found(e):
+  return render_template('error404.html'), 405

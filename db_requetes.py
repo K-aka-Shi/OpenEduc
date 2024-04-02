@@ -158,6 +158,17 @@ def chercher_utilisateurLike(username) :
     print("Resultat requete :",utilisateur)
     conn.close()
     return utilisateur
+
+def supprimer_utilisateurByID(ids) :
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    for id in ids :
+        cur.execute("""DELETE FROM Utilisateur
+                          WHERE Identifiant = ?""", (id,)
+        )
+    conn.commit()
+    conn.close()
+
 # Ecole
 def chercher_ecole(saisie) :
     conn = sqlite3.connect(bdd_name)
@@ -218,6 +229,7 @@ def inserer_referent(identifiant, idEcole):
             """, {'identifiant':identifiant,'mdp':password,'idEcole':idEcole})
     conn.commit()
     conn.close()
+    return password
 
 # ____________________________________________________________________________________________________
 #                                         TRIGGERS

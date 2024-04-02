@@ -15,7 +15,7 @@
     <p><strong>ADMIN</strong></p>
     <!-- Créer -->
 <h2>Ajouter un Référent</h2>
-<button id="toggleForm">Afficher/cacher le formulaire</button>
+<!-- <button id="toggleForm">Afficher/cacher le formulaire</button> -->
 <div id="formContainer" class="hidden">
     <form action="{{url_for('addReferent')}}" method="POST">
         <label for="identifiant">Identifiant:</label><br>
@@ -29,6 +29,16 @@
             {% endfor %}
         </select><br><br>
 
+        <p id="passwordElement">{{ password }}</p>
+        <script>
+            window.onload = function() {
+                var password = document.getElementById("passwordElement").innerHTML;
+                if (password !== '') {
+                    alert(password);
+                }
+            };
+        </script>
+        
         <input type="submit" value="Créer">
     </form>
 </div>
@@ -51,9 +61,9 @@
         <tbody>
             {% for referent in referents %}
             <tr>
-                <td>{{ referent.id }}</td>
-                <td>{{ referent.nom }}</td>
-                <td><input type="checkbox" name="referent_id" value="{{ referent.id }}"></td>
+                <td>{{ referent[0] }}</td>
+                <td>{{ referent[1] }}</td>
+                <td><input type="checkbox" name="referent_id" value="{{ referent[0] }}"></td>
             </tr>
             {% endfor %}
         </tbody>

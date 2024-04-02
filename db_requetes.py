@@ -136,7 +136,7 @@ FOREIGN KEY (cycleScolaire) REFERENCES Ecole(cycleScolaire)
 #                                       SELECT                                                       |
 # ___________________________________________________________________________________________________|
 
-
+# Utilisateur
 def chercher_utilisateur(username,password) :
     conn = sqlite3.connect(bdd_name)
     cur = conn.cursor()

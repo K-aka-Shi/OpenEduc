@@ -73,7 +73,7 @@ def addReferent() :
     idEcole = data.get("idEcole")
     inserer_referent(identifiant,idEcole)
     return redirect(url_for('dashboard'))
-    
+
 # Rechercher
 @app.route('/recherche_referents', methods=['POST'])
 def recherche_referents():
@@ -82,7 +82,7 @@ def recherche_referents():
     results = chercher_utilisateurLike(term)
     print(results)
     # Renvoyez les résultats à la page HTML
-    return render_template('views/dashboard.html', isAdmin=session.get("statut"), referents=referent_search_like)
+    return render_template('views/dashboard.html', isAdmin=session.get("statut"), referents=results)
 
 @app.route('/supprimer_referents', methods=['POST'])
 def supprimer_referents():

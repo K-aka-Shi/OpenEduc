@@ -30,6 +30,7 @@
 
             <li class="navbar-item login-logout">
                 {% if session['username'] %}
+                    <a href="{{ url_for('dashboard') }}">Dashboard</a>
                     <a href="{{ url_for('logout') }}">Se déconnecter</a>
                 {% else %}
                     <a href="{{ url_for('login') }}">Se connecter</a>

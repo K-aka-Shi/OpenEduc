@@ -27,15 +27,16 @@ input[type="text"] {
 
 input[type="submit"] {
     padding: 5px 15px;
-    background-color: #007bff;
+    background-color: #F9A825;
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: color 0.3s ease;
 }
 
 input[type="submit"]:hover {
-    background-color: #0056b3;
+    background-color: #C97700;
 }
 
 p {

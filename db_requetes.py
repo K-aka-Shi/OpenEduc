@@ -148,6 +148,16 @@ def chercher_utilisateur(username,password) :
     conn.close()
     return utilisateur
 
+def chercher_utilisateurLike(username) :
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    res = cur.execute("""SELECT * FROM Utilisateur
+                      WHERE Identifiant LIKE ?""", ('%' + username + '%',)
+    )
+    utilisateur = res.fetchall()
+    print("Resultat requete :",utilisateur)
+    conn.close()
+    return utilisateur
 # Ecole
 def chercher_ecole(saisie) :
     conn = sqlite3.connect(bdd_name)

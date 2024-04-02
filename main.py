@@ -65,6 +65,7 @@ def dashboard() :
                                isAdmin=statut)
     return redirect(url_for('login'))
 
+# Ajouter
 @app.route("/ajouter_referent", methods=["POST"])
 def addReferent() :
     data = request.form
@@ -72,6 +73,16 @@ def addReferent() :
     idEcole = data.get("idEcole")
     inserer_referent(identifiant,idEcole)
     return redirect(url_for('dashboard'))
+    
+# Rechercher
+@app.route('/recherche_referents', methods=['POST'])
+def recherche_referents():
+    term = request.form['term']
+    results = chercher_utilisateurLike(term)
+    print(results)
+    # Utilisez le terme pour effectuer la recherche dans la base de données
+    # Renvoyez les résultats à la page HTML
+    return render_template('views/dashboard.html', isAdmin=session.get("statut"), referents=results)
 
 ###################
 #    RECHERCHE    #

@@ -1,8 +1,33 @@
 {% extends "base.html" %}
 
+{% block title %}Dashboard - {% endblock %}
+{% block js %}<script src"{{ url_for('static', filename='js/dashboard.js') }}"></script>{% endblock %}
+{% block css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}"></link>{% endblock %}
+
+
+
 {% block content %}
 
     <h1>Dashboard</h1>
+    
+    {% if isAdmin == 1 %}
+    <!-- ADMINISTRATEUR -->
+    <p><strong>ADMIN</strong></p>
 
+    <p>tuto ? explication en despi</p>
+
+    <!-- <div id="dashboard-buttons">
+        <a href="{{ url_for('dashboardAdminAddRef') }}" class="dashboard-button">Créer</a>
+        <a href="{{ url_for('dashboardAdminSearchRef') }}" class="dashboard-button">Rechercher</a>
+        <a href="{{ url_for('dashboardAdminEditRef') }}" class="dashboard-button">Modifier</a>
+        <a href="{{ url_for('dashboardAdminDeleteRef') }}" class="dashboard-button">Supprimer</a>
+    </div>
+     -->
+
+
+    {% else %}
+    <!-- REFERENT -->
+    <p>REFERENT</p>
+    {% endif %}
     <br><br><br><br><br><br><br><br><br><b><b></b></b>
 {% endblock %}

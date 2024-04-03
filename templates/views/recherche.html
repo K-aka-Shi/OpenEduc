@@ -1,11 +1,55 @@
 {% extends "base.html" %}
 
+{% block title %}Recherche - {% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/recherche.css') }}">
+{% endblock %}
+
+
 {% block content %}
 
     <h1>Rechercher une école</h1>
+    <section class="section">
+    <!-- <form action="{{url_for('recherche')}}" method="POST"> -->
+        <div class="column">
+            <div class="column is-one-third is-offset-one-third">
+                <label for="nom">Saisir un nom : </label>
+                <input type="text" class="input" placeholder="Search" name="query" id="query" hx-get="/recherche" hx-trigger="keyup changed delay:500ms" hx-target="#results">
+            </div>
+        </div>
+            <!-- <input type="submit" value="Chercher"> -->
+    <!-- </form> -->
 
-    <p>champ de saisie</p>
-    <p>(voir sur <mark>notion > tâches > page recherche</mark> des exemples d'organisation du champ)</p>
+        <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Nom de l'école</th>
+                    <th>Adresse</th>
+                    <th>Ville</th>
+                    <th>Code postal</th>
+                    <th>Téléphone</th>
+                    <th>Email</th>
+                    <th>Niveau</th>
+                </tr>
+            </thead>
+            <tbody id="results">
+
+            </tbody>
+        </table>
+    </section>
+      
+    <!-- {% if resultats is not none %}
+        {% if resultats|length == 0 %}
+            <p>Aucun élève ne correspond à la recherche.</p>
+        {% else %}
+            <ul>
+                {% for resultat in resultats %}
+                    <li>{{ resultat }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endif %} -->
 
 
     <br><br><br><br><br><br><br><br><br><b><b></b></b>

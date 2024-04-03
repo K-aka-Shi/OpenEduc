@@ -140,11 +140,13 @@ FOREIGN KEY (cycleScolaire) REFERENCES Ecole(cycleScolaire)
 def chercher_utilisateur(username,password) :
     conn = sqlite3.connect(bdd_name)
     cur = conn.cursor()
-    res = cur.execute("""SELECT * FROM Utilisateur
-                      WHERE Identifiant = :identifiant and MotDePasse = :mdp""",
-                      {'identifiant':username, 'mdp':password})
+    res = cur.execute("""
+                      SELECT * FROM Utilisateur
+                      WHERE Identifiant = :identifiant AND MotDePasse = :mdp
+                      """, {'identifiant':username, 'mdp':password}
+                      )
     utilisateur = res.fetchall()
-    print("Resultat requete :",utilisateur)
+    print("chercher_utilisateur :",utilisateur)
     conn.close()
     return utilisateur
 
@@ -162,7 +164,9 @@ def chercher_utilisateurLike(username) :
 def supprimer_utilisateurByID(ids) :
     conn = sqlite3.connect(bdd_name)
     cur = conn.cursor()
+    print("\n\n\n")
     for id in ids :
+        print(ids)
         cur.execute("""DELETE FROM Utilisateur
                           WHERE Identifiant = ?""", (id,)
         )
@@ -182,6 +186,17 @@ def chercher_ecole(saisie) :
     conn.close()
     return ecole
 
+def chercher_ecoleAll() :
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    res = cur.execute("""
+                      SELECT nomEcole,Adresse,Ville,CodePostal,nbEleves,Telephone,Email,cycleScolaire
+                      FROM Ecole
+                      """)
+    ecoles = res.fetchall()
+    print("Resultat requete :",ecoles)
+    conn.close()
+    return ecoles
 
 def chercher_ecole_formCreerReferent():
     conn = sqlite3.connect(bdd_name)

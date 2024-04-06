@@ -50,9 +50,9 @@ class Personnel(Base):
     Email = Column(String(255))
     Fonction = Column(String(100))
     idEcole = Column(Integer, ForeignKey('Ecole.idEcole'))
-    idClasse = Column(Integer, ForeignKey('Classe.idClasse'))
+    idClasse = Column(Integer, ForeignKey('Classe.idClasse'), use_alter=True)
     ecole = relationship("Ecole")
-    classe = relationship("Classe")
+    classe = relationship("Classe", foreign_keys=[idClasse])  # Spécifier la clé étrangère
 
 # Defining the Classe table
 class Classe(Base):
@@ -61,7 +61,7 @@ class Classe(Base):
     Effectif = Column(Integer)
     Moyenne = Column(Float)
     cycleScolaire = Column(String, CheckConstraint('cycleScolaire IN ("CP", "CE1", "CE2", "CM1", "CM2", "6E", "5E", "4E", "3E", "1RE", "2NDE", "TALE")'))
-    idPersonnel = Column(Integer, ForeignKey('Personnel.idPersonnel'))
+    idPersonnel = Column(Integer, ForeignKey('Personnel.idPersonnel'), use_alter=True)
     idEcole = Column(Integer, ForeignKey('Ecole.idEcole'))
     ecole = relationship("Ecole")
-    personnel = relationship("Personnel")
+    personnel = relationship("Personnel", foreign_keys=[idPersonnel])  # Spécifier la clé étrangère

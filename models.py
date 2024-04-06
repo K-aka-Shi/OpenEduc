@@ -65,3 +65,103 @@ class Classe(Base):
     idEcole = Column(Integer, ForeignKey('Ecole.idEcole'))
     ecole = relationship("Ecole")
     personnel = relationship("Personnel", foreign_keys=[idPersonnel])  # Spécifier la clé étrangère
+
+
+from sqlalchemy import event
+from sqlalchemy import text
+from models import  Base, Ecole, Classe, Utilisateur, Personnel, HistoriqueModification
+
+# Définition des déclencheurs pour la table Utilisateur
+@event.listens_for(Utilisateur, 'after_insert')
+def after_insert_listener(mapper, connection, target):
+    connection.execute(
+        text("INSERT INTO HistoriqueModification (idUtilisateur, idEcole, champsModifies, ancienneValeur, nouvelleValeur) VALUES (:idUtilisateur, :idEcole, 'Insertion Utilisateur', NULL, :nouvelleValeur)"),
+        idUtilisateur=target.idUtilisateur,
+        idEcole=target.idEcole,
+        nouvelleValeur=target.Identifiant + ' ' + target.MotDePasse
+    )
+
+@event.listens_for(Utilisateur, 'after_update')
+def after_update_listener(mapper, connection, target):
+    connection.execute(
+        text("INSERT INTO HistoriqueModification (idUtilisateur, idEcole, champsModifies, ancienneValeur, nouvelleValeur) VALUES (:idUtilisateur, :idEcole, 'Mise à jour Utilisateur', NULL, NULL)"),
+        idUtilisateur=target.idUtilisateur,
+        idEcole=target.idEcole
+    )
+
+@event.listens_for(Utilisateur, 'after_delete')
+def after_delete_listener(mapper, connection, target):
+    connection.execute(
+        text("INSERT INTO HistoriqueModification (idUtilisateur, idEcole, champsModifies, ancienneValeur, nouvelleValeur) VALUES (:idUtilisateur, :idEcole, 'Suppression Utilisateur', NULL, NULL)"),
+        idUtilisateur=target.idUtilisateur,
+        idEcole=target.idEcole
+    )
+
+
+# Définition des déclencheurs pour la table Ecole
+@event.listens_for(Ecole, 'after_insert')
+def after_insert_listener(mapper, connection, target):
+    connection.execute(
+        text("INSERT INTO HistoriqueModification (idEcole, champsModifies, ancienneValeur, nouvelleValeur) VALUES (:idEcole, 'Insertion Ecole', NULL, NULL)"),
+        idEcole=target.idEcole
+    )
+
+@event.listens_for(Ecole, 'after_update')
+def after_update_listener(mapper, connection, target):
+    connection.execute(
+        text("INSERT INTO HistoriqueModification (idEcole, champsModifies, ancienneValeur, nouvelleValeur) VALUES (:idEcole, 'Mise à jour Ecole', NULL, NULL)"),
+        idEcole=target.idEcole
+    )
+
+@event.listens_for(Ecole, 'after_delete')
+def after_delete_listener(mapper, connection, target):
+    connection.execute(
+        text("INSERT INTO HistoriqueModification (idEcole, champsModifies, ancienneValeur, nouvelleValeur) VALUES (:idEcole, 'Suppression Ecole', NULL, NULL)"),
+        idEcole=target.idEcole
+    )
+
+
+# Définition des déclencheurs pour la table Personnel
+@event.listens_for(Personnel, 'after_insert')
+def after_insert_listener(mapper, connection, target):
+    connection.execute(
+        text("INSERT INTO HistoriqueModification (idUtilisateur, idEcole, champsModifies, ancienneValeur, nouvelleValeur) VALUES (NULL, :idEcole, 'Insertion Personnel', NULL, NULL)"),
+        idEcole=target.idEcole
+    )
+
+@event.listens_for(Personnel, 'after_update')
+def after_update_listener(mapper, connection, target):
+    connection.execute(
+        text("INSERT INTO HistoriqueModification (idUtilisateur, idEcole, champsModifies, ancienneValeur, nouvelleValeur) VALUES (NULL, :idEcole, 'Mise à jour Personnel', NULL, NULL)"),
+        idEcole=target.idEcole
+    )
+
+@event.listens_for(Personnel, 'after_delete')
+def after_delete_listener(mapper, connection, target):
+    connection.execute(
+        text("INSERT INTO HistoriqueModification (idUtilisateur, idEcole, champsModifies, ancienneValeur, nouvelleValeur) VALUES (NULL, :idEcole, 'Suppression Personnel', NULL, NULL)"),
+        idEcole=target.idEcole
+    )
+
+
+# Définition des déclencheurs pour la table Classe
+@event.listens_for(Classe, 'after_insert')
+def after_insert_listener(mapper, connection, target):
+    connection.execute(
+        text("INSERT INTO HistoriqueModification (idUtilisateur, idEcole, champsModifies, ancienneValeur, nouvelleValeur) VALUES (NULL, :idEcole, 'Insertion Classe', NULL, NULL)"),
+        idEcole=target.idEcole
+    )
+
+@event.listens_for(Classe, 'after_update')
+def after_update_listener(mapper, connection, target):
+    connection.execute(
+        text("INSERT INTO HistoriqueModification (idUtilisateur, idEcole, champsModifies, ancienneValeur, nouvelleValeur) VALUES (NULL, :idEcole, 'Mise à jour Classe', NULL, NULL)"),
+        idEcole=target.idEcole
+    )
+
+@event.listens_for(Classe, 'after_delete')
+def after_delete_listener(mapper, connection, target):
+    connection.execute(
+        text("INSERT INTO HistoriqueModification (idUtilisateur, idEcole, champsModifies, ancienneValeur, nouvelleValeur) VALUES (NULL, :idEcole, 'Suppression Classe', NULL, NULL)"),
+        idEcole=target.idEcole
+    )

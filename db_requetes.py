@@ -1,6 +1,6 @@
 import sqlite3
 
-bdd_name = "openeduc.db"
+bdd_name = "test_openeduc.db"
 
 
 def init_database() :
@@ -391,3 +391,4 @@ def creer_triggers_classe():
     """)
     conn.commit()
     conn.close()
+    

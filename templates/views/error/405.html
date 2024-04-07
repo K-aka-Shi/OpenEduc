@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Page Introuvable - {% endblock %}
+{% block title %}Erreur 405 - {% endblock %}
 
 {% block css %}
 <style>
@@ -63,8 +63,8 @@
 {% block content %}
 
 <div class="error-container"> 
-    <h1> 404 </h1> 
-    <p>Oups ! La page que vous recherchez n'est pas ici.</p>
+    <h1> 405 </h1> 
+    <p>Oups ! La méthode HTTP utilisée pour accéder à cette page n'est pas autorisée.</p>
     <a href="{{url_for('index')}}"> Retour à l'Accueil </a> 
 </div> 
 

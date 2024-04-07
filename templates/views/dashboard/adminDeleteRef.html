@@ -14,30 +14,34 @@
 <h2>Supprimer un Référent</h2>
 <form action="{{ url_for('recherche_referents') }}" method="POST">
     <input type="text" name="term" placeholder="Entrez un terme de recherche">
-    <button type="submit">Rechercher</button>
+    <input type="submit" value="Rechercher">
 </form>
 
+<br><br>
+
+
 <form action="{{ url_for('supprimer_referents') }}" method="POST">
-    <table>
+    <table class="table is-fullwidth">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Nom</th>
-                <th>Actions</th>
+                <th style="border: 2px solid #000;">ID</th>
+                <th style="border: 2px solid #000;">Nom</th>
+                <th style="border: 2px solid #000;">Actions</th>
             </tr>
         </thead>
         <tbody>
             {% for referent in referents %}
+            {% if referent[3] == 0 %}
             <tr>
                 <td>{{ referent[0] }}</td>
                 <td>{{ referent[1] }}</td>
                 <td><input type="checkbox" name="referent_id" value="{{ referent[0] }}"></td>
-                <p>referentè</p>
             </tr>
+            {% endif %}
             {% endfor %}
         </tbody>
     </table>
-    <button type="submit">Supprimer les référents sélectionnés</button>
+    <input type="submit" value="Supprimer les référents sélectionnés" style="width: 25%;">
 </form>
 
 

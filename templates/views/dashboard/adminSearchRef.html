@@ -9,9 +9,49 @@
 
 <h1>Dashboard</h1>
 
-<p>tuto ? explication en despi</p>
+<p><mark>MDP : non visible => remplacer par bouton "régénérer" ?</mark></p>
 
 <h2>Rechercher un Référent</h2>
 
+<form action="{{url_for('dashboardAdminSearchRef')}}" method="POST">
+    <p>
+        <label for="nom">Saisir un identifiant :</label>
+        <input type="text" name="query" id="nom" required autofocus>
+        <input type="submit" value="Chercher">
+        <input type="submit" name="query" value="Tous">
+    </p>
+</form>
+
+{% if resultats %}
+    {% if resultats|length == 0 %}
+        <p>Aucun référent ne correspond à la recherche.</p>
+    {% else %}
+    <table class="table is-fullwidth" style="border: 2px solid #000; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th style="border: 2px solid #000;">IdUtilisateur</th>
+                <th style="border: 2px solid #000;">Identifiant</th>
+                <th style="border: 2px solid #000;">MotDePasse</th>
+                <th style="border: 2px solid #000;">isAdmin</th>
+                <th style="border: 2px solid #000;">idEcole</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for resultat in resultats %}
+            <tr>
+                <td style="border: 2px solid #000;">{{ resultat[0] }}</td>
+                <td style="border: 2px solid #000;">{{ resultat[1] }}</td>
+                <td style="border: 2px solid #000;" class="mdpContainer">
+                    <img src="https://static-00.iconduck.com/assets.00/eye-show-icon-2048x1326-edkdqxrw.png" alt="icon show" style="width:30px;">
+                    <span class="mdp">{{ resultat[2] }}</span>
+                </td>
+                <td style="border: 2px solid #000;">{{ resultat[3] }}</td>
+                <td style="border: 2px solid #000;">{{ resultat[4] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+{% endif %}
 
 {% endblock %}

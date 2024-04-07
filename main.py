@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect, request, session
+from flask import Flask, abort, render_template, url_for, redirect, request, session
 from dotenv import load_dotenv
 import os
 from db_requetes import *
@@ -42,7 +42,9 @@ def login() :
 
 @app.route("/logout")
 def logout() :
+    print(session)
     session.pop('username', None)
+    session.pop('statut', None)
     return redirect(url_for('index'))
 
 
@@ -65,7 +67,7 @@ def dashboard() :
                                isAdmin=statut)
     return redirect(url_for('login'))
 
-# Ajouter
+#    DASHBOARD : Créer Referent    #
 @app.route("/dashboard/creer-referent", methods=["POST", "GET"])
 def dashboardAdminAddRef() :
     ecoles = chercher_ecole_formCreerReferent()
@@ -89,7 +91,7 @@ def dashboardAdminAddRef() :
         return render_template("views/dashboard/adminAddRef.html",
                                ecoles=ecoles)
 
-# Rechercher
+#    DASHBOARD : Rechercher Referent    #
 @app.route('/recherche_referents', methods=['POST'])
 def recherche_referents():
     term = request.form['term']
@@ -102,64 +104,105 @@ def recherche_referents():
                            referents=results
                            )
 
+@app.route("/dashboard/rechercher-referent", methods=["POST", "GET"])
+def dashboardAdminSearchRef() :
+    if request.method == "POST":
+        # si le formulaire est envoyé
+        data = request.form
+        print(data)
+        saisie = data.get('query')
+        print("Saisie :",saisie)
+        if saisie == "Tous" :
+            resultats = chercher_utilisateurAll()
+        else :
+            resultats = chercher_utilisateurLike(saisie)
+        print("chercher_utilisateurLike :",resultats)
+        return render_template("views/dashboard/adminSearchRef.html", resultats=resultats)
+    else:
+        # méthode GET
+        resultats = None
+        return render_template("views/dashboard/adminSearchRef.html")
+
+#    DASHBOARD : Modifier Referent    #
+@app.route("/dashboard/modifier-referent")
+def dashboardAdminEditRef() :
+    ecoles = chercher_ecoleAll()
+    ecoles = sorted(ecoles, key=lambda x: x[2])
+    users = chercher_utilisateurAll()
+    users = users[1:]
+    return render_template("views/dashboard/adminEditRef.html", ecoles=ecoles, utilisateurs=users)
+
+@app.route('/modifier_referent', methods=['POST'])
+def modifier_referent():
+    data  = request.form
+    id_utilisateur = data.get('id_utilisateur')
+    identifiant = data.get( 'identifiant' )
+    mdp = data.get( 'mdp' )
+    idEcole = data.get( 'ecoles' )
+    update_referent(id_utilisateur,identifiant,mdp,idEcole)
+    return redirect(url_for('dashboardAdminEditRef'))
+
+#    DASHBOARD : Supprimer Referent    #
+@app.route("/dashboard/supprimer-referent")
+def dashboardAdminDeleteRef() :
+    return render_template("views/dashboard/adminDeleteRef.html")
+
 @app.route('/supprimer_referents', methods=['POST'])
 def supprimer_referents():
-    referents_a_supprimer = request.form.getlist('referents')
+    # referents_a_supprimer = request.form.getlist('referents')
+    referents_a_supprimer = request.form.getlist('referent_id')
     print("referent a supp",referents_a_supprimer)
     # Effectuer les opérations de suppression dans la base de données
     supprimer_utilisateurByID(referents_a_supprimer)
     # Rediriger vers une page de confirmation ou de retour à la page d'accueil
     return redirect(url_for('dashboardAdminDeleteRef'))
 
-@app.route("/dashboard/rechercher-referent")
-def dashboardAdminSearchRef() :
-    return render_template("views/dashboard/adminSearchRef.html")
-
-@app.route("/dashboard/modifier-referent")
-def dashboardAdminEditRef() :
-    return render_template("views/dashboard/adminEditRef.html")
-
-@app.route("/dashboard/supprimer-referent")
-def dashboardAdminDeleteRef() :
-    return render_template("views/dashboard/adminDeleteRef.html")
-
-
 
 ###################
 #    RECHERCHE    #
 ###################
 
-@app.route("/recherche")
+@app.route("/recherche", methods=["POST", "GET"])
 def recherche() :
-    # if request.method == "POST":
-    #     # si le formulaire est envoyé
-    #     data = request.form
-    #     saisie = data.get('query')
-    #     print("Saisie :",saisie)
-    #     resultats = chercher_ecoleAll()
-    #     tab = [res for res in resultats]
-    #     print(tab)
-    #     # resultats = [1:]
-    #     print(resultats)
-    # else:
+    if request.method == "POST":
+        # si le formulaire est envoyé
+        data = request.form
+        saisie = data.get('query')
+        print("Saisie :",saisie)
+        resultats = chercher_ecole(saisie)
+        # tab = [res for res in resultats]
+        # print(tab)
+        # resultats = [1:]
+        print(resultats)
+        return render_template("views/recherche.html", resultats=resultats)
+    else:
         # méthode GET
-        # resultats = None
-    # return render_template("views/recherche.html", resultats=tab)
-    print("ECOLES RECHERCHE ALL")
-    q = request.args.get('query')
-    print("\nQ :\n",q)
-    if q :
-        results = chercher_ecoleAll()
-        print("\nresults :\n",results)
-    else :
-        results = []
-    return render_template("views/recherche.html", resultats=results)
+        resultats = None
+        return render_template("views/recherche.html")
+    # print("ECOLES RECHERCHE ALL")
+    # q = request.args.get('query')
+    # print("\nQ :",q)
+    # if q :
+    #     results = chercher_ecoleAll()
+    #     print("\nresults :\n",results)
+    # else :
+    #     results = []
+    # return render_template("views/recherche.html")
 
 
+
+
+###################
+#   PARTENAIRES   #
+###################
 
 @app.route("/partenaires")
 def partenaires() :
-    return render_template("views/partenaires.html")
+    ecoles = chercher_ecoleAll()
+    ecoles = sorted(ecoles, key=lambda x: x[2])
+    for ecole in ecoles :
+        print(ecole[2], ecole[0])
+    return render_template("views/partenaires.html",  ecoles=ecoles)
 
 
 
@@ -189,14 +232,22 @@ def cgu() :
 #                   ERREURS                    
 # _________________________________________________
 
+# Forbidden
+@app.errorhandler(403)
+def not_found(e):
+  return render_template('views/error/403.html'), 403
+
 # Page not found
 @app.errorhandler(404)
 def not_found(e):
-  return render_template('error404.html'), 404
+  return render_template('views/error/404.html'), 404
 
 # Page not allowed
 @app.errorhandler(405)
 def not_found(e):
-  return render_template('error404.html'), 405
+  return render_template('views/error/405.html'), 405
 
-
+# Internal Server Error
+@app.errorhandler(500)
+def not_found(e):
+  return render_template('views/error/500.html'), 500

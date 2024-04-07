@@ -1,6 +1,10 @@
 body {
   background-color:aliceblue;
   margin: 0;
+  background-image: url('https://static.vecteezy.com/system/resources/previews/021/599/588/non_2x/abstract-white-and-gray-overlap-circles-background-3d-paper-circle-banner-with-drop-shadows-minimal-simple-design-for-presentation-flyer-brochure-website-book-etc-vector.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;  
+  background-size: cover;
 }
 
 #container {
@@ -53,6 +57,41 @@ hr {
   border: 0;
   border-top: 1px solid #ccc;
 }
+/* Sélecteur */
+select {
+  width: 30%;
+  padding: 10px;
+  border-color: #F9A825;
+  color: #F9A825;
+  border: solid;
+  border-width: 2px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+select:hover{
+  background-color: #C97700;
+  border-color: #C97700;
+  color: white;
+}
+
+/* Style du bouton */
+input[type="button"], input[type="submit"], input[type="checkbox"], form[type="button"] {
+  width: 10%;
+  padding: 10px;
+  background-color: #F9A825;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover du bouton */
+input[type="button"]:hover, input[type="submit"]:hover, input[type="checkbox"]:hover { 
+  background-color: #C97700;
+}
 
 /* _________________________ */
 /*          NAVBAR           */
@@ -62,9 +101,9 @@ hr {
   padding: 10px;
   display: flex;
   align-items: center;
-  background-color: black;
+  background: linear-gradient(#F9A825, #F9A825, #F9A825, #00000000);
   font-size: 1.1em;
-  color: #333;
+  color: white;
 }
 
 #navbar-items {
@@ -87,7 +126,7 @@ hr {
 .navbar-item a {
   text-decoration: none;
   display: block;
-  color: #F9A825;
+  color: white;
   font-weight: bold;
 }
 
@@ -109,14 +148,15 @@ hr {
 }
 
 .dropdown-content a {
-  color: black;
+  color: white;
+  background-color: #F9A825;
   padding: 12px 16px;
   text-decoration: none;
   display: block;
 }
 
 .dropdown-content a:hover {
-  background-color: #ddd;
+  background-color: #C97700;
 }
 
 .dropdown:hover .dropdown-content {

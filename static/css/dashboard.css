@@ -1,0 +1,25 @@
+.mdp {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mdpContainer:hover .mdp{
+    opacity: 1;
+}
+
+
+tr:hover {
+    font-weight: bold;
+}
+
+/* TABLEAU */
+
+table {
+    border: 2px solid #000;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+th, td {
+    border: 2px solid #000;
+}

@@ -217,6 +217,17 @@ def chercher_ecoleAll() :
     conn.close()
     return ecoles
 
+def chercher_ecoleLike(name) :
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    res = cur.execute("""SELECT * FROM Ecole
+                      WHERE nomEcole LIKE ?""", ('%' + name + '%',)
+    )
+    ecoles = res.fetchall()
+    print("Resultat requete :",ecoles)
+    conn.close()
+    return ecoles
+
 def chercher_ecole_formCreerReferent():
     conn = sqlite3.connect(bdd_name)
     cur = conn.cursor()
@@ -265,6 +276,19 @@ def inserer_referent(identifiant, idEcole):
     conn.close()
     return password
 
+def inserer_ecole(nom, adresse, ville, code_postal, cycle_scolaire):
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    password = generer_mdp()
+    cur.execute("""
+                INSERT INTO Ecole (nomEcole, Adresse, Ville, CodePostal, cycleScolaire)
+                VALUES (:nom_ecole, :adresse, :ville, :code_postal, :cycle_scolaire);
+            """, 
+            {'nom_ecole':nom, 'adresse':adresse, 'ville':ville, 'code_postal':code_postal,'cycle_scolaire':cycle_scolaire}
+            )
+    conn.commit()
+    conn.close()
+    return password
 # ____________________________________________________________________________________________________
 #                                         TRIGGERS
 # ____________________________________________________________________________________________________

@@ -38,7 +38,22 @@
                 <div class="dropdown">
                     {% if session['statut'] == 1 %}
                     <a style="padding: 0 20px;">
-                        Référent
+                        Gestion Ecoles
+                        <img style="width: 20px;" src="https://static.thenounproject.com/png/1123247-200.png">
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="{{ url_for('dashboardAdminSearchEcole') }}">Rechercher</a>
+                        <a href="{{ url_for('dashboardAdminAddEcole') }}"   >Créer</a>
+                        <a href="{{ url_for('dashboardAdminDeleteEcole') }}">Supprimer</a>
+                        <a href="{{ url_for('dashboardAdminEditEcole') }}"  >Modifier</a>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="dropdown">
+                    {% if session['statut'] == 1 %}
+                    <a style="padding: 0 20px;">
+                        Gestion Référents
                         <img style="width: 20px;" src="https://static.thenounproject.com/png/1123247-200.png">
                     </a>
                     <div class="dropdown-content">

@@ -1,4 +1,4 @@
-from flask import Flask, abort, render_template, url_for, redirect, request, session
+from flask import Flask, abort, render_template, url_for, redirect, flash, request, session
 from dotenv import load_dotenv
 import os
 from db_requetes import *
@@ -7,14 +7,16 @@ from db_requetes import *
 app = Flask(__name__)
 load_dotenv()
 app.secret_key = os.getenv("APP_SECRET_KEY")
+app.config['MESSAGE_FLASHING_OPTIONS'] = {'duration': 5}
+
 
 @app.route("/")
 def index():
     return render_template("views/index.html")
 
-# _________________________________________________
-#                   NAVIGATION                    
-# _________________________________________________
+# ############################################################################
+#                                   NAVIGATION                    
+# ############################################################################
 
 ###################
 #    CONNEXION    #
@@ -33,6 +35,7 @@ def login() :
             session["username"] = utilisateur[1]
             session["statut"] = utilisateur[3]
             print(session.get("username"), session.get("statut"))
+            flash("Connexion réussie","success")
             return redirect(url_for('dashboard'))
         else :
             print("utilisateur inconnu")
@@ -48,9 +51,9 @@ def logout() :
     return redirect(url_for('index'))
 
 
-###################
-#    DASHBOARD    #
-###################
+# ############################################################################
+#                                   DASHBOARD                    
+# ############################################################################
 
 @app.route("/dashboard")
 def dashboard() :
@@ -67,6 +70,12 @@ def dashboard() :
                                isAdmin=statut)
     return redirect(url_for('login'))
 
+
+
+###################
+#    REFERENT     #
+###################
+
 #    DASHBOARD : Créer Referent    #
 @app.route("/dashboard/creer-referent", methods=["POST", "GET"])
 def dashboardAdminAddRef() :
@@ -80,9 +89,11 @@ def dashboardAdminAddRef() :
                 identifiant = data.get("identifiant")
                 idEcole = data.get("idEcole")
                 newPassword = inserer_referent(identifiant,idEcole)
+                flash(f'Le referent a bien été ajouté avec le mot de passe : {newPassword}')
                 return render_template("views/dashboard/adminAddRef.html",
                                 isAdmin=statut,
-                                password = newPassword
+                                password = newPassword,
+                                ecoles=ecoles
                                 )
             return render_template("views/dashboard.html",
                                 isAdmin=statut)
@@ -92,36 +103,29 @@ def dashboardAdminAddRef() :
                                ecoles=ecoles)
 
 #    DASHBOARD : Rechercher Referent    #
-@app.route('/recherche_referents', methods=['POST'])
-def recherche_referents():
-    term = request.form['term']
-    # Utilisez le terme pour effectuer la recherche dans la base de données
-    results = chercher_utilisateurLike(term)
-    print(results)
-    # Renvoyez les résultats à la page HTML
-    return render_template('views/dashboard/adminDeleteRef.html',
-                           isAdmin=session.get("statut"),
-                           referents=results
-                           )
+# @app.route('/recherche_referents', methods=['POST'])
+# def recherche_referents():
+#     term = request.form['term']
+#     # Utilisez le terme pour effectuer la recherche dans la base de données
+#     results = chercher_utilisateurLike(term)
+#     print(results)
+#     # Renvoyez les résultats à la page HTML
+#     return render_template('views/dashboard/adminDeleteRef.html',
+#                            isAdmin=session.get("statut"),
+#                            referents=results
+#                            )
 
 @app.route("/dashboard/rechercher-referent", methods=["POST", "GET"])
 def dashboardAdminSearchRef() :
     if request.method == "POST":
         # si le formulaire est envoyé
         data = request.form
-        print(data)
         saisie = data.get('query')
-        print("Saisie :",saisie)
-        if saisie == "Tous" :
-            resultats = chercher_utilisateurAll()
-        else :
-            resultats = chercher_utilisateurLike(saisie)
-        print("chercher_utilisateurLike :",resultats)
+        resultats = chercher_utilisateurLike(saisie)
         return render_template("views/dashboard/adminSearchRef.html", resultats=resultats)
     else:
         # méthode GET
-        resultats = None
-        return render_template("views/dashboard/adminSearchRef.html")
+        return render_template("views/dashboard/adminSearchRef.html", resultats=None)
 
 #    DASHBOARD : Modifier Referent    #
 @app.route("/dashboard/modifier-referent")
@@ -143,9 +147,21 @@ def modifier_referent():
     return redirect(url_for('dashboardAdminEditRef'))
 
 #    DASHBOARD : Supprimer Referent    #
-@app.route("/dashboard/supprimer-referent")
+@app.route("/dashboard/supprimer-referent", methods=['POST', 'GET'])
 def dashboardAdminDeleteRef() :
-    return render_template("views/dashboard/adminDeleteRef.html")
+    if request.method == "POST":
+        # si le formulaire est envoyé
+        data = request.form
+        print(data)
+        saisie = data.get('term')
+        print("Saisie :",saisie)
+        resultats = chercher_utilisateurLike(saisie)
+        print("chercher_utilisateurLike :",resultats)
+        return render_template("views/dashboard/adminDeleteRef.html", referents=resultats)
+    else:
+        # méthode GET
+        resultats = None
+        return render_template("views/dashboard/adminDeleteRef.html", referents=resultats)
 
 @app.route('/supprimer_referents', methods=['POST'])
 def supprimer_referents():
@@ -155,12 +171,75 @@ def supprimer_referents():
     # Effectuer les opérations de suppression dans la base de données
     supprimer_utilisateurByID(referents_a_supprimer)
     # Rediriger vers une page de confirmation ou de retour à la page d'accueil
-    return redirect(url_for('dashboardAdminDeleteRef'))
+    return render_template("views/dashboard/adminDeleteRef.html")
 
 
 ###################
-#    RECHERCHE    #
+#    ECOLES     #
 ###################
+
+#    DASHBOARD : Créer Ecole    #
+@app.route("/dashboard/creer-ecole", methods=["POST", "GET"])
+def dashboardAdminAddEcole() :
+    username = session.get("username")
+    statut = session.get("statut")
+    if request.method == 'POST' :
+        data = request.form
+        nom           = data.get("nomEcole")
+        adresse       = data.get("adresse")
+        ville         = data.get("ville")
+        codePostal    = data.get("codePostal")
+        cycleScolaire = data.get("cycleScolaire")
+        inserer_ecole(nom,adresse,ville,codePostal,cycleScolaire)
+        print(chercher_ecole(nom,adresse,ville,codePostal,cycleScolaire))
+        flash("Ecole crée !", category='success')  # Affichage du message de succes
+        return render_template("views/dashboard/adminAddEcole.html", resultats=None)
+    else :
+        if username is not None and statut == 1 :
+            return render_template("views/dashboard/adminAddEcole.html", resultats=None)
+        return redirect(request.url)
+
+#    DASHBOARD : Rechercher Ecole    #
+@app.route('/recherche_ecole', methods=['POST'])
+def recherche_ecole():
+    return render_template('views/dashboard/adminDeleteEcole.html')
+
+@app.route("/dashboard/rechercher-ecole", methods=["POST", "GET"])
+def dashboardAdminSearchEcole() :
+    if request.method == "POST" :
+        data = request.form
+        saisie = data.get('query')
+        resultats = chercher_ecoleLike(saisie)
+        print("saisie :",saisie, "\n Résultats :\n", resultats)
+        return render_template("views/dashboard/adminSearchEcole.html", resultats=resultats)
+    else :
+        # méthode GET
+        return render_template("views/dashboard/adminSearchEcole.html", resultats=None)
+
+#    DASHBOARD : Modifier Ecole    #
+@app.route("/dashboard/modifier-ecole")
+def dashboardAdminEditEcole() :
+    return render_template("views/dashboard/adminEditEcole.html")
+
+@app.route('/modifier_ecole', methods=['POST'])
+def modifier_ecole():
+    return redirect(url_for('dashboardAdminEditEcole'))
+
+#    DASHBOARD : Supprimer Referent    #
+@app.route("/dashboard/supprimer-ecole")
+def dashboardAdminDeleteEcole() :
+    return render_template("views/dashboard/adminDeleteEcole.html")
+
+@app.route('/supprimer_ecole', methods=['POST'])
+def supprimer_ecole():
+    return redirect(url_for('dashboardAdminDeleteEcole'))
+
+
+
+
+# ############################################################################
+#                                   PARTENAIRES                    
+# ############################################################################
 
 @app.route("/recherche", methods=["POST", "GET"])
 def recherche() :
@@ -175,10 +254,10 @@ def recherche() :
         # resultats = [1:]
         print(resultats)
         return render_template("views/recherche.html", resultats=resultats)
-    else:
+    else :
         # méthode GET
         resultats = None
-        return render_template("views/recherche.html")
+        return render_template("views/recherche.html", resultats=resultats)
     # print("ECOLES RECHERCHE ALL")
     # q = request.args.get('query')
     # print("\nQ :",q)
@@ -206,9 +285,9 @@ def partenaires() :
 
 
 
-# _________________________________________________
-#                   LEGAL                    
-# _________________________________________________
+# ############################################################################
+#                                   LEGAL                    
+# ############################################################################
 
 
 @app.route("/protection-des-donnees")
@@ -228,9 +307,9 @@ def cgu() :
 
 
 
-# _________________________________________________
-#                   ERREURS                    
-# _________________________________________________
+# ############################################################################
+#                                   ERREURS                    
+# ############################################################################
 
 # Forbidden
 @app.errorhandler(403)

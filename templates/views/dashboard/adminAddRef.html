@@ -9,6 +9,15 @@
 
 <h1>Dashboard</h1>
 
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+    {% for  category, message in messages %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+{% endwith %}
 
 
 <h2>Ajouter un Référent</h2>
@@ -24,21 +33,11 @@
             {% for ecole in ecoles %}
             <option value={{ecole[0]}}>{{ ecole[1] }}, {{ ecole[2] }}, {{ ecole[3] }}, {{ ecole[4] }}</option>
             {% endfor %}
-        </select><br><br>
-
-        <p id="passwordElement">{{ password }}</p>
-        <script>
-            window.onload = function() {
-                var password = document.getElementById("passwordElement").innerHTML;
-                if (password !== '') {
-                    alert(password);
-                }
-            };
-        </script>
-        
+        </select><br><br>        
         <input type="submit" value="Créer">
     </form>
 </div>
+
 
 
 

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Modifier un Référent{% endblock %}
+{% block js %}<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>{% endblock %}
+{% block css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}"></link>{% endblock %}
+
+
+{% block content %}
+
+<h1>Dashboard</h1>
+
+<p>tuto ? explication en despi</p>
+
+<h2>Modifier un Référent</h2>
+
+<form action="{{ url_for('modifier_referent') }}" method="POST">
+    <label for="id_utilisateur">ID de l'utilisateur :</label>
+    <select name="id_utilisateur" id="id_utilisateur">
+        <option value="" disabled selected aria-required="true">Choisissez un utilisateur</option>
+        {% for utilisateur in utilisateurs %}
+        <option value="{{utilisateur[0]}}"> {{ utilisateur[1] }} </option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <label for="champs">Champs à modifier :</label>
+    <input type="text" id="identifiant" name="identifiant" placeholder="Nouvel identifiant (login)">
+    <input type="text" id="mdp" name="mdp" placeholder="Nouveau mot de passe">
+    <select name="ecoles" id="ecoles">
+        <option value="" disabled selected aria-required="true">Choisissez une école</option>
+        {% for ecole in ecoles %}
+        <option value={{ecole[0]}}>{{ ecole[3].upper() }} - {{ ecole[1] }}</option>
+        {% endfor %}
+    </select>
+    <br><br>
+    <input type="submit" value="Modifier">
+</form>
+
+{% endblock %}

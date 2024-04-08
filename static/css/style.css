@@ -61,9 +61,10 @@ hr {
 select {
   width: 30%;
   padding: 10px;
-  border-color: #F9A825;
   color: #F9A825;
+  background-color: white;
   border: solid;
+  border-color: #F9A825;
   border-width: 2px;
   border-radius: 5px;
   cursor: pointer;
@@ -75,6 +76,7 @@ select:hover{
   border-color: #C97700;
   color: white;
 }
+
 
 /* Style du bouton */
 input[type="button"], input[type="submit"], input[type="checkbox"], form[type="button"] {
@@ -91,6 +93,15 @@ input[type="button"], input[type="submit"], input[type="checkbox"], form[type="b
 /* Hover du bouton */
 input[type="button"]:hover, input[type="submit"]:hover, input[type="checkbox"]:hover { 
   background-color: #C97700;
+}
+
+/* INPUT TEXT */
+input[type="text"] {
+  border-color: #F9A825;
+}
+
+input[type="text"]:hover {
+  border-color: #C97700;
 }
 
 /* _________________________ */

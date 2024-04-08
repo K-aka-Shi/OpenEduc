@@ -9,10 +9,6 @@
 
 <h1>Dashboard</h1>
 
-<p><mark>MDP : non visible => remplacer par bouton "régénérer" ?</mark></p>
-
-<h2>Rechercher un Référent</h2>
-
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
     {% for  category, message in messages %}
@@ -24,15 +20,17 @@
 {% endwith %}
 
 
-<form action="{{url_for('dashboardAdminSearchRef')}}" method="POST">
+<h2>Rechercher une Ecole</h2>
+
+<form action="{{url_for('dashboardAdminSearchEcole')}}" method="POST">
     <p>
-        <label for="nom">Saisir un identifiant :</label>
-        <input type="text" name="query" id="nom" autofocus>
+        <label for="nom">Saisir un nom :</label>
+        <input type="text" name="query" id="nom"  autofocus>
         <input type="submit" value="Chercher">
     </p>
 </form>
 
-{% if resultats is not none %}
+{% if resultats %}
     {% if resultats|length == 0 %}
     <div class="alert alert-warning" role="alert">
         Aucun référent ne correspond à la recherche.
@@ -42,10 +40,14 @@
         <thead>
             <tr>
                 <th style="border: 2px solid #000;">ID</th>
-                <th style="border: 2px solid #000;">Identifiant</th>
-                <th style="border: 2px solid #000;">MotDePasse</th>
-                <th style="border: 2px solid #000;">isAdmin</th>
-                <th style="border: 2px solid #000;">idEcole</th>
+                <th style="border: 2px solid #000;">Nom</th>
+                <th style="border: 2px solid #000;">Adresse</th>
+                <th style="border: 2px solid #000;">Ville</th>
+                <th style="border: 2px solid #000;">Code Postal</th>
+                <th style="border: 2px solid #000;">Nombre d'élèves</th>
+                <th style="border: 2px solid #000;">Téléphone</th>
+                <th style="border: 2px solid #000;">E-mail</th>
+                <th style="border: 2px solid #000;">Cycle Scolaire</th>
             </tr>
         </thead>
         <tbody>
@@ -53,12 +55,13 @@
             <tr>
                 <td style="border: 2px solid #000;">{{ resultat[0] }}</td>
                 <td style="border: 2px solid #000;">{{ resultat[1] }}</td>
-                <td style="border: 2px solid #000;" class="mdpContainer">
-                    <img src="https://static-00.iconduck.com/assets.00/eye-show-icon-2048x1326-edkdqxrw.png" alt="icon show" style="width:30px;">
-                    <span class="mdp">{{ resultat[2] }}</span>
-                </td>
+                <td style="border: 2px solid #000;">{{ resultat[2] }}</td>
                 <td style="border: 2px solid #000;">{{ resultat[3] }}</td>
                 <td style="border: 2px solid #000;">{{ resultat[4] }}</td>
+                <td style="border: 2px solid #000;">{{ resultat[5] }}</td>
+                <td style="border: 2px solid #000;">{{ resultat[6] }}</td>
+                <td style="border: 2px solid #000;">{{ resultat[7] }}</td>
+                <td style="border: 2px solid #000;">{{ resultat[8] }}</td>
             </tr>
             {% endfor %}
         </tbody>

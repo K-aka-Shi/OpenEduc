@@ -32,9 +32,10 @@ def login() :
         if utilisateur != [] :
             print(utilisateur)
             utilisateur = utilisateur[0]
+            session["id"] = utilisateur[0]
             session["username"] = utilisateur[1]
             session["statut"] = utilisateur[3]
-            print(session.get("username"), session.get("statut"))
+            print(session.get("id"), session.get("username"), session.get("statut"))
             flash("Connexion réussie","success")
             return redirect(url_for('dashboard'))
         else :
@@ -66,6 +67,17 @@ def dashboard() :
             return render_template("views/dashboard.html",
                                isAdmin=statut,
                                ecoles = ecoles)
+        else :
+            conn = sqlite3.connect(bdd_name).cursor().execute('SELECT SUM(Effectif) FROM Classe')
+            nbEleves = conn.fetchall()[0][0]
+            conn = sqlite3.connect(bdd_name).cursor().execute('SELECT COUNT(Effectif) FROM Classe')
+            moyenneEleveParClasse = conn.fetchall()[0][0]
+            moyenneEleveParClasse = round( nbEleves / moyenneEleveParClasse ,1)
+            conn.close()
+            return render_template("views/dashboard.html",
+                               isAdmin  = statut,
+                               nbEleves = nbEleves,
+                               moyenneEleveParClasse = moyenneEleveParClasse)
         return render_template("views/dashboard.html",
                                isAdmin=statut)
     return redirect(url_for('login'))
@@ -172,7 +184,7 @@ def supprimer_referents():
 
 
 ###################
-#    ECOLES     #
+#    ECOLES       #
 ###################
 
 #    DASHBOARD : Créer Ecole    #
@@ -260,6 +272,51 @@ def supprimer_ecole():
     return render_template("views/dashboard/adminDeleteEcole.html")
 
 
+#############################
+#    DASHBOARD REFERENTS    #
+#############################
+
+@app.route("/dashboard/ecole", methods=["POST", "GET"])
+def referentEcole() :
+    if request.method == "POST":
+        # si le formulaire est envoyé
+        # data = request.form
+        # saisie = data.get('term')
+        # resultats = chercher_ecoleLike(saisie)
+        return render_template("views/dashboard/referentEcole.html")
+    else:
+        # méthode GET
+        return render_template("views/dashboard/referentEcole.html")
+
+@app.route("/dashboard/classe", methods=["POST", "GET"])
+def referentClasse() :
+    username = session.get("username")
+    statut = session.get("statut")
+    if request.method == "POST":
+        # si le formulaire est envoyé
+        pass
+    else :
+        # méthode GET
+        if username is not None and statut == 0 :
+            conn = sqlite3.connect(bdd_name).cursor().execute('select cycleScolaire from Ecole, Utilisateur WHERE Ecole.idEcole = Utilisateur.idEcole AND idUtilisateur=?', (session.get("id"),) )
+            cycleScolaire = conn.fetchall()[0][0]
+            print(cycleScolaire)
+            conn.close()
+            return render_template("views/dashboard/referentClasse.html", cycleScolaire=cycleScolaire)
+        return redirect(request.url)
+
+
+@app.route("/dashboard/correspondants", methods=["POST", "GET"])
+def referentCorrespondants() :
+    if request.method == "POST":
+        # si le formulaire est envoyé
+        # data = request.form
+        # saisie = data.get('term')
+        # resultats = chercher_ecoleLike(saisie)
+        return render_template("views/dashboard/referentCorrespondants.html")
+    else:
+        # méthode GET
+        return render_template("views/dashboard/referentCorrespondants.html")
 
 
 # ############################################################################

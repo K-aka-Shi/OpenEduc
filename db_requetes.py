@@ -122,12 +122,11 @@ CREATE TABLE Classe (
 idClasse INTEGER PRIMARY KEY,
 Effectif INT,
 Moyenne FLOAT,
-cycleScolaire TEXT CHECK( cycleScolaire IN ('CP','CE1','CE2','CM1','CM2','6E','5E','4E','3E','1RE','2NDE','TALE') ),
+niveauScolaire TEXT CHECK( niveauScolaire IN ('CP','CE1','CE2','CM1','CM2','6E','5E','4E','3E','1RE','2NDE','TALE') ),
 idPersonnel INT,
 idEcole INT, -- Clé étrangère faisant référence à l'école à laquelle la classe est rattachée
 FOREIGN KEY (idEcole) REFERENCES Ecole(idEcole),
-FOREIGN KEY (idPersonnel) REFERENCES Personnel(idPersonnel),
-FOREIGN KEY (cycleScolaire) REFERENCES Ecole(cycleScolaire)
+FOREIGN KEY (idPersonnel) REFERENCES Personnel(idPersonnel)
 );
                 """)
     conn.close()
@@ -451,6 +450,19 @@ def update_ecole(id_ecole, nomEcole, adresse, ville, codePostal, nbEleves, telep
 
 
 
+                #
+            #       #
+        #       #       #
+    #       #       #       #
+#       DASHBOARD REFERENT      #
+    #       #       #       #
+        #       #       #
+            #       #
+                #
+
+# Ecole
+
+
 
 # ____________________________________________________________________________________________________
 #                                         INSERT
@@ -496,7 +508,7 @@ def inserer_donnees():
     cur.executemany("INSERT INTO Ecole (nomEcole, Adresse, Ville, CodePostal, nbEleves, Telephone, Email, cycleScolaire) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", ecoles)
     cur.executemany("INSERT INTO Utilisateur (Identifiant, MotDePasse, isAdmin, idEcole) VALUES (?, ?, ?, ?)", utilisateurs)
     cur.executemany("INSERT INTO Personnel (Nom, Prenom, Sexe, Telephone, Email, Fonction, idEcole, idClasse) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", personnel)
-    cur.executemany("INSERT INTO Classe (Effectif, Moyenne, cycleScolaire, idPersonnel, idEcole) VALUES (?, ?, ?, ?, ?)", classes)
+    cur.executemany("INSERT INTO Classe (Effectif, Moyenne, niveauScolaire, idPersonnel, idEcole) VALUES (?, ?, ?, ?, ?)", classes)
 
     conn.commit()
     conn.close()

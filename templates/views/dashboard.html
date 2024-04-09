@@ -37,8 +37,28 @@
 
 
     {% else %}
+
     <!-- REFERENT -->
     <p>REFERENT</p>
+    
+    <!-- Afficher le total des effectifs de l'école -->
+    <button type="button" class="btn btn-primary position-relative">
+        Total des effectifs de l'école
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {{ nbEleves }}
+        </span>
+    </button>
+    
+    <p></p>
+
+    <!-- Afficher la moyenne par classe -->
+    <button type="button" class="btn btn-primary position-relative">
+        Moyenne par classe
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {{ moyenneEleveParClasse }}
+        </span>
+    </button>
+
     {% endif %}
     <br><br><br><br><br><br><br><br><br><b><b></b></b>
 {% endblock %}

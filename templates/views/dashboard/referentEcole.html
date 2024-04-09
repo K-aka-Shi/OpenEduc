@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Modifier les informations de l'école{% endblock %}
+{% block js %}<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>{% endblock %}
+{% block css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}"></link>{% endblock %}
+
+{% block content %}
+
+
+<h1>Dashboard</h1>
+
+<!-- Modifier les informations de l'école -->
+<h2>Informations de l'école</h2>
+
+<form action="{{ url_for('referentEcole') }}" method="POST">
+    <label for="nom_ecole">Nom de l'école :</label>
+    <input type="text" id="nom_ecole" name="nom_ecole" value="" required><br><br>
+    
+    <label for="adresse">Adresse :</label>
+    <input type="text" id="adresse" name="adresse" value="" required><br><br>
+
+    <label for="telephone">Téléphone :</label>
+    <input type="text" id="telephone" name="telephone" value=""><br><br>
+
+    <label for="email">Email :</label>
+    <input type="email" id="email" name="email" value=""><br><br>
+
+    <input type="submit" value="Modifier les informations de l'école">
+</form>
+
+
+
+
+
+
+
+{% endblock %}

@@ -8,7 +8,7 @@
     <div class="login-container">
         <h2>Connexion</h2>
         <form method="POST" action="{{ url_for('login') }}">
-            <input type="text" name="username" class="login-input" placeholder="Nom d'utilisateur" required>
+            <input type="text" name="username" class="login-input" placeholder="Nom d'utilisateur" required autofocus>
             <input type="password" name="password" class="login-input" placeholder="Mot de passe" required>
             <button type="submit" class="login-button">Se Connecter</button>
         </form>

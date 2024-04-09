@@ -170,18 +170,6 @@ def chercher_utilisateurLike(username) :
     conn.close()
     return utilisateur
 
-def supprimer_utilisateurByID(ids) :
-    conn = sqlite3.connect(bdd_name)
-    cur = conn.cursor()
-    print("\n\n\n")
-    for id in ids :
-        print("liste des trucs qui seront effacés :",ids)
-        cur.execute("""
-                    DELETE FROM Utilisateur WHERE idUtilisateur = ?
-                    """, (id,)
-        )
-    conn.commit()
-    conn.close()
 
 # Ecole
 def chercher_ecole(saisie) :
@@ -200,6 +188,35 @@ def chercher_ecole(saisie) :
     res = cur.execute("""
         SELECT nomEcole,Adresse,Ville,CodePostal,nbEleves,Telephone,Email,cycleScolaire
         FROM Ecole WHERE nomEcole LIKE ?""", ('%' + saisie + '%',)
+    )
+    ecole = res.fetchall()
+    print("Resultat requete :",ecole)
+    conn.close()
+    return ecole
+
+
+def chercher_ecole_testVerifAdd(nom,adresse,ville,codePostal,cycleScolaire) :
+    """
+    ## Fonction
+    Retourne les informations d'une école.
+
+    ## Parameters:
+    saisie (str) : le nom d'une école.
+
+    ## Returns:
+    ecole (liste) : La liste d'information.
+    """
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    res = cur.execute("""
+                      SELECT nomEcole,Adresse,Ville,CodePostal,cycleScolaire
+                      FROM Ecole
+                      WHERE nomEcole = ? AND
+                            Adresse = ? AND
+                            Ville = ? AND
+                            CodePostal = ? AND
+                            cycleScolaire = ?
+                      """, (nom,adresse,ville,codePostal,cycleScolaire)
     )
     ecole = res.fetchall()
     print("Resultat requete :",ecole)
@@ -289,6 +306,210 @@ def inserer_ecole(nom, adresse, ville, code_postal, cycle_scolaire):
     conn.commit()
     conn.close()
     return password
+
+# ____________________________________________________________________________________________________
+#                                         DELETE
+# ____________________________________________________________________________________________________
+    
+# Referent
+def supprimer_utilisateurByID(ids) :
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    print("\n\n\n")
+    for id in ids :
+        print("liste des trucs qui seront effacés :",ids)
+        cur.execute("""
+                    DELETE FROM Utilisateur WHERE idUtilisateur = ?
+                    """, (id,)
+        )
+    conn.commit()
+    conn.close()
+
+# Ecole
+def supprimer_ecoleByID(ids) :
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    print("\n\n\n")
+    for id in ids :
+        print("liste des trucs qui seront effacés :",ids)
+        cur.execute("""
+                    DELETE FROM Ecole WHERE idEcole = ?
+                    """, (id,)
+        )
+    conn.commit()
+    conn.close()
+
+
+
+# ____________________________________________________________________________________________________
+#                                         UPDATE
+# ____________________________________________________________________________________________________
+    
+def update_referent(id_utilisateur, identifiant, password, idEcole):
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    if identifiant :
+        print("requete identifiant")
+        cur.execute("""
+                    UPDATE Utilisateur
+                    SET Identifiant = :nouvel_identifiant
+                    WHERE idUtilisateur = :id_utilisateur;
+                    """, {'nouvel_identifiant':identifiant, 'id_utilisateur':id_utilisateur}
+                    )
+    if password :
+        print("requete mdp")
+        cur.execute("""
+                    UPDATE Utilisateur
+                    SET MotDePasse = :nouveau_mdp
+                    WHERE idUtilisateur = :id_utilisateur;
+                    """, {'nouveau_mdp':password, 'id_utilisateur':id_utilisateur}
+                    )
+    if idEcole:
+        print("requete l'idEcole")
+        cur.execute("""
+                    UPDATE Utilisateur
+                    SET idEcole = :nouvelle_ecole
+                    WHERE idUtilisateur = :id_utilisateur;
+                    """, {'nouvelle_ecole':idEcole, 'id_utilisateur':id_utilisateur}
+                    )
+    conn.commit()
+    conn.close()
+
+# Ecole
+def update_ecole(id_ecole, nomEcole, adresse, ville, codePostal, nbEleves, telephone, email, cycleScolaire):
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    
+    if nomEcole:
+        cur.execute("""
+                    UPDATE Ecole
+                    SET nomEcole = :nouveau_nom
+                    WHERE idEcole = :id_ecole;
+                    """, {'nouveau_nom': nomEcole, 'id_ecole': id_ecole}
+                    )
+    
+    if adresse:
+        cur.execute("""
+                    UPDATE Ecole
+                    SET Adresse = :nouvelle_adresse
+                    WHERE idEcole = :id_ecole;
+                    """, {'nouvelle_adresse': adresse, 'id_ecole': id_ecole}
+                    )
+    
+    if ville:
+        cur.execute("""
+                    UPDATE Ecole
+                    SET Ville = :nouvelle_ville
+                    WHERE idEcole = :id_ecole;
+                    """, {'nouvelle_ville': ville, 'id_ecole': id_ecole}
+                    )
+    
+    if codePostal:
+        cur.execute("""
+                    UPDATE Ecole
+                    SET CodePostal = :nouveau_codePostal
+                    WHERE idEcole = :id_ecole;
+                    """, {'nouveau_codePostal': codePostal, 'id_ecole': id_ecole}
+                    )
+    
+    if nbEleves:
+        cur.execute("""
+                    UPDATE Ecole
+                    SET nbEleves = :nouveau_nbEleves
+                    WHERE idEcole = :id_ecole;
+                    """, {'nouveau_nbEleves': nbEleves, 'id_ecole': id_ecole}
+                    )
+    
+    if telephone:
+        cur.execute("""
+                    UPDATE Ecole
+                    SET Telephone = :nouveau_telephone
+                    WHERE idEcole = :id_ecole;
+                    """, {'nouveau_telephone': telephone, 'id_ecole': id_ecole}
+                    )
+    
+    if email:
+        cur.execute("""
+                    UPDATE Ecole
+                    SET Email = :nouvel_email
+                    WHERE idEcole = :id_ecole;
+                    """, {'nouvel_email': email, 'id_ecole': id_ecole}
+                    )
+    
+    if cycleScolaire:
+        cur.execute("""
+                    UPDATE Ecole
+                    SET cycleScolaire = :nouveau_cycleScolaire
+                    WHERE idEcole = :id_ecole;
+                    """, {'nouveau_cycleScolaire': cycleScolaire, 'id_ecole': id_ecole}
+                    )
+    
+    conn.commit()
+    conn.close()
+
+
+
+
+
+
+# ____________________________________________________________________________________________________
+#                                         INSERT
+# ____________________________________________________________________________________________________
+    
+
+
+
+def inserer_donnees():
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+
+    # Données pour la table Ecole
+    ecoles = [
+        ("École des Lilas", "10 Rue des Lilas", "Paris", "75020", 300, "01 23 45 67 89", "ecole.lilas@example.com", "elementaire"),
+        ("Collège Marcel Pagnol", "22 Avenue de la République", "Marseille", "13001", 500, "04 56 78 90 12", "college.pagnol@example.com", "college"),
+        ("Lycée Victor Hugo", "15 Rue Victor Hugo", "Lyon", "69001", 800, "06 78 90 12 34", "lycee.hugo@example.com", "lycee"),
+        ('École Guynemer II', '16 Rue de Châteauroux', 'Strasbourg', '67000', 1000, '0388344130', 'ce.0670384D@ac-strasbourg.fr', 'elementaire'),
+        ('Ecole du Centre', "4 rue de l'Ecole", 'Lingolsheim', '67380', 200, '0388780432', 'ce.0671418C@ac-strasbourg.fr', 'elementaire')
+    ]
+
+    # Données pour la table Utilisateur
+    utilisateurs = [
+        ("administrateur", "admin", True, None),
+        ("nidal", "mdp", False, 1),
+        ("leandre", "mdp", False, 2)
+    ]
+
+    # Données pour la table Personnel
+    personnel = [
+        ("Dupont", "Jean", "H", "01 23 45 67 89", "jean.dupont@example.com", "Enseignant", 1, None),
+        ("Durand", "Marie", "F", "04 56 78 90 12", "marie.durand@example.com", "Directrice", 2, None)
+    ]
+
+    # Données pour la table Classe
+    classes = [
+        (25, 12.5, "CP", 1, 1),
+        (30, 14.2, "CE1", 2, 1),
+        (28, 13.8, "6E", 3, 2)
+    ]
+
+    # Insertion des données dans chaque table
+    cur.executemany("INSERT INTO Ecole (nomEcole, Adresse, Ville, CodePostal, nbEleves, Telephone, Email, cycleScolaire) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", ecoles)
+    cur.executemany("INSERT INTO Utilisateur (Identifiant, MotDePasse, isAdmin, idEcole) VALUES (?, ?, ?, ?)", utilisateurs)
+    cur.executemany("INSERT INTO Personnel (Nom, Prenom, Sexe, Telephone, Email, Fonction, idEcole, idClasse) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", personnel)
+    cur.executemany("INSERT INTO Classe (Effectif, Moyenne, cycleScolaire, idPersonnel, idEcole) VALUES (?, ?, ?, ?, ?)", classes)
+
+    conn.commit()
+    conn.close()
+
+
+
+
+
+
+
+
+
+
 # ____________________________________________________________________________________________________
 #                                         TRIGGERS
 # ____________________________________________________________________________________________________
@@ -432,99 +653,5 @@ def creer_triggers_classe():
         VALUES (NULL, OLD.idEcole, 'Suppression Classe', NULL, NULL);
     END;
     """)
-    conn.commit()
-    conn.close()
-
-
-
-
-
-
-# ____________________________________________________________________________________________________
-#                                         INSERT
-# ____________________________________________________________________________________________________
-    
-
-
-
-def inserer_donnees():
-    conn = sqlite3.connect(bdd_name)
-    cur = conn.cursor()
-
-    # Données pour la table Ecole
-    ecoles = [
-        ("École des Lilas", "10 Rue des Lilas", "Paris", "75020", 300, "01 23 45 67 89", "ecole.lilas@example.com", "elementaire"),
-        ("Collège Marcel Pagnol", "22 Avenue de la République", "Marseille", "13001", 500, "04 56 78 90 12", "college.pagnol@example.com", "college"),
-        ("Lycée Victor Hugo", "15 Rue Victor Hugo", "Lyon", "69001", 800, "06 78 90 12 34", "lycee.hugo@example.com", "lycee"),
-        ('École Guynemer II', '16 Rue de Châteauroux', 'Strasbourg', '67000', 1000, '0388344130', 'ce.0670384D@ac-strasbourg.fr', 'elementaire'),
-        ('Ecole du Centre', "4 rue de l'Ecole", 'Lingolsheim', '67380', 200, '0388780432', 'ce.0671418C@ac-strasbourg.fr', 'elementaire')
-    ]
-
-    # Données pour la table Utilisateur
-    utilisateurs = [
-        ("administrateur", "admin", True, None),
-        ("nidal", "mdp", False, 1),
-        ("leandre", "mdp", False, 2)
-    ]
-
-    # Données pour la table Personnel
-    personnel = [
-        ("Dupont", "Jean", "H", "01 23 45 67 89", "jean.dupont@example.com", "Enseignant", 1, None),
-        ("Durand", "Marie", "F", "04 56 78 90 12", "marie.durand@example.com", "Directrice", 2, None)
-    ]
-
-    # Données pour la table Classe
-    classes = [
-        (25, 12.5, "CP", 1, 1),
-        (30, 14.2, "CE1", 2, 1),
-        (28, 13.8, "6E", 3, 2)
-    ]
-
-    # Insertion des données dans chaque table
-    cur.executemany("INSERT INTO Ecole (nomEcole, Adresse, Ville, CodePostal, nbEleves, Telephone, Email, cycleScolaire) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", ecoles)
-    cur.executemany("INSERT INTO Utilisateur (Identifiant, MotDePasse, isAdmin, idEcole) VALUES (?, ?, ?, ?)", utilisateurs)
-    cur.executemany("INSERT INTO Personnel (Nom, Prenom, Sexe, Telephone, Email, Fonction, idEcole, idClasse) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", personnel)
-    cur.executemany("INSERT INTO Classe (Effectif, Moyenne, cycleScolaire, idPersonnel, idEcole) VALUES (?, ?, ?, ?, ?)", classes)
-
-    conn.commit()
-    conn.close()
-
-
-
-
-
-
-
-# ____________________________________________________________________________________________________
-#                                         UPDATE
-# ____________________________________________________________________________________________________
-    
-def update_referent(id_utilisateur, identifiant, password, idEcole):
-    conn = sqlite3.connect(bdd_name)
-    cur = conn.cursor()
-    if identifiant :
-        print("requete identifiant")
-        cur.execute("""
-                    UPDATE Utilisateur
-                    SET Identifiant = :nouvel_identifiant
-                    WHERE idUtilisateur = :id_utilisateur;
-                    """, {'nouvel_identifiant':identifiant, 'id_utilisateur':id_utilisateur}
-                    )
-    if password :
-        print("requete mdp")
-        cur.execute("""
-                    UPDATE Utilisateur
-                    SET MotDePasse = :nouveau_mdp
-                    WHERE idUtilisateur = :id_utilisateur;
-                    """, {'nouveau_mdp':password, 'id_utilisateur':id_utilisateur}
-                    )
-    if idEcole:
-        print("requete l'idEcole")
-        cur.execute("""
-                    UPDATE Utilisateur
-                    SET idEcole = :nouvelle_ecole
-                    WHERE idUtilisateur = :id_utilisateur;
-                    """, {'nouvelle_ecole':idEcole, 'id_utilisateur':id_utilisateur}
-                    )
     conn.commit()
     conn.close()

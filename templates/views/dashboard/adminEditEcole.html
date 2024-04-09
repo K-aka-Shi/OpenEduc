@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard - Modifier un Référent{% endblock %}
+{% block title %}Dashboard - Modifier une Ecole{% endblock %}
 {% block js %}<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>{% endblock %}
 {% block css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}"></link>{% endblock %}
 
@@ -11,29 +11,45 @@
 
 <p>tuto ? explication en despi</p>
 
-<h2>Modifier un Référent</h2>
+<h2>Modifier une Ecole</h2>
 
-<form action="{{ url_for('modifier_referent') }}" method="POST">
-    <label for="id_utilisateur">ID de l'utilisateur :</label>
-    <select name="id_utilisateur" id="id_utilisateur">
-        <option value="" disabled selected aria-required="true">Choisissez un utilisateur</option>
-        {% for utilisateur in utilisateurs %}
-        <option value="{{utilisateur[0]}}"> {{ utilisateur[1] }} </option>
+<form action="{{ url_for('modifier_ecole') }}" method="POST">
+    <label for="id_ecole">ID de l'école :</label>
+    <select name="id_ecole" id="id_ecole" required>
+        <option value="" disabled selected aria-required="true">Choisissez une école</option>
+        {% for ecole in ecoles %}
+        <option value="{{ecole[0]}}"> {{ ecole[3].upper() }} - {{ ecole[1] }} </option>
         {% endfor %}
     </select>
     <br><br>
+    <hr>
 
     <label for="champs">Champs à modifier :</label>
-    <input type="text" id="identifiant" name="identifiant" placeholder="Nouvel identifiant (login)">
-    <input type="text" id="mdp" name="mdp" placeholder="Nouveau mot de passe">
-    <select name="ecoles" id="ecoles">
-        <option value="" disabled selected aria-required="true">Choisissez une école</option>
-        {% for ecole in ecoles %}
-        <option value={{ecole[0]}}>{{ ecole[3].upper() }} - {{ ecole[1] }}</option>
-        {% endfor %}
+    <br><br>
+    <input type="text" id="nomEcole" name="nomEcole" placeholder="Nouveau nom de l'école">
+    <br><br>
+    <input type="text" id="adresse" name="adresse" placeholder="Nouvelle adresse">
+    <br><br>
+    <input type="text" id="ville" name="ville" placeholder="Nouvelle ville">
+    <br><br>
+    <input type="text" id="codePostal" name="codePostal" placeholder="Nouveau code postal">
+    <br><br>
+    <input type="text" id="nbEleves" name="nbEleves" placeholder="Nouveau nombre d'élèves">
+    <br><br>
+    <input type="text" id="telephone" name="telephone" placeholder="Nouveau numéro de téléphone">
+    <br><br>
+    <input type="text" id="email" name="email" placeholder="Nouvelle adresse email">
+    <br><br>
+    <select name="cycleScolaire" id="cycleScolaire">
+        <option value="" disabled selected aria-required="true">Choisissez un cycle scolaire</option>
+        <option value="maternelle">Maternelle</option>
+        <option value="elementaire">Élémentaire</option>
+        <option value="college">Collège</option>
+        <option value="lycee">Lycée</option>
     </select>
     <br><br>
     <input type="submit" value="Modifier">
 </form>
+
 
 {% endblock %}

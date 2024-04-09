@@ -152,11 +152,8 @@ def dashboardAdminDeleteRef() :
     if request.method == "POST":
         # si le formulaire est envoyé
         data = request.form
-        print(data)
         saisie = data.get('term')
-        print("Saisie :",saisie)
         resultats = chercher_utilisateurLike(saisie)
-        print("chercher_utilisateurLike :",resultats)
         return render_template("views/dashboard/adminDeleteRef.html", referents=resultats)
     else:
         # méthode GET
@@ -191,7 +188,7 @@ def dashboardAdminAddEcole() :
         codePostal    = data.get("codePostal")
         cycleScolaire = data.get("cycleScolaire")
         inserer_ecole(nom,adresse,ville,codePostal,cycleScolaire)
-        print(chercher_ecole(nom,adresse,ville,codePostal,cycleScolaire))
+        print(chercher_ecole_testVerifAdd(nom,adresse,ville,codePostal,cycleScolaire))
         flash("Ecole crée !", category='success')  # Affichage du message de succes
         return render_template("views/dashboard/adminAddEcole.html", resultats=None)
     else :
@@ -219,20 +216,48 @@ def dashboardAdminSearchEcole() :
 #    DASHBOARD : Modifier Ecole    #
 @app.route("/dashboard/modifier-ecole")
 def dashboardAdminEditEcole() :
-    return render_template("views/dashboard/adminEditEcole.html")
+    ecoles = chercher_ecoleAll()
+    ecoles = sorted(ecoles, key=lambda x: x[2])
+    return render_template("views/dashboard/adminEditEcole.html", ecoles=ecoles)
 
 @app.route('/modifier_ecole', methods=['POST'])
 def modifier_ecole():
+    data = request.form
+    id_ecole = data.get('id_ecole')
+    nomEcole = data.get('nomEcole')
+    adresse = data.get('adresse')
+    ville = data.get('ville')
+    codePostal = data.get('codePostal')
+    nbEleves = data.get('nbEleves')
+    telephone = data.get('telephone')
+    email = data.get('email')
+    cycleScolaire = data.get('cycleScolaire')    
+    update_ecole(id_ecole, nomEcole, adresse, ville, codePostal, nbEleves, telephone, email, cycleScolaire)
+
     return redirect(url_for('dashboardAdminEditEcole'))
 
-#    DASHBOARD : Supprimer Referent    #
-@app.route("/dashboard/supprimer-ecole")
+#    DASHBOARD : Supprimer Ecole    #
+@app.route("/dashboard/supprimer-ecole", methods=['POST', 'GET'])
 def dashboardAdminDeleteEcole() :
-    return render_template("views/dashboard/adminDeleteEcole.html")
+    if request.method == "POST":
+        # si le formulaire est envoyé
+        data = request.form
+        saisie = data.get('term')
+        resultats = chercher_ecoleLike(saisie)
+        return render_template("views/dashboard/adminDeleteEcole.html", ecoles=resultats)
+    else:
+        # méthode GET
+        resultats = None
+        return render_template("views/dashboard/adminDeleteEcole.html", ecoles=resultats)
 
 @app.route('/supprimer_ecole', methods=['POST'])
 def supprimer_ecole():
-    return redirect(url_for('dashboardAdminDeleteEcole'))
+    ecoles_a_supprimer = request.form.getlist('ecole_id')
+    print(ecoles_a_supprimer)
+    # Effectuer les opérations de suppression dans la base de données
+    supprimer_ecoleByID(ecoles_a_supprimer)
+    # Rediriger vers une page de confirmation ou de retour à la page d'accueil
+    return render_template("views/dashboard/adminDeleteEcole.html")
 
 
 

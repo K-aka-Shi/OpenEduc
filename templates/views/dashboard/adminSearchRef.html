@@ -44,12 +44,12 @@
                 <th style="border: 2px solid #000;">ID</th>
                 <th style="border: 2px solid #000;">Identifiant</th>
                 <th style="border: 2px solid #000;">MotDePasse</th>
-                <th style="border: 2px solid #000;">isAdmin</th>
                 <th style="border: 2px solid #000;">idEcole</th>
             </tr>
         </thead>
         <tbody>
             {% for resultat in resultats %}
+            {% if resultat[3] == 0 %}
             <tr>
                 <td style="border: 2px solid #000;">{{ resultat[0] }}</td>
                 <td style="border: 2px solid #000;">{{ resultat[1] }}</td>
@@ -57,9 +57,9 @@
                     <img src="https://static-00.iconduck.com/assets.00/eye-show-icon-2048x1326-edkdqxrw.png" alt="icon show" style="width:30px;">
                     <span class="mdp">{{ resultat[2] }}</span>
                 </td>
-                <td style="border: 2px solid #000;">{{ resultat[3] }}</td>
                 <td style="border: 2px solid #000;">{{ resultat[4] }}</td>
             </tr>
+            {% endif %}
             {% endfor %}
         </tbody>
     </table>

@@ -63,10 +63,12 @@ def dashboard() :
     if username is not None :
         if statut == 1 :
             ecoles = chercher_ecole_formCreerReferent()
+            logs = chercher_historiquemodification()
             print(ecoles)
             return render_template("views/dashboard.html",
                                isAdmin=statut,
-                               ecoles = ecoles)
+                               ecoles = ecoles,
+                               logs = logs)
         else :
             conn = sqlite3.connect(bdd_name).cursor().execute('SELECT SUM(Effectif) FROM Classe')
             nbEleves = conn.fetchall()[0][0]
@@ -243,7 +245,7 @@ def modifier_ecole():
     nbEleves = data.get('nbEleves')
     telephone = data.get('telephone')
     email = data.get('email')
-    cycleScolaire = data.get('cycleScolaire')    
+    cycleScolaire = data.get('cycleScolaire')
     update_ecole(id_ecole, nomEcole, adresse, ville, codePostal, nbEleves, telephone, email, cycleScolaire)
 
     return redirect(url_for('dashboardAdminEditEcole'))
@@ -278,32 +280,94 @@ def supprimer_ecole():
 
 @app.route("/dashboard/ecole", methods=["POST", "GET"])
 def referentEcole() :
+    username = session.get("username")
+    statut = session.get("statut")
+    id = session.get('id')
     if request.method == "POST":
         # si le formulaire est envoyé
-        # data = request.form
-        # saisie = data.get('term')
-        # resultats = chercher_ecoleLike(saisie)
-        return render_template("views/dashboard/referentEcole.html")
+        conn = sqlite3.connect(bdd_name).cursor().execute("""
+                                                        SELECT Ecole.idEcole
+                                                        FROM Ecole, Utilisateur
+                                                        WHERE Ecole.idEcole = Utilisateur.idEcole AND idUtilisateur=?
+                                                        """, (id,) )
+        MonEcoleID = conn.fetchall()[0][0]
+        print(MonEcoleID)
+        data = request.form
+        nomEcole = data.get('nom_ecole')
+        adresse = data.get('adresse')
+        ville = data.get('ville')
+        codePostal = data.get('codePostal')
+        telephone = data.get('telephone')
+        email = data.get('email')
+        cycleScolaire = data.get('cycleScolaire')
+        update_ecole(MonEcoleID, nomEcole, adresse, ville, codePostal, None, telephone, email, cycleScolaire)
+        return redirect(request.url)
     else:
         # méthode GET
-        return render_template("views/dashboard/referentEcole.html")
+        if username is not None and statut == 0 :
+            conn = sqlite3.connect(bdd_name).cursor().execute("""
+                                                            SELECT Ecole.idEcole, nomEcole, Adresse, Ville, CodePostal, nbEleves, Telephone, Email, cycleScolaire
+                                                            FROM Ecole, Utilisateur WHERE Ecole.idEcole = Utilisateur.idEcole AND idUtilisateur=?
+                                                            """, (id,) )
+            monEcole = conn.fetchall()[0]
+            conn = sqlite3.connect(bdd_name).cursor().execute('SELECT SUM(Effectif) FROM Classe')
+            nbEleves = conn.fetchall()[0][0]
+            conn.close()
+            return render_template("views/dashboard/referentEcole.html",
+                                monEcole = monEcole,
+                                nbEleves = nbEleves)
+        return redirect(url_for('dashboard'))
+
+
 
 @app.route("/dashboard/classe", methods=["POST", "GET"])
 def referentClasse() :
     username = session.get("username")
     statut = session.get("statut")
+    id = session.get("id")
+    print('session', id)
     if request.method == "POST":
         # si le formulaire est envoyé
-        pass
+        submit_type = request.form.get('submit-type')
+        if submit_type == 'Ajouter':
+            # Traitement pour le formulaire d'ajout
+            data = request.form
+            niveauScolaire = data.get('niveau')
+            prof = ''
+            effectif = data.get('effectifs')
+            idEcole = chercher_personnel(id)
+            print('chercher_personnel',idEcole[0])
+            # inserer_classe(effectif, niveauScolaire, prof, idEcole)
+            print("\n\nTraitement pour le formulaire d'ajout\n\n")
+        elif submit_type == 'Modifier':
+            # Traitement pour le formulaire de modification
+            print("\n\nTraitement pour le formulaire de modification\n\n")
+        return redirect(request.url)
     else :
         # méthode GET
         if username is not None and statut == 0 :
-            conn = sqlite3.connect(bdd_name).cursor().execute('select cycleScolaire from Ecole, Utilisateur WHERE Ecole.idEcole = Utilisateur.idEcole AND idUtilisateur=?', (session.get("id"),) )
+            conn = sqlite3.connect(bdd_name).cursor().execute("""
+                                                              SELECT cycleScolaire
+                                                              FROM Ecole, Utilisateur
+                                                              WHERE Ecole.idEcole = Utilisateur.idEcole
+                                                                AND idUtilisateur=?""", (id,)
+                                                            )
             cycleScolaire = conn.fetchall()[0][0]
-            print(cycleScolaire)
+            conn = sqlite3.connect(bdd_name).cursor().execute("""
+                                                              SELECT c.niveauScolaire, p.Nom, p.Prenom, c.Effectif
+                                                              FROM Classe c
+                                                              JOIN Personnel p ON c.idPersonnel = p.idPersonnel
+                                                              JOIN Utilisateur u ON c.idEcole = u.idEcole
+                                                              WHERE u.idUtilisateur = ?""", (id,)
+                                                              )
+            classes = conn.fetchall()
+            print(classes)
+            print(cycleScolaire, classes)
             conn.close()
-            return render_template("views/dashboard/referentClasse.html", cycleScolaire=cycleScolaire)
-        return redirect(request.url)
+            return render_template("views/dashboard/referentClasse.html",
+                                   cycleScolaire = cycleScolaire,
+                                   classes = classes)
+        return redirect(url_for('dashboard'))
 
 
 @app.route("/dashboard/correspondants", methods=["POST", "GET"])
@@ -320,7 +384,7 @@ def referentCorrespondants() :
 
 
 # ############################################################################
-#                                   PARTENAIRES                    
+#                                   RECHERCHER UNE ECOLE                    
 # ############################################################################
 
 @app.route("/recherche", methods=["POST", "GET"])
@@ -360,6 +424,7 @@ def recherche() :
 @app.route("/partenaires")
 def partenaires() :
     ecoles = chercher_ecoleAll()
+    print("\n\nECOLES :\n",ecoles[0], '\n\n')
     ecoles = sorted(ecoles, key=lambda x: x[2])
     for ecole in ecoles :
         print(ecole[2], ecole[0])

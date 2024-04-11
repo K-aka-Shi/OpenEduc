@@ -8,27 +8,124 @@
 
 <h1>Dashboard</h1>
 
+<mark> bouton activer/desactiver modifications </mark>
+
+
 <!-- Modifier les informations de l'école -->
 <h2>Informations de l'école</h2>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form action="{{ url_for('referentEcole') }}" method="POST">
+                <div class="form-group">
+                    <label for="nom_ecole">Nom de l'école :</label>
+                    <input  class="form-control" type="text" id="nom_ecole" name="nom_ecole" value="{{ monEcole[1] }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="adresse">Adresse :</label>
+                    <input class="form-control" type="text" id="adresse" name="adresse" value="{{ monEcole[2] }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="ville">Ville :</label>
+                    <input class="form-control" type="text"id="ville" name="ville" value="{{ monEcole[3] }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="codePostal">Code postal :</label>
+                    <input class="form-control" type="text"id="codePostal" name="codePostal" value="{{ monEcole[4] }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="telephone">Téléphone :</label>
+                    <input class="form-control" type="text"id="telephone" name="telephone" value="{{ monEcole[6] }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email :</label>
+                    <input class="form-control" type="text" id="email" name="email" value="{{ monEcole[7] }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="cycleScolaire">Cycle Scolaire :</label>
+                    <select name="cycleScolaire" id="cycleScolaire" style="width: max-content">
+                        {% if monEcole[8] == 'maternelle' %}
+                        <option value="" disabled aria-required="true">Choisissez un cycle scolaire</option>
+                        <option selected value="maternelle">Maternelle</option>
+                        <option value="elementaire">Élémentaire</option>
+                        <option value="college">Collège</option>
+                        <option value="lycee">Lycée</option>
+                        {% elif monEcole[8] == 'elementaire' %}
+                        <option value="" disabled aria-required="true">Choisissez un cycle scolaire</option>
+                        <option value="maternelle">Maternelle</option>
+                        <option value="elementaire" selected>Élémentaire</option>
+                        <option value="college">Collège</option>
+                        <option value="lycee">Lycée</option>
+                        {% elif monEcole[8] == 'college' %}
+                        <option value="" disabled aria-required="true">Choisissez un cycle scolaire</option>
+                        <option value="maternelle">Maternelle</option>
+                        <option value="elementaire">Élémentaire</option>
+                        <option selected value="college">Collège</option>
+                        <option value="lycee">Lycée</option>
+                        {% elif monEcole[8] == 'lycee' %}
+                        <option value="" disabled aria-required="true">Choisissez un cycle scolaire</option>
+                        <option value="maternelle">Maternelle</option>
+                        <option value="elementaire">Élémentaire</option>
+                        <option value="college">Collège</option>
+                        <option selected value="lycee">Lycée</option>
+                        {% else %}
+                        <option selected value="" disabled aria-required="true">Choisissez un cycle scolaire</option>
+                        <option value="maternelle">Maternelle</option>
+                        <option value="elementaire">Élémentaire</option>
+                        <option value="college">Collège</option>
+                        <option value="lycee">Lycée</option>
+                        {% endif %}
+                    </select>
+                                </div>
+                <input type="submit" value="Modifier les informations de l'école" style="width: max-content;">
+            </form>
+        </div>
 
-<form action="{{ url_for('referentEcole') }}" method="POST">
-    <label for="nom_ecole">Nom de l'école :</label>
-    <input type="text" id="nom_ecole" name="nom_ecole" value="" required><br><br>
-    
-    <label for="adresse">Adresse :</label>
-    <input type="text" id="adresse" name="adresse" value="" required><br><br>
 
-    <label for="telephone">Téléphone :</label>
-    <input type="text" id="telephone" name="telephone" value=""><br><br>
-
-    <label for="email">Email :</label>
-    <input type="email" id="email" name="email" value=""><br><br>
-
-    <input type="submit" value="Modifier les informations de l'école">
-</form>
-
-
-
+        <!-- INFORMATION SUR L'ECOLE -->
+        <div class="col">
+            <table class="table is-fullwidth" style="border: 2px solid #000; border-collapse: collapse;">
+                <tbody>
+                    <tr>
+                        <th style="border: 2px solid #000;">ID</th>
+                        <td style="border: 2px solid #000;">{{ monEcole[0] }}</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Nom</th>
+                        <td style="border: 2px solid #000;">{{ monEcole[1] }}</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Adresse</th>
+                        <td style="border: 2px solid #000;">{{ monEcole[2] }}</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Code Postal</th>
+                        <td style="border: 2px solid #000;">{{ monEcole[3] }}</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Ville</th>
+                        <td style="border: 2px solid #000;">{{ monEcole[4] }}</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Nombre d'élèves</th>
+                        <td style="border: 2px solid #000;">{{ monEcole[5] }}</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Téléphone</th>
+                        <td style="border: 2px solid #000;">{{ monEcole[6] }}</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">E-mail</th>
+                        <td style="border: 2px solid #000;">{{ monEcole[7] }}</td>
+                    <tr>
+                        <th style="border: 2px solid #000;">Cycle Scolaire</th>
+                        <td style="border: 2px solid #000;">{{ monEcole[8] }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 
 

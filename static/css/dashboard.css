@@ -7,7 +7,17 @@
     opacity: 1;
 }
 
-
+/* LOGS */
+.card {
+    margin-top: 20px;
+  }
+  .card-header {
+    background-color: #007bff;
+    color: #fff;
+  }
+  .table {
+    margin-bottom: 0;
+  }
 
 
 /* TABLEAU */
@@ -22,7 +32,7 @@ th, td {
     border: 2px solid #000;
 }
 
-thead>tr {
+tr>th {
     background-color: #0A4191;
     color: white;
 }

@@ -256,7 +256,27 @@ def chercher_ecole_formCreerReferent():
     conn.close()
     return ecole
 
+def chercher_personnel(idUtilisateur) :
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    res = cur.execute("""
+                      SELECT p.idPersonnel, p.Nom, p.Prenom, p.Sexe, p.Telephone, p.Email, p.Fonction, p.idEcole, p.idClasse FROM Personnel p
+                      INNER JOIN Utilisateur u ON p.idEcole = u.idEcole
+                      WHERE u.idUtilisateur = ?;
+                      """, (idUtilisateur,))
+    idEcole = res.fetchall()
+    conn.close()
+    return idEcole
 
+def chercher_historiquemodification() :
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    res = cur.execute("""
+                      SELECT * FROM HistoriqueModification
+                      """)
+    historiqueModification = res.fetchall()
+    conn.close()
+    return historiqueModification
 # ____________________________________________________________________________________________________
 #                                       INSERT                                                       |
 # ___________________________________________________________________________________________________|
@@ -305,6 +325,17 @@ def inserer_ecole(nom, adresse, ville, code_postal, cycle_scolaire):
     conn.commit()
     conn.close()
     return password
+
+
+def inserer_classe(effectif, moyenne, niveau_scolaire, id_personnel, id_ecole):
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    cur.execute("""
+        INSERT INTO Classe (Effectif, Moyenne, niveauScolaire, idPersonnel, idEcole)
+        VALUES (?, ?, ?, ?, ?)
+    """, (effectif, moyenne, niveau_scolaire, id_personnel, id_ecole))
+    conn.commit()
+    conn.close()
 
 # ____________________________________________________________________________________________________
 #                                         DELETE
@@ -376,10 +407,11 @@ def update_referent(id_utilisateur, identifiant, password, idEcole):
 
 # Ecole
 def update_ecole(id_ecole, nomEcole, adresse, ville, codePostal, nbEleves, telephone, email, cycleScolaire):
+    oldEcole = chercher_ecoleAll()[0]
     conn = sqlite3.connect(bdd_name)
     cur = conn.cursor()
     
-    if nomEcole:
+    if nomEcole != oldEcole[1]:
         cur.execute("""
                     UPDATE Ecole
                     SET nomEcole = :nouveau_nom
@@ -387,7 +419,7 @@ def update_ecole(id_ecole, nomEcole, adresse, ville, codePostal, nbEleves, telep
                     """, {'nouveau_nom': nomEcole, 'id_ecole': id_ecole}
                     )
     
-    if adresse:
+    if adresse != oldEcole[2] :
         cur.execute("""
                     UPDATE Ecole
                     SET Adresse = :nouvelle_adresse
@@ -395,7 +427,7 @@ def update_ecole(id_ecole, nomEcole, adresse, ville, codePostal, nbEleves, telep
                     """, {'nouvelle_adresse': adresse, 'id_ecole': id_ecole}
                     )
     
-    if ville:
+    if ville != oldEcole[3] :
         cur.execute("""
                     UPDATE Ecole
                     SET Ville = :nouvelle_ville
@@ -403,7 +435,7 @@ def update_ecole(id_ecole, nomEcole, adresse, ville, codePostal, nbEleves, telep
                     """, {'nouvelle_ville': ville, 'id_ecole': id_ecole}
                     )
     
-    if codePostal:
+    if codePostal != oldEcole[4] :
         cur.execute("""
                     UPDATE Ecole
                     SET CodePostal = :nouveau_codePostal
@@ -411,7 +443,7 @@ def update_ecole(id_ecole, nomEcole, adresse, ville, codePostal, nbEleves, telep
                     """, {'nouveau_codePostal': codePostal, 'id_ecole': id_ecole}
                     )
     
-    if nbEleves:
+    if nbEleves != oldEcole[5] :
         cur.execute("""
                     UPDATE Ecole
                     SET nbEleves = :nouveau_nbEleves
@@ -419,7 +451,7 @@ def update_ecole(id_ecole, nomEcole, adresse, ville, codePostal, nbEleves, telep
                     """, {'nouveau_nbEleves': nbEleves, 'id_ecole': id_ecole}
                     )
     
-    if telephone:
+    if telephone != oldEcole[6] :
         cur.execute("""
                     UPDATE Ecole
                     SET Telephone = :nouveau_telephone
@@ -427,7 +459,7 @@ def update_ecole(id_ecole, nomEcole, adresse, ville, codePostal, nbEleves, telep
                     """, {'nouveau_telephone': telephone, 'id_ecole': id_ecole}
                     )
     
-    if email:
+    if email != oldEcole[7] :
         cur.execute("""
                     UPDATE Ecole
                     SET Email = :nouvel_email
@@ -435,7 +467,7 @@ def update_ecole(id_ecole, nomEcole, adresse, ville, codePostal, nbEleves, telep
                     """, {'nouvel_email': email, 'id_ecole': id_ecole}
                     )
     
-    if cycleScolaire:
+    if cycleScolaire != oldEcole[8] :
         cur.execute("""
                     UPDATE Ecole
                     SET cycleScolaire = :nouveau_cycleScolaire
@@ -477,11 +509,11 @@ def inserer_donnees():
 
     # Données pour la table Ecole
     ecoles = [
-        ("École des Lilas", "10 Rue des Lilas", "Paris", "75020", 300, "01 23 45 67 89", "ecole.lilas@example.com", "elementaire"),
-        ("Collège Marcel Pagnol", "22 Avenue de la République", "Marseille", "13001", 500, "04 56 78 90 12", "college.pagnol@example.com", "college"),
-        ("Lycée Victor Hugo", "15 Rue Victor Hugo", "Lyon", "69001", 800, "06 78 90 12 34", "lycee.hugo@example.com", "lycee"),
-        ('École Guynemer II', '16 Rue de Châteauroux', 'Strasbourg', '67000', 1000, '0388344130', 'ce.0670384D@ac-strasbourg.fr', 'elementaire'),
-        ('Ecole du Centre', "4 rue de l'Ecole", 'Lingolsheim', '67380', 200, '0388780432', 'ce.0671418C@ac-strasbourg.fr', 'elementaire')
+        ("École des Lilas", "10 Rue des Lilas", "Paris", "75020", "01 23 45 67 89", "ecole.lilas@example.com", "elementaire"),
+        ("Collège Marcel Pagnol", "22 Avenue de la République", "Marseille", "13001", "04 56 78 90 12", "college.pagnol@example.com", "college"),
+        ("Lycée Victor Hugo", "15 Rue Victor Hugo", "Lyon", "69001", "06 78 90 12 34", "lycee.hugo@example.com", "lycee"),
+        ('École Guynemer II', '16 Rue de Châteauroux', 'Strasbourg', '67000', '0388344130', 'ce.0670384D@ac-strasbourg.fr', 'elementaire'),
+        ('Ecole du Centre', "4 rue de l'Ecole", 'Lingolsheim', '67380', '0388780432', 'ce.0671418C@ac-strasbourg.fr', 'elementaire')
     ]
 
     # Données pour la table Utilisateur
@@ -505,7 +537,7 @@ def inserer_donnees():
     ]
 
     # Insertion des données dans chaque table
-    cur.executemany("INSERT INTO Ecole (nomEcole, Adresse, Ville, CodePostal, nbEleves, Telephone, Email, cycleScolaire) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", ecoles)
+    cur.executemany("INSERT INTO Ecole (nomEcole, Adresse, Ville, CodePostal, Telephone, Email, cycleScolaire) VALUES (?, ?, ?, ?, ?, ?, ?)", ecoles)
     cur.executemany("INSERT INTO Utilisateur (Identifiant, MotDePasse, isAdmin, idEcole) VALUES (?, ?, ?, ?)", utilisateurs)
     cur.executemany("INSERT INTO Personnel (Nom, Prenom, Sexe, Telephone, Email, Fonction, idEcole, idClasse) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", personnel)
     cur.executemany("INSERT INTO Classe (Effectif, Moyenne, niveauScolaire, idPersonnel, idEcole) VALUES (?, ?, ?, ?, ?)", classes)
@@ -541,14 +573,52 @@ def creer_triggers_utilisateur():
     END;
     """)
     # Trigger pour la mise à jour
+    # cur.execute("""
+    # CREATE TRIGGER IF NOT EXISTS utilisateur_update_trigger
+    # AFTER UPDATE ON Utilisateur
+    # BEGIN
+    #     INSERT INTO HistoriqueModification (idUtilisateur, idEcole, champsModifies, ancienneValeur, nouvelleValeur)
+    #     VALUES (NEW.idUtilisateur, NEW.idEcole, 'Mise à jour Utilisateur', NULL, NULL);
+    # END;
+    # """)
+
+# Trigger pour la mise à jour de l'identifiant de l'utilisateur
     cur.execute("""
-    CREATE TRIGGER IF NOT EXISTS utilisateur_update_trigger
-    AFTER UPDATE ON Utilisateur
-    BEGIN
-        INSERT INTO HistoriqueModification (idUtilisateur, idEcole, champsModifies, ancienneValeur, nouvelleValeur)
-        VALUES (NEW.idUtilisateur, NEW.idEcole, 'Mise à jour Utilisateur', NULL, NULL);
-    END;
-    """)
+CREATE TRIGGER IF NOT EXISTS utilisateur_identifiant_update_trigger
+AFTER UPDATE OF Identifiant ON Utilisateur
+BEGIN
+    INSERT INTO HistoriqueModification (idUtilisateur, idEcole, champsModifies, ancienneValeur, nouvelleValeur)
+    VALUES (NEW.idUtilisateur, NEW.idEcole, 'Mise à jour Identifiant', OLD.Identifiant, NEW.Identifiant);
+END;
+                """)
+# Trigger pour la mise à jour du mot de passe de l'utilisateur
+    cur.execute("""
+CREATE TRIGGER IF NOT EXISTS utilisateur_motdepasse_update_trigger
+AFTER UPDATE OF MotDePasse ON Utilisateur
+BEGIN
+    INSERT INTO HistoriqueModification (idUtilisateur, idEcole, champsModifies, ancienneValeur, nouvelleValeur)
+    VALUES (NEW.idUtilisateur, NEW.idEcole, 'Mise à jour Mot de passe', OLD.MotDePasse, NEW.MotDePasse);
+END;
+                """)
+# Trigger pour la mise à jour du statut d'administrateur de l'utilisateur
+    cur.execute("""
+CREATE TRIGGER IF NOT EXISTS utilisateur_isadmin_update_trigger
+AFTER UPDATE OF isAdmin ON Utilisateur
+BEGIN
+    INSERT INTO HistoriqueModification (idUtilisateur, idEcole, champsModifies, ancienneValeur, nouvelleValeur)
+    VALUES (NEW.idUtilisateur, NEW.idEcole, 'Mise à jour Statut administrateur', OLD.isAdmin, NEW.isAdmin);
+END;
+                """)
+# Trigger pour la mise à jour de l'ID de l'école de l'utilisateur
+    cur.execute("""
+CREATE TRIGGER IF NOT EXISTS utilisateur_ecole_update_trigger
+AFTER UPDATE OF idEcole ON Utilisateur
+BEGIN
+    INSERT INTO HistoriqueModification (idUtilisateur, idEcole, champsModifies, ancienneValeur, nouvelleValeur)
+    VALUES (NEW.idUtilisateur, NEW.idEcole, 'Mise à jour ID École', OLD.idEcole, NEW.idEcole);
+END;
+
+                """)
     # Trigger pour la suppression
     cur.execute("""
     CREATE TRIGGER IF NOT EXISTS utilisateur_delete_trigger
@@ -577,14 +647,96 @@ def creer_triggers_ecole():
     END;
     """)
     # Trigger pour la mise à jour
+    # cur.execute("""
+    # CREATE TRIGGER IF NOT EXISTS ecole_update_trigger
+    # AFTER UPDATE ON Ecole
+    # BEGIN
+    #     INSERT INTO HistoriqueModification (idEcole, champsModifies, ancienneValeur, nouvelleValeur)
+    #     VALUES (NEW.idEcole, 'Mise à jour Ecole', NULL, NULL);
+    # END;
+    # """)
+    # Trigger pour la mise à jour du nom de l'école
     cur.execute("""
-    CREATE TRIGGER IF NOT EXISTS ecole_update_trigger
-    AFTER UPDATE ON Ecole
+    CREATE TRIGGER IF NOT EXISTS ecole_nom_update_trigger
+    AFTER UPDATE OF nomEcole ON Ecole
     BEGIN
-        INSERT INTO HistoriqueModification (idEcole, champsModifies, ancienneValeur, nouvelleValeur)
-        VALUES (NEW.idEcole, 'Mise à jour Ecole', NULL, NULL);
+        INSERT INTO HistoriqueModification (idUtilisateur, idEcole, champsModifies, ancienneValeur, nouvelleValeur)
+        SELECT u.idUtilisateur, NEW.idEcole, 'Mise à jour Nom Ecole', OLD.nomEcole, NEW.nomEcole
+        FROM Utilisateur u
+        WHERE u.idEcole = NEW.idEcole;
     END;
     """)
+
+    # Trigger pour la mise à jour de l'adresse de l'école
+    cur.execute("""
+    CREATE TRIGGER IF NOT EXISTS ecole_adresse_update_trigger
+    AFTER UPDATE OF Adresse ON Ecole
+    BEGIN
+        INSERT INTO HistoriqueModification (idEcole, champsModifies, ancienneValeur, nouvelleValeur)
+        VALUES (NEW.idEcole, 'Mise à jour Adresse', OLD.Adresse, NEW.Adresse);
+    END;
+    """)
+
+    # Trigger pour la mise à jour de la ville de l'école
+    cur.execute("""
+    CREATE TRIGGER IF NOT EXISTS ecole_ville_update_trigger
+    AFTER UPDATE OF Ville ON Ecole
+    BEGIN
+        INSERT INTO HistoriqueModification (idEcole, champsModifies, ancienneValeur, nouvelleValeur)
+        VALUES (NEW.idEcole, 'Mise à jour Ville', OLD.Ville, NEW.Ville);
+    END;
+    """)
+
+    # Trigger pour la mise à jour du code postal de l'école
+    cur.execute("""
+    CREATE TRIGGER IF NOT EXISTS ecole_codepostal_update_trigger
+    AFTER UPDATE OF CodePostal ON Ecole
+    BEGIN
+        INSERT INTO HistoriqueModification (idEcole, champsModifies, ancienneValeur, nouvelleValeur)
+        VALUES (NEW.idEcole, 'Mise à jour Code Postal', OLD.CodePostal, NEW.CodePostal);
+    END;
+    """)
+
+    # Trigger pour la mise à jour du nombre d'élèves de l'école
+    cur.execute("""
+    CREATE TRIGGER IF NOT EXISTS ecole_nbeleves_update_trigger
+    AFTER UPDATE OF nbEleves ON Ecole
+    BEGIN
+        INSERT INTO HistoriqueModification (idEcole, champsModifies, ancienneValeur, nouvelleValeur)
+        VALUES (NEW.idEcole, "Mise à jour Nombre d'élèves", OLD.nbEleves, NEW.nbEleves);
+    END;
+    """)
+
+    # Trigger pour la mise à jour du numéro de téléphone de l'école
+    cur.execute("""
+    CREATE TRIGGER IF NOT EXISTS ecole_telephone_update_trigger
+    AFTER UPDATE OF Telephone ON Ecole
+    BEGIN
+        INSERT INTO HistoriqueModification (idEcole, champsModifies, ancienneValeur, nouvelleValeur)
+        VALUES (NEW.idEcole, 'Mise à jour Téléphone', OLD.Telephone, NEW.Telephone);
+    END;
+    """)
+
+    # Trigger pour la mise à jour de l'email de l'école
+    cur.execute("""
+    CREATE TRIGGER IF NOT EXISTS ecole_email_update_trigger
+    AFTER UPDATE OF Email ON Ecole
+    BEGIN
+        INSERT INTO HistoriqueModification (idEcole, champsModifies, ancienneValeur, nouvelleValeur)
+        VALUES (NEW.idEcole, 'Mise à jour Email', OLD.Email, NEW.Email);
+    END;
+    """)
+
+    # Trigger pour la mise à jour du cycle scolaire de l'école
+    cur.execute("""
+    CREATE TRIGGER IF NOT EXISTS ecole_cyclescolaire_update_trigger
+    AFTER UPDATE OF cycleScolaire ON Ecole
+    BEGIN
+        INSERT INTO HistoriqueModification (idEcole, champsModifies, ancienneValeur, nouvelleValeur)
+        VALUES (NEW.idEcole, 'Mise à jour Cycle Scolaire', OLD.cycleScolaire, NEW.cycleScolaire);
+    END;
+    """)
+
     # Trigger pour la suppression
     cur.execute("""
     CREATE TRIGGER IF NOT EXISTS ecole_delete_trigger
@@ -645,6 +797,13 @@ def creer_triggers_classe():
     BEGIN
         INSERT INTO HistoriqueModification (idUtilisateur, idEcole, champsModifies, ancienneValeur, nouvelleValeur)
         VALUES (NULL, NEW.idEcole, 'Insertion Classe', NULL, NULL);
+                
+        -- Mettre à jour la colonne nbEleves dans la table Ecole pour l'idEcole concerné
+        UPDATE Ecole
+        SET nbEleves = (
+            SELECT SUM(Effectif) FROM Classe WHERE idEcole = NEW.idEcole
+        )
+        WHERE idEcole = NEW.idEcole;
     END;
     """)
     # Trigger pour la mise à jour
@@ -654,6 +813,14 @@ def creer_triggers_classe():
     BEGIN
         INSERT INTO HistoriqueModification (idUtilisateur, idEcole, champsModifies, ancienneValeur, nouvelleValeur)
         VALUES (NULL, NEW.idEcole, 'Mise à jour Classe', NULL, NULL);
+                
+        -- Mettre à jour la colonne nbEleves dans la table Ecole pour l'idEcole concerné
+        UPDATE Ecole
+        SET nbEleves = (
+            SELECT SUM(Effectif) FROM Classe WHERE idEcole = NEW.idEcole
+        )
+        WHERE idEcole = NEW.idEcole;
+                
     END;
     """)
     # Trigger pour la suppression
@@ -663,6 +830,14 @@ def creer_triggers_classe():
     BEGIN
         INSERT INTO HistoriqueModification (idUtilisateur, idEcole, champsModifies, ancienneValeur, nouvelleValeur)
         VALUES (NULL, OLD.idEcole, 'Suppression Classe', NULL, NULL);
+        
+        -- Mettre à jour la colonne nbEleves dans la table Ecole pour l'idEcole concerné
+        UPDATE Ecole
+        SET nbEleves = (
+            SELECT SUM(Effectif) FROM Classe WHERE idEcole = OLD.idEcole
+        )
+        WHERE idEcole = OLD.idEcole;
+        
     END;
     """)
     conn.commit()

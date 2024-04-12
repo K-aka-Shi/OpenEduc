@@ -10,6 +10,7 @@
 
     <h1>Dashboard</h1>
 
+    <!-- NOTIFS -->
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for  category, message in messages %}
@@ -20,11 +21,28 @@
         {% endif %}
     {% endwith %}
 
+        <!-- RESSOURCES -->
+        <div>
+          <ul>
+            <li>Guide utilisateur (PDF)</li>
+          </ul>
+        </div>
+    
+
     
     {% if isAdmin == 1 %}
     <!-- ADMINISTRATEUR -->
     <p><strong>ADMIN</strong></p>
 
+    <!-- RESSOURCES -->
+    <div>
+      <ul>
+        <li>Guide de développement (Lien Gitbook )</li>
+        <li>Guide utilisateur (PDF)</li>
+      </ul>
+    </div>
+
+    <!-- LOGS -->
     <div class="container">
         <div class="row">
           <div class="col">

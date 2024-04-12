@@ -4,14 +4,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon appli</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+    <title>{% block title %}{% endblock %}OpenEduc</title>
+    <link rel="icon" href="{{url_for('static', filename='img/logo.png')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- <script src="https://cdn.tailwindcss.com"></script>  -->
+    <!-- <script src="https://unpkg.com/htmx.org@1.9.11"></script> -->
     {% block css %}{% endblock %}
 </head>
 <body>
+
+    <!-- NAVBAR -->
 
     <nav id="navbar">
         <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" width="50">
@@ -19,67 +23,107 @@
             <li class="navbar-item">
                 <a href="{{ url_for('index') }}">Accueil</a>
             </li>
-
+            <li class="navbar-item">
+                <a href="{{ url_for('recherche') }}">Rechercher une école</a>
+            </li>
+            <li class="navbar-item">
+                <a href="{{ url_for('partenaires') }}">Nos Partenaires</a>
+            </li>
+            {% if session['username'] %}
+            <li class="navbar-item">
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            </li>
+            {% endif %}
+    
             <li class="navbar-item login-logout">
+                <div class="dropdown">
+                    {% if session['statut'] == 1 %}
+                    <a style="padding: 0 20px;">
+                        Gestion Ecoles
+                        <img style="width: 20px;" src="https://static.thenounproject.com/png/1123247-200.png">
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="{{ url_for('dashboardAdminSearchEcole') }}">Rechercher</a>
+                        <a href="{{ url_for('dashboardAdminAddEcole') }}"   >Créer</a>
+                        <a href="{{ url_for('dashboardAdminDeleteEcole') }}">Supprimer</a>
+                        <a href="{{ url_for('dashboardAdminEditEcole') }}"  >Modifier</a>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="dropdown">
+                    {% if session['statut'] == 1 %}
+                    <a style="padding: 0 20px;">
+                        Gestion Référents
+                        <img style="width: 20px;" src="https://static.thenounproject.com/png/1123247-200.png">
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="{{ url_for('dashboardAdminSearchRef') }}">Rechercher</a>
+                        <a href="{{ url_for('dashboardAdminAddRef') }}"   >Créer</a>
+                        <a href="{{ url_for('dashboardAdminDeleteRef') }}">Supprimer</a>
+                        <a href="{{ url_for('dashboardAdminEditRef') }}"  >Modifier</a>
+                    </div>
+                    {% endif %}
+                </div>
                 {% if session['username'] %}
-                    <a href="{{ url_for('logout') }}">Se déconnecter</a>
+                <a href="{{ url_for('logout') }}">Se déconnecter</a>
                 {% else %}
-                    <a href="{{ url_for('login') }}">Se connecter</a>
+                <a href="{{ url_for('login') }}">Se connecter</a>
                 {% endif %}
             </li>
         </ul> 
     </nav>
-
     
+
+    <!-- CONTENU -->
     <div id="container">
         {% block content %}{% endblock %}
     </div>
 
-<!-- <footer>
-    <ul>
-        <li>Liens rapides vers les pages principales du site.</li>
-        <li>Partenaires</li>
-        <li>Données réglementées ("Conforme au RGPD")</li>
-    </ul>
-</footer> -->
-<div class="footer-dark">
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-6 col-md-4 item">
-                    <h3>Vous & Nous</h3>
-                    <ul>
-                        <li>Besoin d'un peu d'aide ?</li>
-                    </ul>
+    <!-- FOOTER -->
+
+    <div class="footer-dark">
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-md-4 item">
+                        <h3>Vous & Nous</h3>
+                        <ul>
+                            <li><a href="https://nidal-e5.gitbook.io/openeduc" target="_blank">Besoin d'un peu d'aide ?</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 col-md-4 item">
+                            <h3>Navigation</h3>
+                        <ul>
+                            <li><a href="{{ url_for('index') }}">Accueil</a></li>
+                            <li><a href="{{ url_for('dashboard') }}">Tableau de bord</a></li>
+                            <li><a href="{{ url_for('recherche') }}">Rechercher une école</a></li>
+                            <li><a href="{{ url_for('partenaires') }}">Partenaires</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 col-md-4 item">
+                        <h3>Légal</h3>
+                        <ul>
+                            <li><a href="{{ url_for('protectionDesDonnees') }}">Protection des données</a></li>
+                            <li><a href="{{ url_for('mentionsLegales') }}">Mentions légales</a></li>
+                            <li><a href="{{ url_for('cgu') }}">Conditions générales d'utilisation</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-6d-6 item te4t">
+                        <h3>OpenEduc</h3>
+                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est repellendus libero, minus consectetur quam nesciunt corrupti? Hic iste, blanditiis quis recusandae omnis perspiciatis nesciunt quaerat ea possimus, perferendis eius quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam vitae ad, aliquam porro mollitia dolor dolorem aperiam ratione voluptas commodi minima vel. Ducimus fugiat quia provident alias mollitia, tempore beatae? lorem</p>
+                    </div>
+                    <div class="col item social">
+                        <a href="#"><i class="icon ion-social-twitter"></i></a>
+                        <a href="#"><i class="icon ion-social-youtube"></i></a>
+                        <a href="#"><i class="icon ion-social-instagram"></i></a>
+                    </div>
                 </div>
-                <div class="col-sm-6 col-md-4 item">
-                        <h3>Navigation</h3>
-                    <ul>
-                        <li><a href="{{ url_for('index') }}">Accueil</a></li>
-                        <li><a href="{{ url_for('dashboard') }}">Espace Membre</a></li>
-                        <li><a href="{{ url_for('recherche') }}">Rechercher une école</a></li>
-                        <li><a href="{{ url_for('partenaires') }}">Partenaires</a></li>
-                    </ul>
-                </div>
-                <div class="col-sm-6 col-md-4 item">
-                    <h3>Légal</h3>
-                    <ul>
-                        <li><a href="#">Protection des données</a></li>
-                        <li><a href="#">Mentions légales</a></li>
-                        <li><a href="#">Conditions générales d'utilisation</a></li>
-                    </ul>
-                </div>
-                <div class="col-6d-6 item te4t">
-                    <h3>OpenEduc</h3>
-                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est repellendus libero, minus consectetur quam nesciunt corrupti? Hic iste, blanditiis quis recusandae omnis perspiciatis nesciunt quaerat ea possimus, perferendis eius quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam vitae ad, aliquam porro mollitia dolor dolorem aperiam ratione voluptas commodi minima vel. Ducimus fugiat quia provident alias mollitia, tempore beatae? lorem</p>
-                </div>
-                <div class="col item social"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-snapchat"></i></a><a href="#"><i class="icon ion-social-instagram"></i></a></div>
+                <p class="copyright">AlsaNum © 1981-2024</p>
             </div>
-            <p class="copyright">AlsaNum © 1981-2024</p>
-        </div>
-    </footer>
-</div>
+        </footer>
+    </div>
 
-
+{% block js %}{% endblock %}
 </body>
 </html>

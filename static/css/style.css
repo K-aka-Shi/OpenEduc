@@ -1,47 +1,179 @@
 body {
-    background-color:aliceblue;
-    margin: 0;
-}
-
-#navbar {
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    background-color: lightskyblue;
-    font-size: 1.1em;
-    color: #333;
-}
-
-#navbar-items {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    width: 100%;
-}
-
-.navbar-item {
-    margin: 0 10px;
-}
-
-.navbar-item.login-logout {
-    margin-left: auto;
-}
-
-.navbar-item a {
-    text-decoration: none;
-    display: block;
-    color: #333;
-    font-weight: bold;
-}
-
-.navbar-item a:hover {
-    color: #fcfcfc;
+  background-color:aliceblue;
+  margin: 0;
+  background-image: url('https://static.vecteezy.com/system/resources/previews/021/599/588/non_2x/abstract-white-and-gray-overlap-circles-background-3d-paper-circle-banner-with-drop-shadows-minimal-simple-design-for-presentation-flyer-brochure-website-book-etc-vector.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;  
+  background-size: cover;
 }
 
 #container {
     margin: 20px 50px;
+    padding-bottom: 10%;
 }
+
+/* Style du titre */
+h1 {
+  font-size: 40px;
+  margin-bottom: 20px;
+  color: #0A4191;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Style des sous-titres */
+h2 {
+  font-size: 30px;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  color: #F9A825;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h3 {
+  font-size: 25px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Style des paragraphes */
+p {
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+/* Style des éléments forts */
+strong {
+  font-weight: bold;
+}
+
+/* Style de la séparation */
+hr {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  border: 0;
+  border-top: 1px solid #ccc;
+}
+/* Sélecteur */
+select {
+  width: 30%;
+  padding: 10px;
+  color: #F9A825;
+  background-color: white;
+  border: solid;
+  border-color: #F9A825;
+  border-width: 2px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+select:hover{
+  background-color: #C97700;
+  border-color: #C97700;
+  color: white;
+}
+
+
+/* Style du bouton */
+input[type="button"], input[type="submit"], input[type="checkbox"], form[type="button"] {
+  width: 10%;
+  padding: 10px;
+  background-color: #F9A825;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover du bouton */
+input[type="button"]:hover, input[type="submit"]:hover, input[type="checkbox"]:hover { 
+  background-color: #C97700;
+}
+
+/* INPUT TEXT */
+input[type="text"], input[type="email"], input[type="password"] {
+  border-color: #F9A825;
+}
+
+input[type="text"]:hover {
+  border-color: #C97700;
+}
+
+/* _________________________ */
+/*          NAVBAR           */
+/* _________________________ */
+
+#navbar {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(#F9A825, #F9A825, #F9A825, #00000000);
+  font-size: 1.1em;
+  color: white;
+}
+
+#navbar-items {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  width: 100%;
+}
+
+.navbar-item {
+  margin: 0 10px;
+}
+
+.navbar-item.login-logout {
+  margin-left: auto;
+  display: flex;
+}
+
+.navbar-item a {
+  text-decoration: none;
+  display: block;
+  color: white;
+  font-weight: bold;
+}
+
+.navbar-item a:hover {
+  color: #fcfcfc;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: white;
+  background-color: #F9A825;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #C97700;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
 
 
 

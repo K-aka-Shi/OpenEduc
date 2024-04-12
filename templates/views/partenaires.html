@@ -1,10 +1,28 @@
 {% extends "base.html" %}
 
+{% block title %}Partenaires - {% endblock %}
+
 {% block content %}
 
     <h1>Partenaires</h1>
 
     <p>toutes les écoles en liste à puces + contributeurs 'il nous font confiance'</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="padding: 0 30px;text-align: center;">Ville</th>
+                <th style="padding: 0 30px;text-align: center;">Nom de l'école</th>
+        </thead>
+        <tbody>
+            {% for ecole in ecoles %}
+            <tr>
+                <td style="padding: 0 30px;">{{ ecole[3] }}</td>
+                <td style="padding: 0 30px;">{{ ecole[1] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
     <br><br><br><br><br><br><br><br><br><b><b></b></b>
 {% endblock %}

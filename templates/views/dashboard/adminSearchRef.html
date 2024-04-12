@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - {% endblock %}
+{% block js %}<script src"{{ url_for('static', filename='js/dashboard.js') }}"></script>{% endblock %}
+{% block css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}"></link>{% endblock %}
+
+
+{% block content %}
+
+<h1>Dashboard</h1>
+
+<p><mark>MDP : non visible => remplacer par bouton "régénérer" ?</mark></p>
+
+<h2>Rechercher un Référent</h2>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+    {% for  category, message in messages %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+{% endwith %}
+
+
+<form action="{{url_for('dashboardAdminSearchRef')}}" method="POST">
+    <p>
+        <label for="nom">Saisir un identifiant :</label>
+        <input type="text" name="query" id="nom" autofocus>
+        <input type="submit" value="Chercher">
+    </p>
+</form>
+
+{% if resultats is not none %}
+    {% if resultats|length == 0 %}
+    <div class="alert alert-warning" role="alert">
+        Aucun référent ne correspond à la recherche.
+      </div>      
+    {% else %}
+    <table class="table is-fullwidth" style="border: 2px solid #000; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th style="border: 2px solid #000;">ID</th>
+                <th style="border: 2px solid #000;">Identifiant</th>
+                <th style="border: 2px solid #000;">MotDePasse</th>
+                <th style="border: 2px solid #000;">idEcole</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for resultat in resultats %}
+            {% if resultat[3] == 0 %}
+            <tr>
+                <td style="border: 2px solid #000;">{{ resultat[0] }}</td>
+                <td style="border: 2px solid #000;">{{ resultat[1] }}</td>
+                <td style="border: 2px solid #000;" class="mdpContainer">
+                    <img src="https://static-00.iconduck.com/assets.00/eye-show-icon-2048x1326-edkdqxrw.png" alt="icon show" style="width:30px;">
+                    <span class="mdp">{{ resultat[2] }}</span>
+                </td>
+                <td style="border: 2px solid #000;">{{ resultat[4] }}</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+{% endif %}
+
+{% endblock %}

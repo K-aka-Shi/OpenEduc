@@ -1,8 +1,128 @@
 {% extends "base.html" %}
 
+{% block title %}Dashboard - {% endblock %}
+{% block js %}<script src"{{ url_for('static', filename='js/dashboard.js') }}"></script>{% endblock %}
+{% block css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}"></link>{% endblock %}
+
+
+
 {% block content %}
 
     <h1>Dashboard</h1>
 
+    <!-- NOTIFS -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for  category, message in messages %}
+                <div class="alert alert-success" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+        <!-- RESSOURCES -->
+        <div>
+          <ul>
+            <li>Guide utilisateur (PDF)</li>
+          </ul>
+        </div>
+    
+
+    
+    {% if isAdmin == 1 %}
+    <!-- ADMINISTRATEUR -->
+    <p><strong>ADMIN</strong></p>
+
+    <!-- RESSOURCES -->
+    <div>
+      <ul>
+        <li>Guide de développement (Lien Gitbook )</li>
+        <li>Guide utilisateur (PDF)</li>
+      </ul>
+    </div>
+
+    <!-- LOGS -->
+    <div class="container">
+        <div class="row">
+          <div class="col">
+            <div class="card">
+              <div class="card-header">Logs Administrateurs</div>
+              <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">ID Historique</th>
+                      <th scope="col">ID Utilisateur</th>
+                      <th scope="col">ID Ecole</th>
+                      <th scope="col">Date Modification</th>
+                      <th scope="col">Champs Modifiés</th>
+                      <th scope="col">Ancienne Valeur</th>
+                      <th scope="col">Nouvelle Valeur</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Insérer les données ici -->
+                    {% for log in logs %}
+                    <tr>
+                      <td>{{ log[0] }}</td>
+                      <td>{{ log[1] if log[1] }}</td>
+                      <td>{{ log[2] if log[2] }}</td>
+                      <td>{{ log[3] if log[3] }}</td>
+                      <td>{{ log[4] if log[4] }}</td>
+                      <td>{{ log[5] if log[5] }}</td>
+                      <td>{{ log[6] if log[6] }}</td>
+                    </tr>
+                    {% endfor %}
+                    <!-- Répéter le modèle pour chaque ligne de données -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
+    <p>tuto ? explication en despi</p>
+
+    <!-- <div id="dashboard-buttons">
+        <a href="{{ url_for('dashboardAdminAddRef') }}" class="dashboard-button">Créer</a>
+        <a href="{{ url_for('dashboardAdminSearchRef') }}" class="dashboard-button">Rechercher</a>
+        <a href="{{ url_for('dashboardAdminEditRef') }}" class="dashboard-button">Modifier</a>
+        <a href="{{ url_for('dashboardAdminDeleteRef') }}" class="dashboard-button">Supprimer</a>
+    </div>
+     -->
+
+
+    {% else %}
+
+    <!-- REFERENT -->
+    <h2>Gestion :</h2>     
+    <ul>
+        <li> <a href="{{ url_for('referentEcole') }}">Mon Ecole</a> </li>
+        <li> <a href="{{ url_for('referentClasse') }}">Mes Classes</a> </li>
+        <li> <a href="{{ url_for('referentCorrespondants') }}">Mes Correspondants</a> </li>
+    </ul>
+    
+    <!-- Afficher le total des effectifs de l'école -->
+    <button type="button" class="btn btn-primary position-relative">
+        Total des effectifs de l'école
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {{ nbEleves }}
+        </span>
+    </button>
+    
+    <p></p>
+
+    <!-- Afficher la moyenne par classe -->
+    <button type="button" class="btn btn-primary position-relative">
+        Moyenne par classe
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {{ moyenneEleveParClasse }}
+        </span>
+    </button>
+
+    {% endif %}
     <br><br><br><br><br><br><br><br><br><b><b></b></b>
 {% endblock %}

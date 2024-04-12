@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - {% endblock %}
+{% block js %}<script src"{{ url_for('static', filename='js/dashboard.js') }}"></script>{% endblock %}
+{% block css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}"></link>{% endblock %}
+
+
+{% block content %}
+
+<h1>Dashboard</h1>
+
+<p>tuto ? explication en despi</p>
+
+<h2>Supprimer un Référent</h2>
+<form action="{{ url_for('dashboardAdminDeleteRef') }}" method="POST">
+    <input type="text" name="term" placeholder="Entrez un terme de recherche">
+    <input type="submit" value="Rechercher">
+</form>
+
+<br><br>
+
+{% if referents is not none %}
+    {% if referents == [] %}
+        <div class="alert alert-warning" role="alert">
+            Aucun référent ne correspond à la recherche.
+        </div>
+    {% else %}
+        <form action="{{ url_for('supprimer_referents') }}" method="POST">
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th style="border: 2px solid #000;">ID</th>
+                        <th style="border: 2px solid #000;">Nom</th>
+                        <th style="border: 2px solid #000;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for referent in referents %}
+                    {% if referent[3] == 0 %}
+                    <tr>
+                        <td>{{ referent[0] }}</td>
+                        <td>{{ referent[1] }}</td>
+                        <td><input type="checkbox" name="referent_id" value="{{ referent[0] }}"></td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+            <input type="submit" value="Supprimer les référents sélectionnés" style="width: 25%;">
+        </form>
+    {% endif %}
+{% endif %}
+
+
+{% endblock %}

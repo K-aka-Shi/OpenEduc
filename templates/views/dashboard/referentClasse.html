@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block title %}Modifier les informations de l'école{% endblock %}
+{% block js %}<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>{% endblock %}
+{% block css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}"></link>{% endblock %}
+
+{% block content %}
+
+<h1>Dashboard</h1>
+
+
+<h2>Informations des classes</h2>
+
+<div class="container">
+    <div class="row">
+
+        <div class="col">
+
+            <h3>Ajouter une classe</h3>
+
+            <form action="{{ url_for('referentClasse') }}" method="POST">
+                <div class="form-group">
+                    <label for="niveau">Niveau(x) :</label>
+                    <select class="form-control" name="niveau" id="niveau" required>
+                        <option value="" disabled selected aria-required="true">Choisissez un niveau</option>
+                        {% if cycleScolaire == 'maternelle' %}
+                        <option value=""> Petite Section  </option>
+                        <option value=""> Moyenne Section </option>
+                        <option value=""> Moyenne Section </option>
+                        {% endif %}
+                        {% if cycleScolaire == 'elementaire' %}
+                        <option value=""> CP  </option>
+                        <option value=""> CE1 </option>
+                        <option value=""> CE2 </option>
+                        <option value=""> CM1 </option>
+                        <option value=""> CM2 </option>
+                        {% endif %}
+                        {% if cycleScolaire == 'college' %}
+                        <option value=""> 6e </option>
+                        <option value=""> 5e </option>
+                        <option value=""> 4e </option>
+                        <option value=""> 3e </option>
+                        {% endif %}
+                        {% if cycleScolaire == 'lycee' %}
+                        <option value=""> Seconde   </option>
+                        <option value=""> Première  </option>
+                        <option value=""> Terminale </option>
+                        {% endif %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="nom_prof">Nom du professeur :</label>
+                    <input class="form-control" type="text" id="nom_prof" name="nom_prof" value="" required>
+                </div>                
+                <div class="form-group">
+                    <label for="effectifs">Effectifs :</label>
+                    <input class="form-control" type="text" id="effectifs" name="effectifs" value="" required>
+                </div>                
+                
+                <input type="submit" name="submit-type" value="Ajouter" style="width: max-content;">
+            </form>
+        </div>
+
+        <!-- MODIFIER UNE CLASSE -->
+        <div class="col">
+            <h3>Modifier une classe</h3>
+
+            <form action="{{ url_for('referentClasse') }}" method="POST">
+                <div class="form-group">
+                    <label for="niveau">Niveau(x) :</label>
+                    <select class="form-control" name="niveau" id="niveau" required>
+                        <option value="" disabled selected aria-required="true">Choisissez un niveau</option>
+                        {% if cycleScolaire == 'maternelle' %}
+                        <option value=""> Petite Section  </option>
+                        <option value=""> Moyenne Section </option>
+                        <option value=""> Moyenne Section </option>
+                        {% endif %}
+                        {% if cycleScolaire == 'elementaire' %}
+                        <option value=""> CP  </option>
+                        <option value=""> CE1 </option>
+                        <option value=""> CE2 </option>
+                        <option value=""> CM1 </option>
+                        <option value=""> CM2 </option>
+                        {% endif %}
+                        {% if cycleScolaire == 'college' %}
+                        <option value=""> 6e </option>
+                        <option value=""> 5e </option>
+                        <option value=""> 4e </option>
+                        <option value=""> 3e </option>
+                        {% endif %}
+                        {% if cycleScolaire == 'lycee' %}
+                        <option value=""> Seconde   </option>
+                        <option value=""> Première  </option>
+                        <option value=""> Terminale </option>
+                        {% endif %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="nom_prof">Nom du professeur :</label>
+                    <input class="form-control" type="text" id="nom_prof" name="nom_prof" value="" required>
+                </div>                
+                <div class="form-group">
+                    <label for="effectifs">Effectifs :</label>
+                    <input class="form-control" type="text" id="effectifs" name="effectifs" value="" required>
+                </div>                
+                
+                <input type="submit" name="submit-type" value="Modifier" style="width: max-content;">
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<br>
+
+<div class="row">
+    <table class="table is-fullwidth">
+        <thead>
+            <tr>
+                <th>Niveau(x)</th>
+                <th>Nom de la classe</th>
+                <th>Effectifs</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for classe in classes %}
+            <tr>
+                <td>{{ classe[0] }}</td>
+                <td>{{ classe[1] }} {{ classe[2] }}</td>
+                <td>{{ classe[3] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,39 @@
+/* Style général */
+.login-container {
+    width: 300px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* Style du titre */
+.login-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Style des champs de saisie */
+.login-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Style du bouton */
+.login-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #F9A825;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover du bouton */
+.login-button:hover {
+    background-color: #C97700;
+}

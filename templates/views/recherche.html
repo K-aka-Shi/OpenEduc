@@ -1,11 +1,60 @@
 {% extends "base.html" %}
 
+{% block title %}Recherche - {% endblock %}
+
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/recherche.css') }}">
+{% endblock %}
+
+
 {% block content %}
 
     <h1>Rechercher une école</h1>
 
-    <p>champ de saisie</p>
-    <p>(voir sur <mark>notion > tâches > page recherche</mark> des exemples d'organisation du champ)</p>
+    <form action="{{url_for('recherche')}}" method="POST">
+        <p>
+            <label for="nom">Saisir un nom : </label>
+            <input type="text" name="query" id="nom" autofocus>
+            <input type="submit" value="Chercher">
+        </p>
+    </form>
+
+    {% if resultats is not none %}
+        {% if resultats|length == 0 %}
+            <p>Aucun élève ne correspond à la recherche.</p>
+        {% else %}
+        <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Nom de l'école</th>
+                    <th>Adresse</th>
+                    <th>Ville</th>
+                    <th>Code postal</th>
+                    <th>Téléphone</th>
+                    <th>Email</th>
+                    <th>Niveau</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resultat in resultats %}
+                <tr>
+                    <td>{{ resultat[0] }}</td>
+                    <td>{{ resultat[1] }}</td>
+                    <td>{{ resultat[2] }}</td>
+                    <td>{{ resultat[3] }}</td>
+                    <td>{{ resultat[5] }}</td>
+                    <td>{{ resultat[6] }}</td>
+                    <td>{{ resultat[7] }}</td>
+                    <td>{{ resultat[8] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    {% endif %}
+
+
 
 
     <br><br><br><br><br><br><br><br><br><b><b></b></b>

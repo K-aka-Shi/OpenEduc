@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% block title %}Modifier les informations de l'école{% endblock %}
+{% block js %}<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>{% endblock %}
+{% block css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}"></link>{% endblock %}
+
+{% block content %}
+
+<h1>Dashboard</h1>
+
+
+<!-- Modifier les informations du correspondant local APEA -->
+<h2>Informations du correspondant local APEA</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form action="{{ url_for('referentCorrespondants') }}" method="POST">
+                <div class="form-group">
+                    <label for="sexe_apea">Sexe :</label>
+                    <input class="form-control" type="text" id="sexe_apea" name="sexe_apea" value="" required>
+                </div>
+                <div class="form-group">
+                    <label for="nom_apea">Nom :</label>
+                    <input class="form-control" type="text" id="nom_apea" name="nom_apea" value="" required>
+                </div>        
+                <div class="form-group">
+                    <label for="prenom_apea">Prénom :</label>
+                    <input class="form-control" type="text" id="prenom_apea" name="prenom_apea" value="" required>
+                </div>        
+                <div class="form-group">
+                    <label for="fonction_apea">Fonction :</label>
+                    <input class="form-control" type="text" id="fonction_apea" name="fonction_apea" value="" required>
+                </div>        
+                <div class="form-group">
+                    <label for="mail_apea">Email :</label>
+                    <input class="form-control" type="email" id="mail_apea" name="mail_apea" value="">
+                </div>        
+                <input type="submit" value="Modifier" style="width: max-content;">
+            </form>
+        </div> <!-- col -->
+
+        <div class="col">
+        <!-- INFORMATION -->
+        <div class="col">
+            <table class="table is-fullwidth" style="border: 2px solid #000; border-collapse: collapse;">
+                <tbody>
+                    <tr>
+                        <th style="border: 2px solid #000;">ID</th>
+                        <td style="border: 2px solid #000;">data</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Nom</th>
+                        <td style="border: 2px solid #000;">data</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Adresse</th>
+                        <td style="border: 2px solid #000;">data</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Code Postal</th>
+                        <td style="border: 2px solid #000;">data</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Ville</th>
+                        <td style="border: 2px solid #000;">data</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Nombre d'élèves</th>
+                        <td style="border: 2px solid #000;">data</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Téléphone</th>
+                        <td style="border: 2px solid #000;">data</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">E-mail</th>
+                        <td style="border: 2px solid #000;">data</td>
+                    <tr>
+                        <th style="border: 2px solid #000;">Cycle Scolaire</th>
+                        <td style="border: 2px solid #000;">data</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        </div> <!-- col -->
+
+    </div> <!-- row -->
+    
+    
+    <!-- Modifier les informations du correspondant local MAIRIE -->
+    <h2>Informations du correspondant local MAIRIE</h2>
+    
+    <div class="row">
+        <div class="col">
+
+            <form action="{{ url_for('referentCorrespondants') }}" method="POST">
+                <div class="form-group">
+                    <label for="sexe_mairie">Sexe :</label>
+                    <input class="form-control" type="text" id="sexe_mairie" name="sexe_mairie" value="" required>
+                </div>            
+                <div class="form-group">
+                    <label for="nom_mairie">Nom :</label>
+                    <input class="form-control" type="text" id="nom_mairie" name="nom_mairie" value="" required>
+                </div>        
+                <div class="form-group">
+                    <label for="prenom_mairie">Prénom :</label>
+                    <input class="form-control" type="text" id="prenom_mairie" name="prenom_mairie" value="" required>
+                </div>        
+                <div class="form-group">
+                    <label for="fonction_mairie">Fonction :</label>
+                    <input class="form-control" type="text" id="fonction_mairie" name="fonction_mairie" value="" required>
+                </div>        
+                <div class="form-group">
+                    <label for="telephone_mairie">Téléphone :</label>
+                    <input class="form-control" type="text" id="telephone_mairie" name="telephone_mairie" value="">
+                </div>        
+                <div class="form-group">
+                    <label for="mail_mairie">Email :</label>
+                    <input class="form-control" type="email" id="mail_mairie" name="mail_mairie" value="">
+                </div>            
+                <input type="submit" value="Modifier" style="width: max-content;">
+            </form>
+        </div> <!-- col -->
+        <!-- INFORMATION SUR L'ECOLE -->
+        <div class="col">
+            <table class="table is-fullwidth" style="border: 2px solid #000; border-collapse: collapse;">
+                <tbody>
+                    <tr>
+                        <th style="border: 2px solid #000;">ID</th>
+                        <td style="border: 2px solid #000;">data</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Nom</th>
+                        <td style="border: 2px solid #000;">data</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Adresse</th>
+                        <td style="border: 2px solid #000;">data</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Code Postal</th>
+                        <td style="border: 2px solid #000;">data</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Ville</th>
+                        <td style="border: 2px solid #000;">data</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Nombre d'élèves</th>
+                        <td style="border: 2px solid #000;">data</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Téléphone</th>
+                        <td style="border: 2px solid #000;">data</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">E-mail</th>
+                        <td style="border: 2px solid #000;">data</td>
+                    <tr>
+                        <th style="border: 2px solid #000;">Cycle Scolaire</th>
+                        <td style="border: 2px solid #000;">data</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> <!-- col -->
+    </div> <!-- row -->
+
+</div> <!-- container -->
+
+
+
+
+{% endblock %}

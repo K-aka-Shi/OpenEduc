@@ -4,25 +4,42 @@
 
 {% block content %}
 
-    <h1>Partenaires</h1>
+    <h1 class="text-center">Partenaires</h1>
 
-    <p>toutes les écoles en liste à puces + contributeurs 'il nous font confiance'</p>
+    <h2 class="text-center">Ils nous font confiance</h2>
 
-    <table>
+    <div class="card" style="border-radius: 40px; background: linear-gradient(90deg, rgba(255,222,89,1) 0%, rgba(255,145,77,1) 100%); color: #0A4191;width: 30em;">
+        <div class="card-body">
+            <img src="/static/img/logo_apea.png" class="card-img-top" alt="logo de l'APEA" style="background-size: cover;">
+            <h5 class="card-title">l'A.P.E.A</h5>
+            <br>
+                <!-- <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6> -->
+                <p class="card-text" style="color: #0A4191;">
+                    L'APEA, Association de Parents d’Elèves d’Alsace, est une organisation à but non lucratif qui facilite la participation des parents aux actions scolaires. Elle agit en tant qu'intermédiaire entre les parents et le personnel pédagogique pour défendre leurs intérêts communs. L'APEA est représentée dans divers organes de décision liés à l'éducation.
+                </p>
+                <!-- <a href="#" class="card-link">Card link</a>
+                <a href="#" class="card-link">Another link</a> -->
+        </div>
+    </div>
+
+
+
+
+    <!-- <table class="table is-fullwidth">
         <thead>
             <tr>
-                <th style="padding: 0 30px;text-align: center;">Ville</th>
-                <th style="padding: 0 30px;text-align: center;">Nom de l'école</th>
+                <th>Ville</th>
+                <th>Nom de l'école</th>
         </thead>
         <tbody>
             {% for ecole in ecoles %}
             <tr>
-                <td style="padding: 0 30px;">{{ ecole[3] }}</td>
-                <td style="padding: 0 30px;">{{ ecole[1] }}</td>
+                <td>{{ ecole[3] }}</td>
+                <td>{{ ecole[1] }}</td>
             </tr>
             {% endfor %}
         </tbody>
-    </table>
+    </table> -->
 
     <br><br><br><br><br><br><br><br><br><b><b></b></b>
 {% endblock %}

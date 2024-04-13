@@ -20,19 +20,12 @@
             {% endfor %}
         {% endif %}
     {% endwith %}
-
-        <!-- RESSOURCES -->
-        <div>
-          <ul>
-            <li>Guide utilisateur (PDF)</li>
-          </ul>
-        </div>
     
-
     
     {% if isAdmin == 1 %}
-    <!-- ADMINISTRATEUR -->
-    <p><strong>ADMIN</strong></p>
+     <!-- -------------------------------------------------------------------- -->
+     <!--                               ADMINS                                  -->
+     <!-- -------------------------------------------------------------------- -->
 
     <!-- RESSOURCES -->
     <div>
@@ -83,45 +76,59 @@
         </div>
       </div>
       
-
-    <p>tuto ? explication en despi</p>
-
-    <!-- <div id="dashboard-buttons">
+      
+      <p>tuto ? explication en despi</p>
+      
+      <!-- <div id="dashboard-buttons">
         <a href="{{ url_for('dashboardAdminAddRef') }}" class="dashboard-button">Créer</a>
         <a href="{{ url_for('dashboardAdminSearchRef') }}" class="dashboard-button">Rechercher</a>
         <a href="{{ url_for('dashboardAdminEditRef') }}" class="dashboard-button">Modifier</a>
         <a href="{{ url_for('dashboardAdminDeleteRef') }}" class="dashboard-button">Supprimer</a>
-    </div>
-     -->
-
-
+      </div>
+    -->
+    
+    
     {% else %}
+    <!-- -------------------------------------------------------------------- -->
+    <!--                               REFERENT                                -->
+    <!-- -------------------------------------------------------------------- -->
+    <div class="row">
+      <div class="col"><p></p></div>
+      <div class="col">
+        <button type="button" class="btn btn-primary position-relative">
+            Total des élèves de l'école
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {{ nbEleves }}
+            </span>
+        </button>
+      </div>  
+      <!-- Afficher la moyenne par classe -->
+      <div class="col">
+        <button type="button" class="btn btn-primary position-relative">
+          Moyenne d'élèves par classe
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {{ moyenneEleveParClasse }}
+          </span>
+      </button>
+      </div>
+      <div class="col"><p></p></div>
+    </div>
 
-    <!-- REFERENT -->
+    <!-- Afficher le total des effectifs de l'école -->
+    <!-- RESSOURCES -->
+     <div>
+       <ul>
+         <li>Guide utilisateur (PDF)</li>
+      </ul>
+    </div>
+
     <h2>Gestion :</h2>     
     <ul>
         <li> <a href="{{ url_for('referentEcole') }}">Mon Ecole</a> </li>
         <li> <a href="{{ url_for('referentClasse') }}">Mes Classes</a> </li>
-        <li> <a href="{{ url_for('referentCorrespondants') }}">Mes Correspondants</a> </li>
+        <li> <a href="{{ url_for('referentPersonnels') }}">Mon Personnel</a> </li>
     </ul>
     
-    <!-- Afficher le total des effectifs de l'école -->
-    <button type="button" class="btn btn-primary position-relative">
-        Total des effectifs de l'école
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            {{ nbEleves }}
-        </span>
-    </button>
-    
-    <p></p>
-
-    <!-- Afficher la moyenne par classe -->
-    <button type="button" class="btn btn-primary position-relative">
-        Moyenne par classe
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            {{ moyenneEleveParClasse }}
-        </span>
-    </button>
 
     {% endif %}
     <br><br><br><br><br><br><br><br><br><b><b></b></b>

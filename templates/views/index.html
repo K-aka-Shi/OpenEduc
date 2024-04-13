@@ -8,13 +8,51 @@
     <!-- GARDER CA POUR LE DASHBOARD
     <p>Bonjour {{ session['username']|title if session['username'] else 'invité'}}, bienvenue sur mon site !</p> -->
     
-    <h1>Accueil</h1>
 
-    <p>Bonjour <strong>{{ session['username']|title if session['username'] else 'invité'}}</strong> !</p>
+    <h1 style="color: white;">
+        Bonjour {{ session['username']|title if session['username'] else 'invité'}} !
+    </h1>
+    <h2>card : openEduc </h2>
 
-    <hr>
+    <br>
+    
+    <div class="container">
+        
+        <div class="row">
+          <div class="col">
+              <div class="card" style="border-radius: 40px; background: linear-gradient(90deg, rgba(255,222,89,1) 0%, rgba(255,145,77,1) 100%); color: #0A4191;">
+                  <div class="card-body">
+                      <br><br><br><br>
+                      <h5 class="card-title">l'A.P.E.A</h5>
+                      <br>
+                        <!-- <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6> -->
+                        <p class="card-text">
+                            L'APEA, Association de Parents d’Elèves d’Alsace, est une organisation à but non lucratif qui facilite la participation des parents aux actions scolaires. Elle agit en tant qu'intermédiaire entre les parents et le personnel pédagogique pour défendre leurs intérêts communs. L'APEA est représentée dans divers organes de décision liés à l'éducation.
+                        </p>
+                        <!-- <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a> -->
+                  </div>
+                </div>
+          </div>
+        <div class="col">
+              <div class="card" style="border-radius: 40px; background: linear-gradient(90deg, rgba(255,222,89,1) 0%, rgba(255,145,77,1) 100%); color: #0A4191;">
+                  <div class="card-body">
+                        <br><br><br><br>
+                        <h5 class="card-title">OpenEduc</h5>
+                        <br>
+                        <!-- <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6> -->
+                        <p class="card-text">
+                            OpenEduc facilite la collecte, la gestion et la diffusion d'informations sur les écoles. Elle permet de saisir, modifier et consulter les données éducatives de manière efficace. Utilisée par les référents locaux d'écoles, les secrétaires d'associations de parents d'élèves et d'autres membres de la communauté éducative, elle simplifie la gestion quotidienne des données scolaires.
+                        </p>
+                        <!-- <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a> -->
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <h2>l'A.P.E.A</h2>
+    <!-- <h2>l'A.P.E.A</h2>
     
     <p>
         L’APEA, Association de Parents d’Elèves d’Alsace, est une organisation à but non lucratif quia pour mission de participer aux actions scolaires au sein des établissements publics locauxd’enseignement.
@@ -29,26 +67,5 @@
     OpenEduc est une plateforme web conçue pour faciliter la collecte, la gestion et la diffusion d'informations sur les écoles. Elle vise à fournir aux utilisateurs un moyen efficace de saisir, modifier et consulter les données liées aux écoles.
     Les principaux objectifs de l'application OpenEduc sont de simplifier le processus de collecte d'informations sur les écoles, de permettre aux utilisateurs de stocker ces données de manière organisée, et de rendre ces informations accessibles au public de manière conviviale.
     OpenEduc est utilisé par des référents locaux d'écoles, des secrétaires d'association de parents d'élèves, ainsi que par d'autres membres de la communauté éducative. Il est destiné à être utilisé dans le cadre de la gestion quotidienne des informations sur les écoles.
-
-
-
-
-
-    <br><br>
-    <h3>Sous-Titre 1</h3>
-
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore, mollitia architecto inventore beatae esse harum praesentium accusamus, enim explicabo incidunt quasi assumenda odit a dolore dignissimos aut laudantium, qui natus!
-    Tempora dignissimos similique pariatur praesentium consectetur, laboriosam adipisci! Tempore natus quibusdam perferendis aut omnis ipsam, reprehenderit, dolorem cupiditate facilis voluptatem eaque vitae maxime, exercitationem dolore et possimus labore dolorum molestias.
-    Eius assumenda veniam eligendi, minima quas harum eveniet dicta aut, dolor dolorum eum? Sequi facilis itaque enim magnam quasi sunt dolorem, nulla ducimus, nam delectus dicta animi unde vero ipsam.
-    Animi quasi officia dolor odit veniam. Ipsa doloremque laboriosam ratione aperiam suscipit, in provident quae delectus! Quia assumenda asperiores laboriosam ratione, eaque, earum animi aspernatur sit eligendi, ut nulla magnam.
-
-    <br><br>
-    <h3>Sous-Titre 2</h3>
-
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto a laboriosam quae sit soluta, odio exercitationem voluptate, repudiandae totam ut odit quisquam quos? Repudiandae recusandae nobis cumque. Itaque, reprehenderit at!
-    Voluptatum illum, necessitatibus possimus ab animi nemo quam et quisquam? Rerum voluptates, assumenda expedita voluptas enim quos id architecto quaerat inventore, mollitia pariatur nam, ab tempora nihil possimus magnam quisquam.
-    Non dolore fugit inventore minima, nesciunt suscipit quis voluptates repellendus et soluta obcaecati sunt ab, asperiores, aspernatur quo hic mollitia accusamus error! Nihil aspernatur repudiandae iusto rerum, non velit omnis?
-    Eos necessitatibus odio veritatis recusandae facilis sed maiores omnis harum ratione, numquam, repellendus quos reprehenderit. Debitis odio ad repellendus itaque animi quis, tenetur ullam dolor voluptatem rerum soluta ab numquam!
-
-    <h4>Conforimté RGPD</h4>
+-->
 {% endblock %}

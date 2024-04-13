@@ -100,7 +100,7 @@ Prenom VARCHAR(50),
 Sexe TEXT CHECK( Sexe IN ('H','F') ),
 Telephone VARCHAR(15),
 Email VARCHAR(255),
-Fonction VARCHAR(100),
+Fonction TEXT CHECK( Fonction IN ('Directeur','Enseignant','Correspondant Local APEA','Correspondant Local Mairie') ),
 idEcole INT, -- Clé étrangère faisant référence à l'école à laquelle le personnel est rattaché
 idClasse INT,
 FOREIGN KEY (idEcole) REFERENCES Ecole(idEcole),
@@ -122,7 +122,7 @@ CREATE TABLE Classe (
 idClasse INTEGER PRIMARY KEY,
 Effectif INT,
 Moyenne FLOAT,
-niveauScolaire TEXT CHECK( niveauScolaire IN ('CP','CE1','CE2','CM1','CM2','6E','5E','4E','3E','1RE','2NDE','TALE') ),
+niveauScolaire TEXT CHECK( niveauScolaire IN ('PS','MS','GS','CP','CE1','CE2','CM1','CM2','6E','5E','4E','3E','2NDE','1RE','TALE') ),
 idPersonnel INT,
 idEcole INT, -- Clé étrangère faisant référence à l'école à laquelle la classe est rattachée
 FOREIGN KEY (idEcole) REFERENCES Ecole(idEcole),
@@ -526,7 +526,7 @@ def inserer_donnees():
     # Données pour la table Personnel
     personnel = [
         ("Dupont", "Jean", "H", "01 23 45 67 89", "jean.dupont@example.com", "Enseignant", 1, None),
-        ("Durand", "Marie", "F", "04 56 78 90 12", "marie.durand@example.com", "Directrice", 2, None)
+        ("Durand", "Marie", "F", "04 56 78 90 12", "marie.durand@example.com", "Directeur", 2, None)
     ]
 
     # Données pour la table Classe

@@ -1,10 +1,38 @@
+/*
+ * ORANGE clair : #F9A825
+ * ORANGE foncé : #C97700
+ * BLEU         : #0A4191
+ * NOIR   clair : #282d32
+*/
+/* width */
+::-webkit-scrollbar {
+  width: 15px;
+  background-color: #282d32;
+}
+
+/* Track */
+/* ::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+} */
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #C97700;
+  border-radius: 10px;
+}
+
+
 body {
-  background-color:aliceblue;
   margin: 0;
+  background: rgb(0,0,0);
+  background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(53,51,205,1) 100%);
+  /* background-color:aliceblue;
   background-image: url('https://static.vecteezy.com/system/resources/previews/021/599/588/non_2x/abstract-white-and-gray-overlap-circles-background-3d-paper-circle-banner-with-drop-shadows-minimal-simple-design-for-presentation-flyer-brochure-website-book-etc-vector.jpg');
   background-repeat: no-repeat;
   background-attachment: fixed;  
-  background-size: cover;
+  background-size: cover; */
+  color: white;
 }
 
 #container {
@@ -13,10 +41,15 @@ body {
 }
 
 /* Style du titre */
+h1,h2 {
+  text-align: center;
+}
+
+
 h1 {
   font-size: 40px;
   margin-bottom: 20px;
-  color: #0A4191;
+  color: #F9A825;
   font-weight: bold;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -26,7 +59,7 @@ h2 {
   font-size: 30px;
   margin-top: 30px;
   margin-bottom: 15px;
-  color: #F9A825;
+  color: white;
   font-weight: bold;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -43,6 +76,11 @@ h3 {
 p {
   font-size: 16px;
   margin-bottom: 15px;
+  color: white;
+}
+
+label {
+  color: white;
 }
 
 /* Style des éléments forts */
@@ -78,6 +116,33 @@ select:hover{
 }
 
 
+/* TABLEAU */
+table {
+  border: 2px solid #000;
+  border-collapse: collapse;
+  text-align: center;
+  color: white;
+}
+
+/* ligne */
+tr {
+  background-color: #282d32;
+}
+/* ligne-titre */
+th {
+  background-color: #0A4191;
+}
+/* toutes les lignes corps  */
+td, th {
+  border: 2px solid #000;
+}
+/* hover : ligne */
+tbody>tr:hover {
+  /* font-weight: bold; */
+  background-color: #15181b;
+}
+
+
 /* Style du bouton */
 input[type="button"], input[type="submit"], input[type="checkbox"], form[type="button"] {
   width: 10%;
@@ -110,9 +175,10 @@ input[type="text"]:hover {
 
 #navbar {
   padding: 10px;
+  padding-bottom: 30px;
   display: flex;
   align-items: center;
-  background: linear-gradient(#F9A825, #F9A825, #F9A825, #00000000);
+  /* background: linear-gradient(#F9A825, #F9A825, #F9A825, #00000000); */
   font-size: 1.1em;
   color: white;
 }
@@ -160,7 +226,7 @@ input[type="text"]:hover {
 
 .dropdown-content a {
   color: white;
-  background-color: #F9A825;
+  background-color: #0A4191;
   padding: 12px 16px;
   text-decoration: none;
   display: block;
@@ -174,6 +240,9 @@ input[type="text"]:hover {
   display: block;
 }
 
+#logout:hover, #login:hover {
+  color: #0A4191;
+}
 
 
 

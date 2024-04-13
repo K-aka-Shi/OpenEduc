@@ -54,7 +54,7 @@
                 <td style="border: 2px solid #000;">{{ resultat[0] }}</td>
                 <td style="border: 2px solid #000;">{{ resultat[1] }}</td>
                 <td style="border: 2px solid #000;" class="mdpContainer">
-                    <img src="https://static-00.iconduck.com/assets.00/eye-show-icon-2048x1326-edkdqxrw.png" alt="icon show" style="width:30px;">
+                    <img src="https://static-00.iconduck.com/assets.00/eye-show-icon-2048x1326-edkdqxrw.png" alt="icon show" style="width:30px; pointer-events:none; user-select:none;">
                     <span class="mdp">{{ resultat[2] }}</span>
                 </td>
                 <td style="border: 2px solid #000;">{{ resultat[4] }}</td>
@@ -66,4 +66,10 @@
     {% endif %}
 {% endif %}
 
+
+<script>
+    function copyToClipboard(link) {
+        navigator.clipboard.writeText(link)
+    }
+</script>
 {% endblock %}

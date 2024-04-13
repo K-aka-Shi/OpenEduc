@@ -3,12 +3,12 @@
     width: 300px;
     margin: 0 auto;
     text-align: center;
+    padding-top: 3em;
 }
 
 /* Style du titre */
-.login-container h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
+.login-container h1 {
+    margin-bottom: 1em;
 }
 
 /* Style des champs de saisie */

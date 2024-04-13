@@ -331,14 +331,26 @@ def referentClasse() :
         submit_type = request.form.get('submit-type')
         if submit_type == 'Ajouter':
             # Traitement pour le formulaire d'ajout
+            print("\n\nTraitement pour le formulaire d'ajout\n\n")
             data = request.form
             niveauScolaire = data.get('niveau')
-            prof = ''
+            prof = data.get('nom_prof')
             effectif = data.get('effectifs')
-            idEcole = chercher_personnel(id)
-            print('chercher_personnel',idEcole[0])
-            # inserer_classe(effectif, niveauScolaire, prof, idEcole)
-            print("\n\nTraitement pour le formulaire d'ajout\n\n")
+            moyenne = data.get('moyenne')
+            conn = sqlite3.connect(bdd_name).cursor().execute("""
+                                                              SELECT idEcole, nomEcole 
+                                                              FROM Ecole
+                                                              WHERE idEcole = (
+                                                                    SELECT idEcole
+                                                                    FROM Utilisateur
+                                                                    WHERE idUtilisateur = ?
+                                                                )""",
+                                                              (id,)
+                                                            )
+            idEcole = conn.fetchall()[0]
+            print(session)
+            print("formulaire ajouter classe :", prof, effectif, niveauScolaire, idEcole[1])
+            inserer_classe(effectif, moyenne, niveauScolaire, prof, idEcole[0])
         elif submit_type == 'Modifier':
             # Traitement pour le formulaire de modification
             print("\n\nTraitement pour le formulaire de modification\n\n")
@@ -354,7 +366,7 @@ def referentClasse() :
                                                             )
             cycleScolaire = conn.fetchall()[0][0]
             conn = sqlite3.connect(bdd_name).cursor().execute("""
-                                                              SELECT c.niveauScolaire, p.Nom, p.Prenom, c.Effectif
+                                                              SELECT c.niveauScolaire, p.Nom, p.Prenom, c.Effectif, c.Moyenne
                                                               FROM Classe c
                                                               JOIN Personnel p ON c.idPersonnel = p.idPersonnel
                                                               JOIN Utilisateur u ON c.idEcole = u.idEcole
@@ -370,17 +382,17 @@ def referentClasse() :
         return redirect(url_for('dashboard'))
 
 
-@app.route("/dashboard/correspondants", methods=["POST", "GET"])
-def referentCorrespondants() :
+@app.route("/dashboard/personnels", methods=["POST", "GET"])
+def referentPersonnels() :
     if request.method == "POST":
         # si le formulaire est envoyé
         # data = request.form
         # saisie = data.get('term')
         # resultats = chercher_ecoleLike(saisie)
-        return render_template("views/dashboard/referentCorrespondants.html")
+        return render_template("views/dashboard/referentPersonnel.html")
     else:
         # méthode GET
-        return render_template("views/dashboard/referentCorrespondants.html")
+        return render_template("views/dashboard/referentPersonnel.html")
 
 
 # ############################################################################

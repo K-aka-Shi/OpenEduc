@@ -17,6 +17,23 @@
 
     <!-- NAVBAR -->
 
+    <!-- <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #F9A825;">
+        
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+              <img src="/static/img/logo_text.png" alt="Logo" width="50" height="50" class="d-inline-block align-text-center">
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <div class="navbar-nav">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link" href="#">Features</a>
+                    <a class="nav-link" href="#">Pricing</a>
+                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                </div>
+            </div>
+        </div>
+      </nav> -->
+
     <nav id="navbar">
         <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" width="50">
         <ul id="navbar-items">
@@ -29,18 +46,21 @@
             <li class="navbar-item">
                 <a href="{{ url_for('partenaires') }}">Nos Partenaires</a>
             </li>
-            {% if session['username'] %}
-            <li class="navbar-item">
-                <a href="{{ url_for('dashboard') }}">Dashboard</a>
-            </li>
-            {% endif %}
+
     
             <li class="navbar-item login-logout">
                 <div class="dropdown">
+                    {% if session['username'] %}
+                    <a href="{{ url_for('dashboard') }}" style="padding: 0 10px">
+                        Dashboard
+                    </a>
+                    {% endif %}
+                </div>
+                <div class="dropdown">
                     {% if session['statut'] == 1 %}
-                    <a style="padding: 0 20px;">
+                    <a style="padding: 0 10px;">
                         Gestion Ecoles
-                        <img style="width: 20px;" src="https://static.thenounproject.com/png/1123247-200.png">
+                        <img style="width: 20px;" src="https://www.nzrugby-connect.com/wp-content/uploads/2019/03/fleche-blanche-bas.png">
                     </a>
                     <div class="dropdown-content">
                         <a href="{{ url_for('dashboardAdminSearchEcole') }}">Rechercher</a>
@@ -53,9 +73,9 @@
 
                 <div class="dropdown">
                     {% if session['statut'] == 1 %}
-                    <a style="padding: 0 20px;">
+                    <a style="padding: 0 10px;">
                         Gestion Référents
-                        <img style="width: 20px;" src="https://static.thenounproject.com/png/1123247-200.png">
+                        <img style="width: 20px;" src="https://www.nzrugby-connect.com/wp-content/uploads/2019/03/fleche-blanche-bas.png">
                     </a>
                     <div class="dropdown-content">
                         <a href="{{ url_for('dashboardAdminSearchRef') }}">Rechercher</a>
@@ -66,9 +86,9 @@
                     {% endif %}
                 </div>
                 {% if session['username'] %}
-                <a href="{{ url_for('logout') }}">Se déconnecter</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-outline-light" id="logout">Se déconnecter</a>
                 {% else %}
-                <a href="{{ url_for('login') }}">Se connecter</a>
+                <a href="{{ url_for('login') }}" class="btn btn-outline-light" id="login">Se connecter</a>
                 {% endif %}
             </li>
         </ul> 
@@ -111,7 +131,9 @@
                     </div>
                     <div class="col-6d-6 item te4t">
                         <h3>OpenEduc</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est repellendus libero, minus consectetur quam nesciunt corrupti? Hic iste, blanditiis quis recusandae omnis perspiciatis nesciunt quaerat ea possimus, perferendis eius quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam vitae ad, aliquam porro mollitia dolor dolorem aperiam ratione voluptas commodi minima vel. Ducimus fugiat quia provident alias mollitia, tempore beatae? lorem</p>
+                        <p>
+                            OpenEduc facilite la collecte, la gestion et la diffusion d'informations sur les écoles. Elle permet de saisir, modifier et consulter les données éducatives de manière efficace. Utilisée par les référents locaux d'écoles, les secrétaires d'associations de parents d'élèves et d'autres membres de la communauté éducative, elle simplifie la gestion quotidienne des données scolaires.
+                        </p>
                     </div>
                     <div class="col item social">
                         <a href="#"><i class="icon ion-social-twitter"></i></a>

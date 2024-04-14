@@ -9,8 +9,6 @@
 
 <h1>Dashboard</h1>
 
-<p>tuto ? explication en despi</p>
-
 <h2>Modifier un Référent</h2>
 
 <form action="{{ url_for('dashboardAdminEditRef') }}" method="POST">
@@ -18,7 +16,11 @@
     <select name="id_utilisateur" id="id_utilisateur">
         <option value="" disabled selected aria-required="true">Choisissez un utilisateur</option>
         {% for utilisateur in utilisateurs %}
-        <option value="{{utilisateur[0]}}"> {{ utilisateur[1] }} </option>
+            {% if utilisateur[0] == id_utilisateur %}
+            <option selected value="{{utilisateur[0]}}"> {{ utilisateur[1] }} </option>
+            {% else %}
+            <option value="{{utilisateur[0]}}"> {{ utilisateur[1] }} </option>
+            {% endif %}
         {% endfor %}
     </select>
     <input type="submit" name="submit-type" value="Rechercher">
@@ -28,11 +30,13 @@
     <hr>
     <br>
 
+    {% if affichage %}
     <div class="container">
         <div class="row">
 
             <div class="col">
                 <form action="{{ url_for('dashboardAdminEditRef') }}" method="POST">
+                    <input type="hidden" name="id_utilisateur" value="{{ id_utilisateur }}">
                     <div class="form-group">
                         <label for="identifiant">identifiant : </label>
                         <input style="width: max-content" class="form-control" type="text" id="identifiant" name="identifiant" value="{{identifiant}}" placeholder="Nouvel identifiant (login)">
@@ -83,5 +87,6 @@
         </div>
     </div>
 </div>
+{% endif %}
 
 {% endblock %}

@@ -169,15 +169,14 @@ def dashboardAdminEditRef() :
         submit_type = request.form.get('submit-type')
         print("submit",submit_type)
         data = request.form
-        id_utilisateur = data.get('id_utilisateur')
         if submit_type == "Rechercher" :
-            # pour le selecteur des utilisateur
+            id_utilisateur = data.get('id_utilisateur')
             conn = sqlite3.connect(bdd_name).cursor().execute("""
                                                         SELECT idUtilisateur,Identifiant, MotDePasse, idEcole
-                                                        FROM Utilisateur
-                                                        WHERE idUtilisateur=?
-                                                        """, (id_utilisateur,) )
+                                                        FROM Utilisateur WHERE idUtilisateur = ?
+                                                            """, (id_utilisateur,) )
             Utilisateur = conn.fetchall()[0]
+            # pour le selecteur des utilisateur
             id_utilisateur = Utilisateur[0]
             identifiant = Utilisateur[1]
             mdp = Utilisateur[2]
@@ -185,18 +184,21 @@ def dashboardAdminEditRef() :
             print(ecole)
             print(ecoles)
             return render_template("views/dashboard/adminEditRef.html",
-                                   utilisateurs=users, ecoles=ecoles,
+                                   utilisateurs=users, ecoles=ecoles, affichage=True,
                                    id_utilisateur=id_utilisateur,identifiant=identifiant, mdp=mdp, ecole=ecole)
         
         if submit_type == "Modifier" :
-            identifiant = data.get('identifiant')
-            mdp = data.get('mdp')
-            ecole = data.get('ecoles')
-            print(ecole)
+
+            id_utilisateur = data.get('id_utilisateur')
+            print(id_utilisateur)
+            NVidentifiant = data.get('identifiant')
+            NVmdp = data.get('mdp')
+            NVecole = data.get('ecoles')
+            update_referent(id_utilisateur, NVidentifiant, NVmdp, NVecole)
+            print("chercher",chercher_utilisateur(NVidentifiant,NVmdp))
             return render_template("views/dashboard/adminEditRef.html",
                                    utilisateurs=users,
-                                   id_utilisateur=id_utilisateur,identifiant=identifiant, mdp=mdp, ecole=ecole, ecoles=ecoles)
-    
+                                   id_utilisateur=id_utilisateur,identifiant=NVidentifiant, mdp=NVmdp, ecole=NVecole, ecoles=ecoles)
     else :
         # GET
         if username is not None and statut == 1 :
@@ -204,7 +206,7 @@ def dashboardAdminEditRef() :
             return render_template("views/dashboard/adminEditRef.html",
                                 ecoles = ecoles, utilisateurs=users)
         return redirect(url_for('dashboard'))
-    2
+
 
 #    DASHBOARD : Supprimer Referent    #
 @app.route("/dashboard/supprimer-referent", methods=['POST', 'GET'])

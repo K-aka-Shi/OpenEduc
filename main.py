@@ -169,6 +169,7 @@ def dashboardAdminEditRef() :
         submit_type = request.form.get('submit-type')
         print("submit",submit_type)
         data = request.form
+
         if submit_type == "Rechercher" :
             id_utilisateur = data.get('id_utilisateur')
             conn = sqlite3.connect(bdd_name).cursor().execute("""
@@ -278,6 +279,72 @@ def dashboardAdminSearchEcole() :
 #    DASHBOARD : Modifier Ecole    #
 @app.route("/dashboard/modifier-ecole")
 def dashboardAdminEditEcole() :
+    username = session.get("username")
+    statut = session.get("statut")
+    id = session.get('id')
+    ecoles = sorted(chercher_ecoleAll(), key=lambda x: x[3]) # Toutes les écoles par ville triées par ordre alph.
+    users = chercher_utilisateurAll()[1:]
+
+    if request.method == "POST":
+
+        submit_type = request.form.get('submit-type')
+        print("submit",submit_type)
+        data = request.form
+
+        if submit_type == "Rechercher" :
+            id_ecole = data.get('id_ecole')
+            conn = sqlite3.connect(bdd_name).cursor().execute("""
+                                                        SELECT *
+                                                        FROM Utilisateur
+                                                        WHERE idUtilisateur = ?
+                                                            """, (id_ecole,) )
+            Ecole = conn.fetchall()[0]
+            # pour le selecteur des utilisateur
+            id_ecole = Ecole[0]
+            nomEcole = Ecole[1]
+            adresse = Ecole[2]
+            ville = Ecole[3]
+            codePostal = Ecole[4]
+            nbEleves = Ecole[5]
+            telephone = Ecole[6]
+            email = Ecole[7]
+            cycleScolaire = Ecole[8]
+            print(ecoles)
+            return render_template("views/dashboard/adminEditRef.html",
+                                   utilisateurs=users, ecoles=ecoles, affichage=True,
+                                   id_ecole=id_ecole, nomEcole=nomEcole, adresse=adresse,
+                                   ville=ville, codePostal=codePostal, nbEleves=nbEleves, telephone=telephone, email=email, cycleScolaire=cycleScolaire
+                                   )
+
+        if submit_type == "Modifier" :
+
+            id_ecole = data.get('id_ecole')
+            print(id_ecole)
+            nomEcole = data.get('nomEcole')
+            adresse = data.get('adresse')
+            ville = data.get('ville')
+            codePostal = data.get('codePostal')
+            nbEleves = data.get('nbEleves')
+            telephone = data.get('telephone')
+            email = data.get('email')
+            cycleScolaire = data.get('cycleScolaire')
+            update_ecole(id_ecole, nomEcole, adresse, ville, codePostal, nbEleves, telephone, email, cycleScolaire)
+            print("chercher",chercher_ecole_testVerifAdd(nomEcole, adresse, ville, codePostal))
+            return render_template("views/dashboard/adminEditEcole.html",
+                                   utilisateurs=users,
+                                   ville=ville, codePostal=codePostal, nbEleves=nbEleves, telephone=telephone, email=email, cycleScolaire=cycleScolaire
+                                    )
+
+    else :
+        # GET
+        if username is not None and statut == 1 :
+            ecoles = chercher_ecoleAll()
+            return render_template("views/dashboard/adminEditEcole.html",
+                                ecoles = ecoles, utilisateurs=users)
+        return redirect(url_for('dashboard'))
+
+
+
     ecoles = chercher_ecoleAll()
     ecoles = sorted(ecoles, key=lambda x: x[2])
     return render_template("views/dashboard/adminEditEcole.html", ecoles=ecoles)

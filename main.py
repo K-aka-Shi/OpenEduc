@@ -277,7 +277,7 @@ def dashboardAdminSearchEcole() :
         return render_template("views/dashboard/adminSearchEcole.html", resultats=None)
 
 #    DASHBOARD : Modifier Ecole    #
-@app.route("/dashboard/modifier-ecole")
+@app.route("/dashboard/modifier-ecole", methods=["POST","GET"])
 def dashboardAdminEditEcole() :
     username = session.get("username")
     statut = session.get("statut")
@@ -295,10 +295,11 @@ def dashboardAdminEditEcole() :
             id_ecole = data.get('id_ecole')
             conn = sqlite3.connect(bdd_name).cursor().execute("""
                                                         SELECT *
-                                                        FROM Utilisateur
-                                                        WHERE idUtilisateur = ?
+                                                        FROM Ecole
+                                                        WHERE idEcole = ?
                                                             """, (id_ecole,) )
             Ecole = conn.fetchall()[0]
+            print("aaaaaaaaaaaa",Ecole)
             # pour le selecteur des utilisateur
             id_ecole = Ecole[0]
             nomEcole = Ecole[1]
@@ -310,8 +311,8 @@ def dashboardAdminEditEcole() :
             email = Ecole[7]
             cycleScolaire = Ecole[8]
             print(ecoles)
-            return render_template("views/dashboard/adminEditRef.html",
-                                   utilisateurs=users, ecoles=ecoles, affichage=True,
+            return render_template("views/dashboard/adminEditEcole.html",
+                                   utilisateurs=users, ecoles=ecoles, affichage=True, monEcole=Ecole,
                                    id_ecole=id_ecole, nomEcole=nomEcole, adresse=adresse,
                                    ville=ville, codePostal=codePostal, nbEleves=nbEleves, telephone=telephone, email=email, cycleScolaire=cycleScolaire
                                    )

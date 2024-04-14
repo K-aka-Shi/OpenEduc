@@ -40,46 +40,115 @@
                 <input type="hidden" name="id_ecole" value="{{ id_ecole }}">
                 <div class="form-group">
                     <label for="nomEcole">Nom de l'école :</label>
-                    <input value="nomEcole" class="form-control" type="text" id="nomEcole" name="nomEcole" placeholder="Nouveau nom de l'école">
+                    <input value="{{nomEcole}}" class="form-control" type="text" id="nomEcole" name="nomEcole">
                 </div>
                 <div class="form-group">
                     <label for="adresse">Adresse :</label>
-                    <input value="adresse" class="form-control" type="text" id="adresse" name="adresse" placeholder="Nouvelle adresse">
+                    <input value="{{adresse}}" class="form-control" type="text" id="adresse" name="adresse">
                 </div>
                 <div class="form-group">
                     <label for="ville">Ville :</label>
-                    <input value="ville" class="form-control" type="text" id="ville" name="ville" placeholder="Nouvelle ville">
+                    <input value="{{ville}}" class="form-control" type="text" id="ville" name="ville">
                 </div>
                 <div class="form-group">
                     <label for="codePostal">Code postal :</label>
-                    <input value="codePostal" class="form-control" type="text" id="codePostal" name="codePostal" placeholder="Nouveau code postal">
+                    <input value="{{codePostal}}" class="form-control" type="text" id="codePostal" name="codePostal">
                 </div>
                 <div class="form-group">
                     <label for="nbEleves">Nombre d'élèves :</label>
-                    <input class="form-control" type="text" id="nbEleves" name="nbEleves" placeholder="Nouveau nombre d'élèves">
+                    <input value="{{nbEleves if nbEleves}}" class="form-control" type="text" id="nbEleves" name="nbEleves">
                 </div>
                 <div class="form-group">
                     <label for="telephone">Téléphone :</label>
-                    <input class="form-control" type="text" id="telephone" name="telephone" placeholder="Nouveau numéro de téléphone">
+                    <input value="{{telephone if telephone}}"class="form-control" type="text" id="telephone" name="telephone">
                 </div>
                 <div class="form-group">
-                    <label for="email">Email :
-                    </label>
-                    <input class="form-control" type="text" id="email" name="email" placeholder="Nouvelle adresse email">
+                    <label for="email">Email :</label>
+                    <input value="{{email if email}}" class="form-control" type="text" id="email" name="email">
                 </div>
                 <div class="form-group">
                     <select class="form-control" name="cycleScolaire" id="cycleScolaire">
                         <option value="" disabled selected aria-required="true">Choisissez un cycle scolaire</option>
+                        {% if monEcole[8] == 'maternelle' %}
+                        <option value="" disabled aria-required="true">Choisissez un cycle scolaire</option>
+                        <option selected value="maternelle">Maternelle</option>
+                        <option value="elementaire">Élémentaire</option>
+                        <option value="college">Collège</option>
+                        <option value="lycee">Lycée</option>
+                        {% elif monEcole[8] == 'elementaire' %}
+                        <option value="" disabled aria-required="true">Choisissez un cycle scolaire</option>
+                        <option value="maternelle">Maternelle</option>
+                        <option value="elementaire" selected>Élémentaire</option>
+                        <option value="college">Collège</option>
+                        <option value="lycee">Lycée</option>
+                        {% elif monEcole[8] == 'college' %}
+                        <option value="" disabled aria-required="true">Choisissez un cycle scolaire</option>
+                        <option value="maternelle">Maternelle</option>
+                        <option value="elementaire">Élémentaire</option>
+                        <option selected value="college">Collège</option>
+                        <option value="lycee">Lycée</option>
+                        {% elif monEcole[8] == 'lycee' %}
+                        <option value="" disabled aria-required="true">Choisissez un cycle scolaire</option>
+                        <option value="maternelle">Maternelle</option>
+                        <option value="elementaire">Élémentaire</option>
+                        <option value="college">Collège</option>
+                        <option selected value="lycee">Lycée</option>
+                        {% else %}
+                        <option selected value="" disabled aria-required="true">Choisissez un cycle scolaire</option>
                         <option value="maternelle">Maternelle</option>
                         <option value="elementaire">Élémentaire</option>
                         <option value="college">Collège</option>
                         <option value="lycee">Lycée</option>
+                        {% endif %}
                     </select>
                 </div>
                 <input type="submit" value="Modifier" style="width: max-content;">
-        </form>
-
+            </form>
         </div>
+
+        <div class="col">
+            <table class="table is-fullwidth" style="border: 2px solid #000; border-collapse: collapse;">
+                <tbody>
+                    <tr>
+                        <th style="border: 2px solid #000;">ID</th>
+                        <td style="border: 2px solid #000;">{{ id_ecole }}</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Nom</th>
+                        <td style="border: 2px solid #000;">{{ nomEcole }}</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Adresse</th>
+                        <td style="border: 2px solid #000;">{{ adresse }}</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Ville</th>
+                        <td style="border: 2px solid #000;">{{ ville }}</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Code postal</th>
+                        <td style="border: 2px solid #000;">{{ codePostal }}</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Nombre d'élèves</th>
+                        <td style="border: 2px solid #000;">{{ nbEleves }}</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Téléphone</th>
+                        <td style="border: 2px solid #000;">{{ telephone }}</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">E-Mail</th>
+                        <td style="border: 2px solid #000;">{{ email }}</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Cycle Scolaire</th>
+                        <td style="border: 2px solid #000;">{{ cycleScolaire }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    
     </div>
 </div>
 {% endif %}

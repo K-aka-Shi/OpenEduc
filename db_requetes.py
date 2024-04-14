@@ -135,6 +135,16 @@ FOREIGN KEY (idPersonnel) REFERENCES Personnel(idPersonnel)
 #                                       SELECT                                                       |
 # ___________________________________________________________________________________________________|
 
+def isUtilisateurExist(id) :
+    """ Vérifie si un utilisateur existe dans la base de données en fonction de son id."""
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    cur.execute('SELECT COUNT(*) FROM Utilisateurs WHERE id=?', (str(id),))
+    if cur.fetchone()[0] == 1:
+        return True
+    else:
+        return False
+
 # Utilisateur
 def chercher_utilisateurAll() :
     conn = sqlite3.connect(bdd_name)
@@ -161,13 +171,27 @@ def chercher_utilisateur(username,password) :
 def chercher_utilisateurLike(username) :
     conn = sqlite3.connect(bdd_name)
     cur = conn.cursor()
-    res = cur.execute("""SELECT * FROM Utilisateur
-                      WHERE Identifiant LIKE ?""", ('%' + username + '%',)
+    res = cur.execute("""
+                      SELECT * FROM Utilisateur
+                      WHERE isAdmin = 0 AND Identifiant LIKE ?
+                      """, ('%' + username + '%',)
     )
     utilisateur = res.fetchall()
     print("Resultat requete :",utilisateur)
     conn.close()
     return utilisateur
+
+def chercher_utilisateurByID(id) :
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    res = cur.execute("""SELECT * FROM Utilisateur
+                      WHERE idUtilisateur = ?""", (id,)
+                      )
+    utilisateur = res.fetchall()
+    print("Resultat requete :",utilisateur)
+    conn.close()
+    return utilisateur
+
 
 
 # Ecole
@@ -296,7 +320,7 @@ def generer_mdp() :
         if (any(char in special_chars for char in password) and 
         sum(char in digits for char in password)>=2):
             break
-    print(password)
+    print("NOUVEAU MDP",password)
     return(password)
 
 
@@ -315,7 +339,6 @@ def inserer_referent(identifiant, idEcole):
 def inserer_ecole(nom, adresse, ville, code_postal, cycle_scolaire):
     conn = sqlite3.connect(bdd_name)
     cur = conn.cursor()
-    password = generer_mdp()
     cur.execute("""
                 INSERT INTO Ecole (nomEcole, Adresse, Ville, CodePostal, cycleScolaire)
                 VALUES (:nom_ecole, :adresse, :ville, :code_postal, :cycle_scolaire);
@@ -324,7 +347,6 @@ def inserer_ecole(nom, adresse, ville, code_postal, cycle_scolaire):
             )
     conn.commit()
     conn.close()
-    return password
 
 
 def inserer_classe(effectif, moyenne, niveau_scolaire, id_personnel, id_ecole):
@@ -404,6 +426,23 @@ def update_referent(id_utilisateur, identifiant, password, idEcole):
                     )
     conn.commit()
     conn.close()
+
+def update_mdpUtilisateur_byID(id) :
+    password = generer_mdp()
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    cur.execute("""
+                UPDATE Utilisateur
+                SET MotDePasse = :nouveau_mdp
+                WHERE idUtilisateur = :id_utilisateur""",
+                    {'nouveau_mdp' : password,
+                    'id_utilisateur' : id}
+                )
+    conn.commit()
+    conn.close()
+    return True
+
+
 
 # Ecole
 def update_ecole(id_ecole, nomEcole, adresse, ville, codePostal, nbEleves, telephone, email, cycleScolaire):

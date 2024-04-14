@@ -9,8 +9,6 @@
 
 <h1>Dashboard</h1>
 
-<p><mark>MDP : non visible => remplacer par bouton "régénérer" ?</mark></p>
-
 <h2>Rechercher un Référent</h2>
 
 {% with messages = get_flashed_messages(with_categories=true) %}
@@ -23,53 +21,82 @@
 {% endif %}
 {% endwith %}
 
+<div class="container">
+    <div class="row">
 
-<form action="{{url_for('dashboardAdminSearchRef')}}" method="POST">
-    <p>
-        <label for="nom">Saisir un identifiant :</label>
-        <input type="text" name="query" id="nom" autofocus>
-        <input type="submit" value="Chercher">
-    </p>
-</form>
+        <div class="col">
+            <form action="{{url_for('dashboardAdminSearchRef')}}" method="POST">
+                <div class="form-group">
+                    <label for="nom">Saisir un identifiant :</label>
+                    <input class="form-control" type="text" name="query" id="nom" autofocus>
+                </div>
+                <input type="submit" value="Chercher" style="width: max-content;">
+            </form>
+        </div>
 
-{% if resultats is not none %}
-    {% if resultats|length == 0 %}
-    <div class="alert alert-warning" role="alert">
-        Aucun référent ne correspond à la recherche.
-      </div>      
-    {% else %}
-    <table class="table is-fullwidth" style="border: 2px solid #000; border-collapse: collapse;">
-        <thead>
-            <tr>
-                <th style="border: 2px solid #000;">ID</th>
-                <th style="border: 2px solid #000;">Identifiant</th>
-                <th style="border: 2px solid #000;">MotDePasse</th>
-                <th style="border: 2px solid #000;">idEcole</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for resultat in resultats %}
-            {% if resultat[3] == 0 %}
-            <tr>
-                <td style="border: 2px solid #000;">{{ resultat[0] }}</td>
-                <td style="border: 2px solid #000;">{{ resultat[1] }}</td>
-                <td style="border: 2px solid #000;" class="mdpContainer">
-                    <img src="https://static-00.iconduck.com/assets.00/eye-show-icon-2048x1326-edkdqxrw.png" alt="icon show" style="width:30px; pointer-events:none; user-select:none;">
-                    <span class="mdp">{{ resultat[2] }}</span>
-                </td>
-                <td style="border: 2px solid #000;">{{ resultat[4] }}</td>
-            </tr>
+        <div class="col">
+            {% if resultats is not none %}
+                {% if resultats|length == 0 %}
+                <div class="alert alert-warning" role="alert">
+                    Aucun référent ne correspond à la recherche.
+                  </div>      
+                {% else %}
+                <table class="table is-fullwidth" style="border: 2px solid #000; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th style="border: 2px solid #000;">ID</th>
+                            <th style="border: 2px solid #000;">Identifiant</th>
+                            <th style="border: 2px solid #000;">MotDePasse</th>
+                            <th style="border: 2px solid #000;">idEcole</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for resultat in resultats %}
+                        {% if resultat[3] == 0 %}
+                        <tr>
+                            <td style="border: 2px solid #000;">{{ resultat[0] }}</td>
+                            <td style="border: 2px solid #000;">{{ resultat[1] }}</td>
+                            <td style="border: 2px solid #000;" class="mdpContainer">
+                                <img src="https://static-00.iconduck.com/assets.00/eye-show-icon-2048x1326-edkdqxrw.png" alt="icon show" style="width:30px; pointer-events:none; user-select:none;">
+                                <span class="mdp">{{ resultat[2] }}</span>
+                            </td>
+                            <td style="border: 2px solid #000;">{{ resultat[4] }}</td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
             {% endif %}
-            {% endfor %}
-        </tbody>
-    </table>
-    {% endif %}
-{% endif %}
+        </div>
+
+    </div>
+</div>
+
+<br><br>
+
+<div class="container">
+    <div class="row">
+
+        <div class="col">
+            <h2>Regénérer un  mot de passe :</h2>
+            <form action="{{url_for('dashboardAdminSearchRef')}}" method="POST">
+                <div class="form-group">
+                    <label for="nom">Saisir un identifiant :</label>
+                    <input class="form-control" type="text" name="idUtilisateur" id="nom" required>
+                </div>
+                <input type="submit" name="submit-generate" value="Regénérer" style="width: max-content;" onclick="return confirm('Are you sure ?')">
+            </form>
+        </div>
+        
+        <div class="col"></div>
+        <div class="col"></div>
+        <div class="col"></div>
+
+    </div>
+</div>
 
 
-<script>
-    function copyToClipboard(link) {
-        navigator.clipboard.writeText(link)
-    }
-</script>
+
+
 {% endblock %}

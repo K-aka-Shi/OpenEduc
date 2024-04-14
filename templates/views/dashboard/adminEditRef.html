@@ -13,7 +13,7 @@
 
 <h2>Modifier un Référent</h2>
 
-<form action="{{ url_for('modifier_referent') }}" method="POST">
+<form action="{{ url_for('dashboardAdminEditRef') }}" method="POST">
     <label for="id_utilisateur">ID de l'utilisateur :</label>
     <select name="id_utilisateur" id="id_utilisateur">
         <option value="" disabled selected aria-required="true">Choisissez un utilisateur</option>
@@ -21,20 +21,67 @@
         <option value="{{utilisateur[0]}}"> {{ utilisateur[1] }} </option>
         {% endfor %}
     </select>
+    <input type="submit" name="submit-type" value="Rechercher">
+</form>
+
     <br><br>
     <hr>
+    <br>
 
-    <label for="champs">Champs à modifier :</label>
-    <input type="text" id="identifiant" name="identifiant" placeholder="Nouvel identifiant (login)">
-    <input type="text" id="mdp" name="mdp" placeholder="Nouveau mot de passe">
-    <select name="ecoles" id="ecoles">
-        <option value="" disabled selected aria-required="true">Choisissez une école</option>
-        {% for ecole in ecoles %}
-        <option value={{ecole[0]}}>{{ ecole[3].upper() }} - {{ ecole[1] }}</option>
-        {% endfor %}
-    </select>
-    <br><br>
-    <input type="submit" value="Modifier">
-</form>
+    <div class="container">
+        <div class="row">
+
+            <div class="col">
+                <form action="{{ url_for('dashboardAdminEditRef') }}" method="POST">
+                    <div class="form-group">
+                        <label for="identifiant">identifiant : </label>
+                        <input style="width: max-content" class="form-control" type="text" id="identifiant" name="identifiant" value="{{identifiant}}" placeholder="Nouvel identifiant (login)">
+                    </div>
+                    <div class="form-group">
+                        <label for="mdp">Mot de passe : </label>
+                        <input style="width: max-content" class="form-control" type="text" id="mdp" name="mdp" value="{{mdp}}" placeholder="Nouveau mot de passe">
+                    </div>
+                    <div class="form-group">
+                        <label for="ecoles">Ecoles : </label>
+                        <select style="width: max-content" class="form-control" name="ecoles" id="ecoles">
+                            <option value="" disabled selected aria-required="true">Choisissez une école</option>
+                            {% for e in ecoles %}
+                                {% if ecole == e[0] %}
+                                <option selected value={{ecole}}>{{ e[3].upper() }} - {{ e[1] }}</option>
+                                {% else %}
+                                <option value="{{e[0]}}">{{ e[3].upper() }} - {{ e[1] }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <br><br>
+                        <input style="width: max-content" type="submit" name="submit-type" value="Modifier">
+                    </div>
+                </form>
+            </div>
+
+        <div class="col">
+            <table class="table is-fullwidth" style="border: 2px solid #000; border-collapse: collapse;">
+                <tbody>
+                    <tr>
+                        <th style="border: 2px solid #000;">ID</th>
+                        <td style="border: 2px solid #000;">{{ id_utilisateur }}</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Identifiant</th>
+                        <td style="border: 2px solid #000;">{{ identifiant }}</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Mot de passe</th>
+                        <td style="border: 2px solid #000;">{{ mdp }}</td>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid #000;">Ecole</th>
+                        <td style="border: 2px solid #000;">{{ ecole }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

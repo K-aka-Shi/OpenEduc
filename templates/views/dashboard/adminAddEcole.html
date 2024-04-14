@@ -20,31 +20,40 @@
 
 <h2>Ajouter une École</h2>
 
-<div id="formContainer" class="hidden">
-    <form action="{{ url_for('dashboardAdminAddEcole') }}" method="POST">
-        <label for="nomEcole">Nom de l'école:</label><br>
-        <input type="text" id="nomEcole" name="nomEcole" required><br><br>
-    
-        <label for="adresse">Adresse:</label><br>
-        <input type="text" id="adresse" name="adresse" required><br><br>
-    
-        <label for="ville">Ville:</label><br>
-        <input type="text" id="ville" name="ville" required><br><br>
-    
-        <label for="codePostal">Code Postal:</label><br>
-        <input type="text" id="codePostal" name="codePostal" required><br><br>
-    
-        <label for="cycleScolaire">Cycle Scolaire:</label><br>
-        <select id="cycleScolaire" name="cycleScolaire" required>
-            <option value="" disabled selected aria-required="true">Choisissez un cycle scolaire</option>
-            <option value="maternelle">Maternelle</option>
-            <option value="elementaire">Élémentaire</option>
-            <option value="college">Collège</option>
-            <option value="lycee">Lycée</option>
-        </select><br><br>
-        
-        <input type="submit" value="Créer">
-    </form>
+<div class="container">
+    <div class="row" style="width: 30em;">
+        <div class="col">
+            <form action="{{ url_for('dashboardAdminAddEcole') }}" method="POST">
+                <div class="form-group">
+                    <label for="nomEcole">Nom de l'école:</label><br>
+                    <input type="text" id="nomEcole" name="nomEcole" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="adresse">Adresse:</label><br>
+                    <input type="text" id="adresse" name="adresse" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="ville">Ville:</label><br>
+                    <input type="text" id="ville" name="ville" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="codePostal">Code Postal:</label><br>
+                    <input type="text" id="codePostal" name="codePostal" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="cycleScolaire">Cycle Scolaire:</label><br>
+                    <select id="cycleScolaire" name="cycleScolaire" class="form-control" required>
+                        <option value="" disabled selected aria-required="true">Choisissez un cycle scolaire</option>
+                        <option value="maternelle">Maternelle</option>
+                        <option value="elementaire">Élémentaire</option>
+                        <option value="college">Collège</option>
+                        <option value="lycee">Lycée</option>
+                    </select><br>
+                </div>
+                <input type="submit" value="Créer" style="width:max-content;">
+            </form>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

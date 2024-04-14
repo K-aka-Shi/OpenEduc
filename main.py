@@ -133,32 +133,78 @@ def dashboardAdminAddRef() :
 def dashboardAdminSearchRef() :
     if request.method == "POST":
         # si le formulaire est envoyé
-        data = request.form
-        saisie = data.get('query')
-        resultats = chercher_utilisateurLike(saisie)
-        return render_template("views/dashboard/adminSearchRef.html", resultats=resultats)
+        submit_type = request.form.get('submit-generate')
+        print("SUBMIT_TYPE", submit_type)
+        # Formulaire Regénérer mdp
+        if submit_type == "Regénérer":
+            id_utilisateur = request.form.get('idUtilisateur')
+            user = chercher_utilisateurByID(id_utilisateur)
+            if user != [] :
+                user = user[0]
+                if user[3] == 0 :
+                    update_mdpUtilisateur_byID(id_utilisateur)
+                    flash(f"""Mot de passe regénéré de l'utilisateur {user[1]}. Mot de passe : {chercher_utilisateurByID(id_utilisateur)[0][2]}""")
+            return redirect(request.url)
+        else :
+            data = request.form
+            saisie = data.get('query')
+            resultats = chercher_utilisateurLike(saisie)
+            print('final',resultats)
+            return render_template("views/dashboard/adminSearchRef.html", resultats=resultats)
     else:
         # méthode GET
-        return render_template("views/dashboard/adminSearchRef.html", resultats=None)
+        return render_template("views/dashboard/adminSearchRef.html", resultats=None, newPassword=None)
 
 #    DASHBOARD : Modifier Referent    #
-@app.route("/dashboard/modifier-referent")
+@app.route("/dashboard/modifier-referent", methods=["POST", "GET"])
 def dashboardAdminEditRef() :
-    ecoles = chercher_ecoleAll()
-    ecoles = sorted(ecoles, key=lambda x: x[2])
-    users = chercher_utilisateurAll()
-    users = users[1:]
-    return render_template("views/dashboard/adminEditRef.html", ecoles=ecoles, utilisateurs=users)
+    username = session.get("username")
+    statut = session.get("statut")
+    id = session.get('id')
+    ecoles = sorted(chercher_ecoleAll(), key=lambda x: x[3]) # Toutes les écoles par ville triées par ordre alph.
+    users = chercher_utilisateurAll()[1:]
 
-@app.route('/modifier_referent', methods=['POST'])
-def modifier_referent():
-    data  = request.form
-    id_utilisateur = data.get('id_utilisateur')
-    identifiant = data.get( 'identifiant' )
-    mdp = data.get( 'mdp' )
-    idEcole = data.get( 'ecoles' )
-    update_referent(id_utilisateur,identifiant,mdp,idEcole)
-    return redirect(url_for('dashboardAdminEditRef'))
+    if request.method == "POST":
+
+        submit_type = request.form.get('submit-type')
+        print("submit",submit_type)
+        data = request.form
+        id_utilisateur = data.get('id_utilisateur')
+        if submit_type == "Rechercher" :
+            # pour le selecteur des utilisateur
+            conn = sqlite3.connect(bdd_name).cursor().execute("""
+                                                        SELECT idUtilisateur,Identifiant, MotDePasse, idEcole
+                                                        FROM Utilisateur
+                                                        WHERE idUtilisateur=?
+                                                        """, (id_utilisateur,) )
+            Utilisateur = conn.fetchall()[0]
+            id_utilisateur = Utilisateur[0]
+            identifiant = Utilisateur[1]
+            mdp = Utilisateur[2]
+            ecole = Utilisateur[3]
+            print(ecole)
+            print(ecoles)
+            return render_template("views/dashboard/adminEditRef.html",
+                                   utilisateurs=users, ecoles=ecoles,
+                                   id_utilisateur=id_utilisateur,identifiant=identifiant, mdp=mdp, ecole=ecole)
+        
+        if submit_type == "Modifier" :
+            identifiant = data.get('identifiant')
+            mdp = data.get('mdp')
+            ecole = data.get('ecoles')
+            print(ecole)
+            return render_template("views/dashboard/adminEditRef.html",
+                                   utilisateurs=users,
+                                   id_utilisateur=id_utilisateur,identifiant=identifiant, mdp=mdp, ecole=ecole, ecoles=ecoles)
+    
+    else :
+        # GET
+        if username is not None and statut == 1 :
+            ecoles = chercher_ecoleAll()
+            return render_template("views/dashboard/adminEditRef.html",
+                                ecoles = ecoles, utilisateurs=users)
+        return redirect(url_for('dashboard'))
+    2
 
 #    DASHBOARD : Supprimer Referent    #
 @app.route("/dashboard/supprimer-referent", methods=['POST', 'GET'])

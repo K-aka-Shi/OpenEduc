@@ -9,9 +9,18 @@
 
 <h1>Dashboard</h1>
 
-<p>tuto ? explication en despi</p>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+    {% for  category, message in messages %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+{% endwith %}
 
 <h2>Supprimer un Référent</h2>
+
 <div class="container">
     <div class="row">
 
@@ -43,13 +52,13 @@
                             </thead>
                             <tbody>
                                 {% for referent in referents %}
-                                {% if referent[3] == 0 %}
-                                <tr>
-                                    <td>{{ referent[0] }}</td>
-                                    <td>{{ referent[1] }}</td>
-                                    <td><input type="checkbox" name="referent_id" value="{{ referent[0] }}"></td>
-                                </tr>
-                                {% endif %}
+                                    {% if referent[3] == 0 %}
+                                    <tr>
+                                        <td>{{ referent[0] }}</td>
+                                        <td>{{ referent[1] }}</td>
+                                        <td><input type="checkbox" name="referent_id" value="{{ referent[0] }}"></td>
+                                    </tr>
+                                    {% endif %}
                                 {% endfor %}
                             </tbody>
                         </table>

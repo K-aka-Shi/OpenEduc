@@ -7,14 +7,26 @@
 
 <h1>Dashboard</h1>
 
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+    {% for  category, message in messages %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+{% endwith %}
 
 <h2>Informations des classes</h2>
 
 <div class="container">
     <div class="row">
 
-        <div class="col">
 
+        <!-- AJOUTER UNE CLASSE -->
+        
+
+        <div class="col">
             <h3>Ajouter une classe</h3>
 
             <form action="{{ url_for('referentClasse') }}" method="POST">
@@ -49,8 +61,13 @@
                 </div>
                 <div class="form-group">
                     <label for="nom_prof">Nom du professeur :</label>
-                    <input class="form-control" type="text" id="nom_prof" name="nom_prof" value="" required>
-                </div>                
+                    <select class="form-control" name="nom_prof" id="nom_prof" required>
+                        <option value="" disabled selected aria-required="true">Choisissez un enseignant</option>
+                        {% for prof in profs %}
+                        <option value="{{ prof[0] }}"> {{ prof[1].upper() }} {{ prof[2] }} </option>
+                        {% endfor %}
+                    </select>
+                </div>      
                 <div class="form-group">
                     <label for="effectifs">Effectifs :</label>
                     <input class="form-control" type="text" id="effectifs" name="effectifs" value="" required>
@@ -60,44 +77,56 @@
             </form>
         </div>
 
+
         <!-- MODIFIER UNE CLASSE -->
+
+
         <div class="col">
             <h3>Modifier une classe</h3>
 
             <form action="{{ url_for('referentClasse') }}" method="POST">
                 <div class="form-group">
+                    <label for="idClasse">ID Classe</label>
+                    <input class="form-control" type="number" name="idClasse" id="idClasse" required style="width: 5em;">
+                </div>
+                <div class="form-group">
                     <label for="niveau">Niveau(x) :</label>
                     <select class="form-control" name="niveau" id="niveau" required>
                         <option value="" disabled selected aria-required="true">Choisissez un niveau</option>
                         {% if cycleScolaire == 'maternelle' %}
-                        <option value=""> Petite Section  </option>
-                        <option value=""> Moyenne Section </option>
-                        <option value=""> Moyenne Section </option>
+                        <option value="PS"> Petite Section  </option>
+                        <option value="MS"> Moyenne Section </option>
+                        <option value="GS"> Moyenne Section </option>
                         {% endif %}
                         {% if cycleScolaire == 'elementaire' %}
-                        <option value=""> CP  </option>
-                        <option value=""> CE1 </option>
-                        <option value=""> CE2 </option>
-                        <option value=""> CM1 </option>
-                        <option value=""> CM2 </option>
+                        <option value="CP"> CP  </option>
+                        <option value="CE1"> CE1 </option>
+                        <option value="CE2"> CE2 </option>
+                        <option value="CM1"> CM1 </option>
+                        <option value="CM2"> CM2 </option>
                         {% endif %}
                         {% if cycleScolaire == 'college' %}
-                        <option value=""> 6e </option>
-                        <option value=""> 5e </option>
-                        <option value=""> 4e </option>
-                        <option value=""> 3e </option>
+                        <option value="6E"> 6e </option>
+                        <option value="5E"> 5e </option>
+                        <option value="4E"> 4e </option>
+                        <option value="3E"> 3e </option>
                         {% endif %}
                         {% if cycleScolaire == 'lycee' %}
-                        <option value=""> Seconde   </option>
-                        <option value=""> Première  </option>
-                        <option value=""> Terminale </option>
+                        <option value="2NDE"> Seconde   </option>
+                        <option value="1RE"> Première  </option>
+                        <option value="TALE"> Terminale </option>
                         {% endif %}
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="nom_prof">Nom du professeur :</label>
-                    <input class="form-control" type="text" id="nom_prof" name="nom_prof" value="" required>
-                </div>                
+                    <select class="form-control" name="nom_prof" id="nom_prof" required>
+                        <option value="" disabled selected aria-required="true">Choisissez un enseignant</option>
+                        {% for prof in profs %}
+                        <option value="{{ prof[0] }}"> {{ prof[1].upper() }} {{ prof[2] }} </option>
+                        {% endfor %}
+                    </select>
+                </div>                   
                 <div class="form-group">
                     <label for="effectifs">Effectifs :</label>
                     <input class="form-control" type="text" id="effectifs" name="effectifs" value="" required>
@@ -110,34 +139,46 @@
                 <input type="submit" name="submit-type" value="Modifier" style="width: max-content;">
             </form>
         </div>
-
+        
     </div>
 </div>
 
+        <!-- SUPPRIMER UNE CLASSE -->
+
+
+        
 <br>
 
-<div class="row">
+<form action="{{ url_for('referentClasse') }}" method="POST">
     <table class="table is-fullwidth">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Niveaux</th>
                 <th>Nom de la classe</th>
                 <th>Effectifs</th>
                 <th>Moyenne</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
             {% for classe in classes %}
-            <tr>
-                <td>{{ classe[0] }}</td>
-                <td>{{ classe[1] }} {{ classe[2] }}</td>
-                <td>{{ classe[3] }}</td>
-                <td>{{ classe[4] }}</td>
-            </tr>
+                <tr>
+                    <td value="classe[0]">{{ classe[0] }}</td>
+                    <td value="classe[0]">{{ classe[1] }}</td>
+                    <td value="classe[0]">{{ classe[2].upper() }} {{ classe[3] }}</td>
+                    <td value="classe[0]">{{ classe[4] }}</td>
+                    <td value="classe[0]">{{ classe[5] if classe[5] }}</td>
+                    <td>
+                        <input type="checkbox" name="idClasse" value="{{ classe[0] }}">
+                    </td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
-</div>
+    <br>
+    <input type="submit" name="submit-type" value="Supprimer" style="width: max-content;">
+</form>
 
 
 {% endblock %}

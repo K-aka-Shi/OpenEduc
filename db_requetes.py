@@ -301,6 +301,29 @@ def chercher_historiquemodification() :
     historiqueModification = res.fetchall()
     conn.close()
     return historiqueModification
+
+# Référent
+def chercher_monEcole(id_utilisteur) :
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    res = cur.execute("SELECT idEcole FROM Utilisateur WHERE idUtilisateur = ?", (id_utilisteur,))
+    monEcole = res.fetchall()
+    print("Resultat requete :",monEcole)
+    conn.close()
+    return monEcole[0][0]
+
+def chercher_profs(monEcole) :
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    res = cur.execute("SELECT * FROM Personnel WHERE Fonction = 'Enseignant' AND idEcole = ?", (monEcole,))
+    profs = res.fetchall()
+    print("Resultat requete :",profs)
+    conn.close()
+    return profs
+
+
+
+
 # ____________________________________________________________________________________________________
 #                                       INSERT                                                       |
 # ___________________________________________________________________________________________________|
@@ -359,6 +382,20 @@ def inserer_classe(effectif, moyenne, niveau_scolaire, id_personnel, id_ecole):
     conn.commit()
     conn.close()
 
+
+# Référent
+def update_classe(idClasse, niveauScolaire, prof, effectif, moyenne):
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    cur.execute("""
+        UPDATE Classe
+        SET Effectif = ?, Moyenne = ?, niveauScolaire = ?, idPersonnel = ?
+        WHERE idClasse = ?
+                """, (effectif, moyenne, niveauScolaire, prof, idClasse)
+                )
+    conn.commit()
+    conn.close()
+
 # ____________________________________________________________________________________________________
 #                                         DELETE
 # ____________________________________________________________________________________________________
@@ -391,7 +428,15 @@ def supprimer_ecoleByID(ids) :
     conn.commit()
     conn.close()
 
-
+def supprimer_classe(id) :
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    cur.execute("""
+                DELETE FROM Classe WHERE idClasse = ?
+                """, (id,)
+    )
+    conn.commit()
+    conn.close()
 
 # ____________________________________________________________________________________________________
 #                                         UPDATE

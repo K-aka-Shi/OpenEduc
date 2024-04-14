@@ -8,8 +8,20 @@
 
 <h1>Dashboard</h1>
 
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+    {% for  category, message in messages %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+{% endwith %}
+
 <!-- Modifier les informations de l'école -->
+
 <h2>Informations de l'école</h2>
+
 <div class="container">
     <div class="row">
         <div class="col">

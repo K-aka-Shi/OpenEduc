@@ -56,8 +56,8 @@
                     </a>
                     {% endif %}
                 </div>
+                {% if session['statut'] == 1 %}
                 <div class="dropdown">
-                    {% if session['statut'] == 1 %}
                     <a style="padding: 0 10px;">
                         Gestion Ecoles
                         <img style="width: 20px;" src="https://www.nzrugby-connect.com/wp-content/uploads/2019/03/fleche-blanche-bas.png">
@@ -68,11 +68,9 @@
                         <a href="{{ url_for('dashboardAdminDeleteEcole') }}">Supprimer</a>
                         <a href="{{ url_for('dashboardAdminEditEcole') }}"  >Modifier</a>
                     </div>
-                    {% endif %}
                 </div>
 
                 <div class="dropdown">
-                    {% if session['statut'] == 1 %}
                     <a style="padding: 0 10px;">
                         Gestion Référents
                         <img style="width: 20px;" src="https://www.nzrugby-connect.com/wp-content/uploads/2019/03/fleche-blanche-bas.png">
@@ -83,8 +81,24 @@
                         <a href="{{ url_for('dashboardAdminDeleteRef') }}">Supprimer</a>
                         <a href="{{ url_for('dashboardAdminEditRef') }}"  >Modifier</a>
                     </div>
-                    {% endif %}
                 </div>
+
+                {% else %}
+
+                <div class="dropdown">
+                    <a style="padding: 0 10px;">
+                        Mon Ecole
+                        <img style="width: 20px;" src="https://www.nzrugby-connect.com/wp-content/uploads/2019/03/fleche-blanche-bas.png">
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="{{ url_for('referentEcole') }}"     >Globale</a>
+                        <a href="{{ url_for('referentClasse') }}"    >Classes</a>
+                        <a href="{{ url_for('referentPersonnels') }}">Personnel</a>
+                    </div>
+                </div>
+
+                {% endif %}
+
                 {% if session['username'] %}
                 <a href="{{ url_for('logout') }}" class="btn btn-outline-light" id="logout">Se déconnecter</a>
                 {% else %}

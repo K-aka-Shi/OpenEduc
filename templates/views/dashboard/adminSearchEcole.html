@@ -60,15 +60,15 @@
                     <tbody>
                         {% for resultat in resultats %}
                         <tr>
-                            <td style="border: 2px solid #000;">{{ resultat[0] }}</td>
-                            <td style="border: 2px solid #000;">{{ resultat[1] }}</td>
-                            <td style="border: 2px solid #000;">{{ resultat[2] }}</td>
-                            <td style="border: 2px solid #000;">{{ resultat[3] }}</td>
-                            <td style="border: 2px solid #000;">{{ resultat[4] }}</td>
-                            <td style="border: 2px solid #000;">{{ resultat[5] }}</td>
-                            <td style="border: 2px solid #000;">{{ resultat[6] }}</td>
-                            <td style="border: 2px solid #000;">{{ resultat[7] }}</td>
-                            <td style="border: 2px solid #000;">{{ resultat[8] }}</td>
+                            <td>{{ resultat[0] }}</td>
+                            <td>{{ resultat[1] }}</td>
+                            <td>{{ resultat[2] }}</td>
+                            <td>{{ resultat[3] }}</td>
+                            <td>{{ resultat[4] }}</td>
+                            <td>{{ resultat[5] if resultat[5] }}</td>
+                            <td style="width: 9em;">{{ resultat[6] if resultat[6] }}</td>
+                            <td>{{ resultat[7] if resultat[7] }}</td>
+                            <td>{{ resultat[8] }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

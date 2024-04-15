@@ -30,7 +30,7 @@
                     <label for="term">Saisir une recherche :</label>
                     <input class="form-control" type="text" name="term" placeholder="Entrez un terme de recherche">
                 </div>
-                <input type="submit" value="Rechercher" class="form-control" style="width:max-content;">
+                <input type="submit" name="submit-type" value="Rechercher" class="form-control" style="width:max-content;">
             </form>
         </div>
 
@@ -41,27 +41,29 @@
                         Aucune école ne correspond à la recherche.
                     </div>
                 {% else %}
-                    <form action="{{ url_for('supprimer_ecole') }}" method="POST">
+                    <form action="{{ url_for('dashboardAdminDeleteEcole') }}" method="POST">
                         <table class="table is-fullwidth">
                             <thead>
                                 <tr>
-                                    <th style="border: 2px solid #000;">ID</th>
-                                    <th style="border: 2px solid #000;">Nom</th>
-                                    <th style="border: 2px solid #000;">Actions</th>
+                                    <th style="width: 3em;">ID</th>
+                                    <th>Nom</th>
+                                    <th style="width: 5em;">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for ecole in ecoles %}
                                 <tr>
-                                    <td>{{ ecole[0] }}</td>
-                                    <td>{{ ecole[1] }}</td>
-                                    <td><input type="checkbox" name="ecole_id" value="{{ ecole[0] }}"></td>
+                                    <td value="ecole[0]">{{ ecole[0] }}</td>
+                                    <td value="ecole[0]">{{ ecole[1] }}</td>
+                                    <td>
+                                        <input type="checkbox" name="ecole_id" value="{{ ecole[0] }}" style="width: max-content;">
+                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                         <br>
-                        <input type="submit" value="Supprimer les écoles sélectionnés" style="width: max-content;">
+                        <input type="submit" name="submit-type" value="Supprimer les écoles sélectionnés" style="width: max-content;">
                     </form>
                 {% endif %}
             {% endif %}

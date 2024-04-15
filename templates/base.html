@@ -82,9 +82,7 @@
                         <a href="{{ url_for('dashboardAdminEditRef') }}"  >Modifier</a>
                     </div>
                 </div>
-
-                {% else %}
-
+                {% elif session['statut'] == 0 %}
                 <div class="dropdown">
                     <a style="padding: 0 10px;">
                         Mon Ecole

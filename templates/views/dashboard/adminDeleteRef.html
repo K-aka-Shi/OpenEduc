@@ -23,17 +23,17 @@
 
 <div class="container">
     <div class="row">
-
+                                <!-- RECHERCHE -->
         <div class="col">
             <form action="{{ url_for('dashboardAdminDeleteRef') }}" method="POST">
                 <div class="form-group">
                     <label for="term">Saisir une recherche : </label>
                     <input class="form-control" type="text" name="term" placeholder="Entrez un terme de recherche">
                 </div>
-                <input type="submit" value="Rechercher" style="width: max-content;">
+                <input type="submit" name="submit-type" value="Rechercher" style="width: max-content;">
             </form>
         </div>
-
+                                <!-- SUPPRESSION -->
         <div class="col">
             {% if referents is not none %}
                 {% if referents == [] %}
@@ -41,7 +41,7 @@
                         Aucun référent ne correspond à la recherche.
                     </div>
                 {% else %}
-                    <form action="{{ url_for('supprimer_referents') }}" method="POST">
+                    <form action="{{ url_for('dashboardAdminDeleteRef') }}" method="POST">
                         <table class="table is-fullwidth">
                             <thead>
                                 <tr>
@@ -62,7 +62,7 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-                        <input type="submit" value="Supprimer les référents sélectionnés" style="width: 25%;">
+                        <input type="submit" name="submit-type" value="Supprimer les référents sélectionnés" style="width: 25%;">
                     </form>
                 {% endif %}
             {% endif %}            

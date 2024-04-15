@@ -372,9 +372,7 @@ def supprimer_utilisateurByID(ids) :
     print("\n\n\n")
     for id in ids :
         print("liste des trucs qui seront effacés :",ids)
-        cur.execute("""
-                    DELETE FROM Utilisateur WHERE idUtilisateur = ?
-                    """, (id,)
+        cur.execute("DELETE FROM Utilisateur WHERE idUtilisateur = ?", (id,)
         )
     conn.commit()
     conn.close()

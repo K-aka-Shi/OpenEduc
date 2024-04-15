@@ -210,15 +210,26 @@ def dashboardAdminEditRef() :
 #    DASHBOARD : Supprimer Referent    #
 @app.route("/dashboard/supprimer-referent", methods=['POST', 'GET'])
 def dashboardAdminDeleteRef() :
+
     if request.method == "POST":
         # si le formulaire est envoyé
         data = request.form
-        saisie = data.get('term')
-        resultats = chercher_utilisateurLike(saisie)
-        return render_template("views/dashboard/adminDeleteRef.html", referents=resultats)
+        submit_type = data.get('submit-type')
+        print("submit",submit_type)
+
+        if submit_type == 'Rechercher' :
+            saisie = data.get('term')
+            resultats = chercher_utilisateurLike(saisie)
+            return render_template("views/dashboard/adminDeleteRef.html", referents=resultats)
+
+        elif submit_type == 'Supprimer les référents sélectionnés' :
+            referents_a_supprimer = request.form.getlist('referent_id')
+            supprimer_utilisateurByID(referents_a_supprimer)
+            return redirect(request.url)
+
     else:
         # méthode GET
-        resultats = None
+        resultats = chercher_utilisateurLike('')
         return render_template("views/dashboard/adminDeleteRef.html", referents=resultats)
 
 @app.route('/supprimer_referents', methods=['POST'])
@@ -258,10 +269,6 @@ def dashboardAdminAddEcole() :
         return redirect(request.url)
 
 #    DASHBOARD : Rechercher Ecole    #
-@app.route('/recherche_ecole', methods=['POST'])
-def recherche_ecole():
-    return render_template('views/dashboard/adminDeleteEcole.html')
-
 @app.route("/dashboard/rechercher-ecole", methods=["POST", "GET"])
 def dashboardAdminSearchEcole() :
     if request.method == "POST" :
@@ -353,13 +360,24 @@ def dashboardAdminEditEcole() :
 def dashboardAdminDeleteEcole() :
     if request.method == "POST":
         # si le formulaire est envoyé
+        
         data = request.form
-        saisie = data.get('term')
-        resultats = chercher_ecoleLike(saisie)
-        return render_template("views/dashboard/adminDeleteEcole.html", ecoles=resultats)
+        submit_type = data.get('submit-type')
+
+        if submit_type == "Rechercher" :
+            saisie = data.get('term')
+            resultats = chercher_ecoleLike(saisie)
+            return render_template("views/dashboard/adminDeleteEcole.html", ecoles=resultats)
+        
+        elif submit_type == "Supprimer les écoles sélectionnés" :
+            ecoles = data.getlist('ecole_id')
+            print("\n\nSELECTIONNE",ecoles)
+            supprimer_ecoleByID(ecoles)
+            return redirect(request.url)
+
     else:
         # méthode GET
-        resultats = None
+        resultats = chercher_ecoleLike('')
         return render_template("views/dashboard/adminDeleteEcole.html", ecoles=resultats)
 
 

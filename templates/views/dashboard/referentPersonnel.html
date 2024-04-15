@@ -8,200 +8,179 @@
 <h1>Dashboard</h1>
 
 {% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-    {% for  category, message in messages %}
-        <div class="alert alert-success" role="alert">
-            {{ message }}
-        </div>
-    {% endfor %}
-{% endif %}
+    {% if messages %}
+        {% for  category, message in messages %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
 {% endwith %}
-
-<h2>Ajouter un membre</h2>
 
 <div class="container">
     <div class="row">
+
+
+        <!-- AJOUTER UNE CLASSE -->
+        
+
         <div class="col">
-            <form action="{{ url_for('referentPersonnels') }}" method="POST">
+            <h3>Ajouter un personnel</h3>
+
+            <form action="{{ url_for('referentPersonnel') }}" method="POST">
                 <div class="form-group">
-                    <label for="sexe_apea">Sexe :</label>
-                    <input class="form-control" type="text" id="sexe_apea" name="sexe_apea" value="" required>
+                    <label for="niveau">Sexe :</label>
+                    <select class="form-control" name="sexe" id="sexe" required>
+                        <option value="" disabled selected aria-required="true">Choisissez un sexe</option>
+                        <option value="H">Homme</option>
+                        <option value="F">Femme</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="nom_apea">Nom :</label>
-                    <input class="form-control" type="text" id="nom_apea" name="nom_apea" value="" required>
-                </div>        
+                    <label for="nomPersonnel">Nom :</label>
+                    <input class="form-control" type="text" name="nomPersonnel" id="nomPersonnel" required>
+                </div>
                 <div class="form-group">
-                    <label for="prenom_apea">Prénom :</label>
-                    <input class="form-control" type="text" id="prenom_apea" name="prenom_apea" value="" required>
-                </div>        
+                    <label for="prenomPersonnel">Prénom :</label>
+                    <input class="form-control" type="text" name="prenomPersonnel" id="prenomPersonnel" required>
+                </div>
                 <div class="form-group">
-                    <label for="fonction">fonction :</label>
+                    <label for="telephone">Téléphone :</label>
+                    <input class="form-control" type="text" name="telephone" id="telephone" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-Mail :</label>
+                    <input class="form-control" type="text" name="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="fonction">Fonction :</label>
                     <select class="form-control" name="fonction" id="fonction" required>
-                        <option value="" disabled selected aria-required="true">Choisissez sa fonction</option>
-                        {% if fonction == 'Directeur' %}
-                        <option selected value="Directeur"> Directeur </option>
-                        <option value="Enseignant"> Enseignant</option>
-                        <option value="Correspondant Local APEA"> Correspondant Local APEA</option>
-                        <option value="Correspondant Local Mairie"> Correspondant Local Mairie</option>
-                        {% endif %}
-                        {% if fonction == 'Enseignant' %}
-                        <option value="Directeur"> Directeur </option>
-                        <option selected value="Enseignant"> Enseignant</option>
-                        <option value="Correspondant Local APEA"> Correspondant Local APEA</option>
-                        <option value="Correspondant Local Mairie"> Correspondant Local Mairie</option>
-                        {% endif %}
-                        {% if fonction == 'Correspondant Local APEA' %}
-                        <option value="Directeur"> Directeur </option>
-                        <option value="Enseignant"> Enseignant</option>
-                        <option selected value="Correspondant Local APEA"> Correspondant Local APEA</option>
-                        <option value="Correspondant Local Mairie"> Correspondant Local Mairie</option>
-                        {% endif %}
-                        {% if fonction == 'Correspondant Local Mairie' %}
-                        <option value="Directeur"> Directeur </option>
-                        <option value="Enseignant"> Enseignant</option>
-                        <option value="Correspondant Local APEA"> Correspondant Local APEA</option>
-                        <option selected value="Correspondant Local Mairie"> Correspondant Local Mairie</option>
+                        <option value="" disabled selected aria-required="true">Choisissez une fonction</option>
+                        <option value="Directeur">Directeur</option>
+                        <option value="Enseignant">Enseignant</option>
+                        <option value="Correspondant Local APEA">Correspondant Local APEA</option>
+                        <option value="Correspondant Local Mairie">Correspondant Local Mairie</option>
+                    </select>
+                </div>
+                <input type="submit" name="submit-type" value="Ajouter" style="width: max-content;">
+            </form>
+        </div>
+
+
+        <!-- MODIFIER UNE CLASSE -->
+
+        <div class="col">
+            {% if affichage %}
+            <h3>Modifier un personnel</h3>
+            
+            <form action="{{ url_for('referentPersonnel') }}" method="POST">
+                <input type="hidden" name="idPersonnel" value="{{idPersonnel}}">
+                <div class="form-group">
+                    <label for="niveau">Sexe :</label>
+                    <select class="form-control" name="sexe" id="sexe" required>
+                        <option value="" disabled selected aria-required="true">Choisissez un sexe</option>
+                        {% if sexe == "H" %}
+                        <option selected value="H">Homme</option>
+                        <option value="F">Femme</option>
+                        {% else %}
+                        <option value="H">Homme</option>
+                        <option selected value="F">Femme</option>
                         {% endif %}
                     </select>
-                </div>       
+                </div>
                 <div class="form-group">
-                    <label for="mail_apea">Email :</label>
-                    <input class="form-control" type="email" id="mail_apea" name="mail_apea" value="">
-                </div>        
-                <input type="submit" value="Modifier" style="width: max-content;">
+                    <label for="nomPersonnel">Nom :</label>
+                    <input value="{{nomPersonnel}}" class="form-control" type="text" name="nomPersonnel" id="nomPersonnel" required>
+                </div>
+                <div class="form-group">
+                    <label for="prenomPersonnel">Prénom :</label>
+                    <input value="{{prenomPersonnel}}" class="form-control" type="text" name="prenomPersonnel" id="prenomPersonnel" required>
+                </div>
+                <div class="form-group">
+                    <label for="telephone">Téléphone :</label>
+                    <input value="{{telephone}}" class="form-control" type="text" name="telephone" id="telephone" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-Mail :</label>
+                    <input value="{{email}}" class="form-control" type="text" name="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="fonction">Fonction :</label>
+                    <select class="form-control" name="fonction" id="fonction" required>
+                        <option value="" disabled selected aria-required="true">Choisissez une fonction</option>
+                        {% if fonction == "Directeur" %}
+                        <option selected value="Directeur">Directeur</option>
+                        <option value="Enseignant">Enseignant</option>
+                        <option value="Correspondant Local APEA">Correspondant Local APEA</option>
+                        <option value="Correspondant Local Mairie">Correspondant Local Mairie</option>
+                        {% elif fonction == "Enseignant" %}
+                        <option value="Directeur">Directeur</option>
+                        <option selected value="Enseignant">Enseignant</option>
+                        <option value="Correspondant Local APEA">Correspondant Local APEA</option>
+                        <option value="Correspondant Local Mairie">Correspondant Local Mairie</option>
+                        {% elif fonction == "Correspondant Local APEA" %}
+                        <option value="Directeur">Directeur</option>
+                        <option value="Enseignant">Enseignant</option>
+                        <option selected value="Correspondant Local APEA">Correspondant Local APEA</option>
+                        <option value="Correspondant Local Mairie">Correspondant Local Mairie</option>
+                        {% elif fonction == "Correspondant Local Mairie" %}
+                        <option value="Directeur">Directeur</option>
+                        <option value="Enseignant">Enseignant</option>
+                        <option value="Correspondant Local APEA">Correspondant Local APEA</option>
+                        <option selected value="Correspondant Local Mairie">Correspondant Local Mairie</option>
+                        {% endif %}
+                    </select>
+                </div>
+                <input type="submit" name="submit-type" value="Modifier" style="width: max-content;">
             </form>
-        </div> <!-- col -->
-
-        <div class="col">
-        <!-- INFORMATION -->
-        <div class="col">
-            <table class="table is-fullwidth" style="border: 2px solid #000; border-collapse: collapse;">
-                <tbody>
-                    <tr>
-                        <th style="border: 2px solid #000;">ID</th>
-                        <td style="border: 2px solid #000;">data</td>
-                    </tr>
-                    <tr>
-                        <th style="border: 2px solid #000;">Nom</th>
-                        <td style="border: 2px solid #000;">data</td>
-                    </tr>
-                    <tr>
-                        <th style="border: 2px solid #000;">Adresse</th>
-                        <td style="border: 2px solid #000;">data</td>
-                    </tr>
-                    <tr>
-                        <th style="border: 2px solid #000;">Code Postal</th>
-                        <td style="border: 2px solid #000;">data</td>
-                    </tr>
-                    <tr>
-                        <th style="border: 2px solid #000;">Ville</th>
-                        <td style="border: 2px solid #000;">data</td>
-                    </tr>
-                    <tr>
-                        <th style="border: 2px solid #000;">Nombre d'élèves</th>
-                        <td style="border: 2px solid #000;">data</td>
-                    </tr>
-                    <tr>
-                        <th style="border: 2px solid #000;">Téléphone</th>
-                        <td style="border: 2px solid #000;">data</td>
-                    </tr>
-                    <tr>
-                        <th style="border: 2px solid #000;">E-mail</th>
-                        <td style="border: 2px solid #000;">data</td>
-                    <tr>
-                        <th style="border: 2px solid #000;">Cycle Scolaire</th>
-                        <td style="border: 2px solid #000;">data</td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
-        </div> <!-- col -->
-
-    </div> <!-- row -->
-    
-    
-    <!-- Modifier les informations du correspondant local MAIRIE -->
-    <h2>Modifier un membre</h2>
-    
-    <div class="row">
-        <div class="col">
-
-            <form action="{{ url_for('referentPersonnels') }}" method="POST">
-                <div class="form-group">
-                    <label for="sexe_mairie">Sexe :</label>
-                    <input class="form-control" type="text" id="sexe_mairie" name="sexe_mairie" value="" required>
-                </div>            
-                <div class="form-group">
-                    <label for="nom_mairie">Nom :</label>
-                    <input class="form-control" type="text" id="nom_mairie" name="nom_mairie" value="" required>
-                </div>        
-                <div class="form-group">
-                    <label for="prenom_mairie">Prénom :</label>
-                    <input class="form-control" type="text" id="prenom_mairie" name="prenom_mairie" value="" required>
-                </div>        
-                <div class="form-group">
-                    <label for="fonction_mairie">Fonction :</label>
-                    <input class="form-control" type="text" id="fonction_mairie" name="fonction_mairie" value="" required>
-                </div>        
-                <div class="form-group">
-                    <label for="telephone_mairie">Téléphone :</label>
-                    <input class="form-control" type="text" id="telephone_mairie" name="telephone_mairie" value="">
-                </div>        
-                <div class="form-group">
-                    <label for="mail_mairie">Email :</label>
-                    <input class="form-control" type="email" id="mail_mairie" name="mail_mairie" value="">
-                </div>            
-                <input type="submit" value="Modifier" style="width: max-content;">
-            </form>
-        </div> <!-- col -->
-        <!-- INFORMATION SUR L'ECOLE -->
-        <div class="col">
-            <table class="table is-fullwidth" style="border: 2px solid #000; border-collapse: collapse;">
-                <tbody>
-                    <tr>
-                        <th style="border: 2px solid #000;">ID</th>
-                        <td style="border: 2px solid #000;">data</td>
-                    </tr>
-                    <tr>
-                        <th style="border: 2px solid #000;">Nom</th>
-                        <td style="border: 2px solid #000;">data</td>
-                    </tr>
-                    <tr>
-                        <th style="border: 2px solid #000;">Adresse</th>
-                        <td style="border: 2px solid #000;">data</td>
-                    </tr>
-                    <tr>
-                        <th style="border: 2px solid #000;">Code Postal</th>
-                        <td style="border: 2px solid #000;">data</td>
-                    </tr>
-                    <tr>
-                        <th style="border: 2px solid #000;">Ville</th>
-                        <td style="border: 2px solid #000;">data</td>
-                    </tr>
-                    <tr>
-                        <th style="border: 2px solid #000;">Nombre d'élèves</th>
-                        <td style="border: 2px solid #000;">data</td>
-                    </tr>
-                    <tr>
-                        <th style="border: 2px solid #000;">Téléphone</th>
-                        <td style="border: 2px solid #000;">data</td>
-                    </tr>
-                    <tr>
-                        <th style="border: 2px solid #000;">E-mail</th>
-                        <td style="border: 2px solid #000;">data</td>
-                    <tr>
-                        <th style="border: 2px solid #000;">Cycle Scolaire</th>
-                        <td style="border: 2px solid #000;">data</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div> <!-- col -->
-    </div> <!-- row -->
-
-</div> <!-- container -->
+        {% endif %}
+        
+    </div>
+</div>
+        <!-- SUPPRIMER UNE CLASSE -->
 
 
+        
+<br>
+
+<form action="{{ url_for('referentPersonnel') }}" method="POST">
+    <table class="table is-fullwidth">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Sexe</th>
+                <th>Telephone</th>
+                <th>E-Mail</th>
+                <th>Fonction</th>
+                <th>Classe</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for personnel in personnels %}
+                <tr>
+                    <td value="personnel[0]">{{ personnel[0] }}</td>
+                    <td value="personnel[0]">{{ personnel[1] }}</td>
+                    <td value="personnel[0]">{{ personnel[2] }}</td>
+                    <td value="personnel[0]">{{ personnel[3] }}</td>
+                    <td value="personnel[0]">{{ personnel[4] }}</td>
+                    <td value="personnel[0]">{{ personnel[5] }}</td>
+                    <td value="personnel[0]">{{ personnel[6] }}</td>
+                    <td value="personnel[0]">{{ personnel[7] if personnel[7] }}</td>
+                    <td>
+                        <input type="checkbox" name="idPersonnel" value="{{ personnel[0] }}" style="width: max-content;">
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <input type="submit" name="submit-type" value="Supprimer" style="width: max-content;">
+    <input type="submit" name="submit-type" value="Rechercher" style="width: max-content;">
+</form>
 
 
 {% endblock %}

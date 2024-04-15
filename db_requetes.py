@@ -85,6 +85,25 @@ FOREIGN KEY (idEcole) REFERENCES Ecole(idEcole) ON DELETE CASCADE
                 """)
     conn.close()
 
+# Classe
+
+def creer_classe():
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    cur.execute("DROP TABLE IF EXISTS Classe")
+    cur.execute("""
+CREATE TABLE Classe (
+idClasse INTEGER PRIMARY KEY,
+Effectif INT,
+Moyenne FLOAT,
+niveauScolaire TEXT CHECK( niveauScolaire IN ('PS','MS','GS','CP','CE1','CE2','CM1','CM2','6E','5E','4E','3E','2NDE','1RE','TALE') ),
+idPersonnel INT,
+idEcole INT, -- Clé étrangère faisant référence à l'école à laquelle la classe est rattachée
+FOREIGN KEY (idEcole) REFERENCES Ecole(idEcole),
+FOREIGN KEY (idPersonnel) REFERENCES Personnel(idPersonnel)
+);
+                """)
+    conn.close()
 
 # Personnel
 
@@ -111,25 +130,7 @@ FOREIGN KEY (idClasse) REFERENCES Classe(idClasse)
 
 
 
-# Classe
 
-def creer_classe():
-    conn = sqlite3.connect(bdd_name)
-    cur = conn.cursor()
-    cur.execute("DROP TABLE IF EXISTS Classe")
-    cur.execute("""
-CREATE TABLE Classe (
-idClasse INTEGER PRIMARY KEY,
-Effectif INT,
-Moyenne FLOAT,
-niveauScolaire TEXT CHECK( niveauScolaire IN ('PS','MS','GS','CP','CE1','CE2','CM1','CM2','6E','5E','4E','3E','2NDE','1RE','TALE') ),
-idPersonnel INT,
-idEcole INT, -- Clé étrangère faisant référence à l'école à laquelle la classe est rattachée
-FOREIGN KEY (idEcole) REFERENCES Ecole(idEcole),
-FOREIGN KEY (idPersonnel) REFERENCES Personnel(idPersonnel)
-);
-                """)
-    conn.close()
 
 # ____________________________________________________________________________________________________
 #                                       SELECT                                                       |
@@ -280,18 +281,6 @@ def chercher_ecole_formCreerReferent():
     conn.close()
     return ecole
 
-def chercher_personnel(idUtilisateur) :
-    conn = sqlite3.connect(bdd_name)
-    cur = conn.cursor()
-    res = cur.execute("""
-                      SELECT p.idPersonnel, p.Nom, p.Prenom, p.Sexe, p.Telephone, p.Email, p.Fonction, p.idEcole, p.idClasse FROM Personnel p
-                      INNER JOIN Utilisateur u ON p.idEcole = u.idEcole
-                      WHERE u.idUtilisateur = ?;
-                      """, (idUtilisateur,))
-    idEcole = res.fetchall()
-    conn.close()
-    return idEcole
-
 def chercher_historiquemodification() :
     conn = sqlite3.connect(bdd_name)
     cur = conn.cursor()
@@ -327,6 +316,7 @@ def chercher_profs(monEcole) :
 # ____________________________________________________________________________________________________
 #                                       INSERT                                                       |
 # ___________________________________________________________________________________________________|
+
 def generer_mdp() :
     import secrets, string, random
 
@@ -371,31 +361,6 @@ def inserer_ecole(nom, adresse, ville, code_postal, cycle_scolaire):
     conn.commit()
     conn.close()
 
-
-def inserer_classe(effectif, moyenne, niveau_scolaire, id_personnel, id_ecole):
-    conn = sqlite3.connect(bdd_name)
-    cur = conn.cursor()
-    cur.execute("""
-        INSERT INTO Classe (Effectif, Moyenne, niveauScolaire, idPersonnel, idEcole)
-        VALUES (?, ?, ?, ?, ?)
-    """, (effectif, moyenne, niveau_scolaire, id_personnel, id_ecole))
-    conn.commit()
-    conn.close()
-
-
-# Référent
-def update_classe(idClasse, niveauScolaire, prof, effectif, moyenne):
-    conn = sqlite3.connect(bdd_name)
-    cur = conn.cursor()
-    cur.execute("""
-        UPDATE Classe
-        SET Effectif = ?, Moyenne = ?, niveauScolaire = ?, idPersonnel = ?
-        WHERE idClasse = ?
-                """, (effectif, moyenne, niveauScolaire, prof, idClasse)
-                )
-    conn.commit()
-    conn.close()
-
 # ____________________________________________________________________________________________________
 #                                         DELETE
 # ____________________________________________________________________________________________________
@@ -425,16 +390,6 @@ def supprimer_ecoleByID(ids) :
                     DELETE FROM Ecole WHERE idEcole = ?
                     """, (id,)
         )
-    conn.commit()
-    conn.close()
-
-def supprimer_classe(id) :
-    conn = sqlite3.connect(bdd_name)
-    cur = conn.cursor()
-    cur.execute("""
-                DELETE FROM Classe WHERE idClasse = ?
-                """, (id,)
-    )
     conn.commit()
     conn.close()
 
@@ -489,7 +444,120 @@ def update_mdpUtilisateur_byID(id) :
 
 
 
+
+
+
+                #
+            #       #
+        #       #       #
+    #       #       #       #
+#       DASHBOARD REFERENT      #
+    #       #       #       #
+        #       #       #
+            #       #
+                #
+#
+# Personnel
+#
+def chercher_personnel(idUtilisateur) :
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    res = cur.execute("""
+                      SELECT p.idPersonnel, p.Nom, p.Prenom, p.Sexe, p.Telephone, p.Email, p.Fonction, p.idEcole, p.idClasse
+                      FROM Personnel p
+                      INNER JOIN Utilisateur u ON p.idEcole = u.idEcole
+                      WHERE u.idUtilisateur = ?;
+                      """, (idUtilisateur,))
+    Personnel = res.fetchall()
+    conn.close()
+    return Personnel
+
+def inserer_personnel(nom, prenom, sexe, telephone, email, fonction, idEcole) :
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    cur.execute("""
+        INSERT INTO Personnel (Nom, Prenom, Sexe, Telephone, Email, Fonction, idEcole)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+                """, (nom, prenom, sexe, telephone, email, fonction, idEcole)
+                )
+    conn.commit()
+    conn.close()
+
+def update_personnel(idPersonnel, sexe, nomPersonnel, prenomPersonnel, telephone, email, fonction):
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    cur.execute("""
+        UPDATE Personnel
+        SET Sexe = ?, Nom = ?, Prenom = ?, Telephone = ? ,Email = ?, Fonction = ?
+        WHERE idPersonnel = ?
+                """, (sexe, nomPersonnel, prenomPersonnel, telephone, email, fonction, idPersonnel)
+                )
+    conn.commit()
+    conn.close()
+    
+def supprimer_personnel(ids) :
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    for id in ids :
+        cur.execute("DELETE FROM Personnel WHERE idPersonnel = ?", (id,) )        
+    conn.commit()
+    conn.close()
+
+#
+# Classe
+#
+def chercher_classe(idUtilisateur) :
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    res = cur.execute("""
+                      SELECT p.idPersonnel, p.Nom, p.Prenom, p.Sexe, p.Telephone, p.Email, p.Fonction, p.idEcole, p.idClasse
+                      FROM Personnel p
+                      INNER JOIN Utilisateur u ON p.idEcole = u.idEcole
+                      WHERE u.idUtilisateur = ?;
+                      """, (idUtilisateur,))
+    Personnel = res.fetchall()
+    conn.close()
+    return Personnel
+
+def inserer_classe(effectif, moyenne, niveau_scolaire, id_personnel, id_ecole):
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    cur.execute("""
+        INSERT INTO Classe (Effectif, Moyenne, niveauScolaire, idPersonnel, idEcole)
+        VALUES (?, ?, ?, ?, ?)
+    """, (effectif, moyenne, niveau_scolaire, id_personnel, id_ecole))
+    cur.execute("""
+        UPDATE Personnel
+        SET idClasse = ( SELECT idClasse FROM Classe WHERE idPersonnel = :id )
+        WHERE idPersonnel = :id
+                """, {'id':id_personnel}
+                )
+    conn.commit()
+    conn.close()
+
+def update_classe(idClasse, niveauScolaire, prof, effectif, moyenne):
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    cur.execute("""
+        UPDATE Classe
+        SET Effectif = ?, Moyenne = ?, niveauScolaire = ?, idPersonnel = ?
+        WHERE idClasse = ?
+                """, (effectif, moyenne, niveauScolaire, prof, idClasse)
+                )
+    conn.commit()
+    conn.close()
+
+def supprimer_classe(ids) :
+    conn = sqlite3.connect(bdd_name)
+    cur = conn.cursor()
+    for id in ids :
+        cur.execute("DELETE FROM Classe WHERE idClasse = ?", (id,) )        
+    conn.commit()
+    conn.close()
+
+# 
 # Ecole
+# 
 def update_ecole(id_ecole, nomEcole, adresse, ville, codePostal, nbEleves, telephone, email, cycleScolaire):
     oldEcole = chercher_ecoleAll()[0]
     conn = sqlite3.connect(bdd_name)
@@ -561,25 +629,6 @@ def update_ecole(id_ecole, nomEcole, adresse, ville, codePostal, nbEleves, telep
     
     conn.commit()
     conn.close()
-
-
-
-
-
-                #
-            #       #
-        #       #       #
-    #       #       #       #
-#       DASHBOARD REFERENT      #
-    #       #       #       #
-        #       #       #
-            #       #
-                #
-
-# Ecole
-
-
-
 # ____________________________________________________________________________________________________
 #                                         INSERT
 # ____________________________________________________________________________________________________

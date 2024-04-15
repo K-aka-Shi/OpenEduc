@@ -80,8 +80,6 @@ def dashboard() :
                                isAdmin  = statut,
                                nbEleves = nbEleves,
                                moyenneEleveParClasse = moyenneEleveParClasse)
-        return render_template("views/dashboard.html",
-                               isAdmin=statut)
     return redirect(url_for('login'))
 
 
@@ -350,22 +348,6 @@ def dashboardAdminEditEcole() :
     ecoles = sorted(ecoles, key=lambda x: x[2])
     return render_template("views/dashboard/adminEditEcole.html", ecoles=ecoles)
 
-@app.route('/modifier_ecole', methods=['POST'])
-def modifier_ecole():
-    data = request.form
-    id_ecole = data.get('id_ecole')
-    nomEcole = data.get('nomEcole')
-    adresse = data.get('adresse')
-    ville = data.get('ville')
-    codePostal = data.get('codePostal')
-    nbEleves = data.get('nbEleves')
-    telephone = data.get('telephone')
-    email = data.get('email')
-    cycleScolaire = data.get('cycleScolaire')
-    update_ecole(id_ecole, nomEcole, adresse, ville, codePostal, nbEleves, telephone, email, cycleScolaire)
-
-    return redirect(url_for('dashboardAdminEditEcole'))
-
 #    DASHBOARD : Supprimer Ecole    #
 @app.route("/dashboard/supprimer-ecole", methods=['POST', 'GET'])
 def dashboardAdminDeleteEcole() :
@@ -380,14 +362,6 @@ def dashboardAdminDeleteEcole() :
         resultats = None
         return render_template("views/dashboard/adminDeleteEcole.html", ecoles=resultats)
 
-@app.route('/supprimer_ecole', methods=['POST'])
-def supprimer_ecole():
-    ecoles_a_supprimer = request.form.getlist('ecole_id')
-    print(ecoles_a_supprimer)
-    # Effectuer les opérations de suppression dans la base de données
-    supprimer_ecoleByID(ecoles_a_supprimer)
-    # Rediriger vers une page de confirmation ou de retour à la page d'accueil
-    return render_template("views/dashboard/adminDeleteEcole.html")
 
 
 #############################
@@ -482,7 +456,7 @@ def referentClasse() :
             print("\n\n SUPPRESSION CLASSE \n\n")
 
             data = request.form
-            idClasse = data.get('idClasse')
+            idClasse = data.getlist('idClasse')
             print("idClasse",idClasse)
 
             supprimer_classe(idClasse)
@@ -516,21 +490,119 @@ def referentClasse() :
         return redirect(url_for('dashboard'))
 
 
-@app.route("/dashboard/personnels", methods=["POST", "GET"])
-def referentPersonnels() :
+@app.route("/dashboard/personnel", methods=["POST", "GET"])
+def referentPersonnel() :
+    username = session.get("username")
+    statut = session.get("statut")
+    id = session.get("id")
+    monEcole = chercher_monEcole(id)
+
     if request.method == "POST":
+
         # si le formulaire est envoyé
-        # data = request.form
-        # saisie = data.get('term')
-        # resultats = chercher_ecoleLike(saisie)
-        return render_template("views/dashboard/referentPersonnel.html")
-    else:
+        submit_type = request.form.get('submit-type')
+        data = request.form
+
+        if submit_type == "Rechercher" :
+            idPersonnel = data.get('idPersonnel')
+            conn = sqlite3.connect(bdd_name).cursor().execute("""SELECT * FROM Personnel WHERE idPersonnel = ?
+                                                              """, (idPersonnel,) )
+            Personnel = conn.fetchall()[0]
+            print(Personnel)
+            print("aaaaaaaaaaaa",Personnel)
+            # pour le selecteur des utilisateur
+            data = request.form
+            sexe = Personnel[3]
+            nomPersonnel = Personnel[1]
+            prenomPersonnel = Personnel[2]
+            telephone = Personnel[4]
+            email = Personnel[5]
+            fonction = Personnel[6]
+
+            print(Personnel)
+
+            conn = sqlite3.connect(bdd_name).cursor().execute("""SELECT cycleScolaire FROM Ecole, Utilisateur WHERE Ecole.idEcole = Utilisateur.idEcole AND idUtilisateur = ?""", (id,))
+            cycleScolaire = conn.fetchall()[0][0]
+            conn = sqlite3.connect(bdd_name).cursor().execute("""SELECT idPersonnel, Nom, Prenom, Sexe, Telephone, Email, Fonction, idClasse FROM Personnel p JOIN Utilisateur u ON p.idEcole = u.idEcole WHERE p.idEcole = ?""", (monEcole,))
+            personnels = conn.fetchall()
+            conn.close()
+
+            return render_template("views/dashboard/referentPersonnel.html",
+                                   cycleScolaire = cycleScolaire, personnels = personnels, profs = chercher_profs(monEcole),
+                                   affichage=True,
+                                   idPersonnel=idPersonnel, sexe=sexe, nomPersonnel=nomPersonnel, prenomPersonnel=prenomPersonnel, telephone=telephone, email=email, fonction=fonction
+                                   )
+
+        
+        if submit_type == 'Ajouter':
+
+            # Traitement pour le formulaire d'ajout
+            print("\n\n AJOUT PERSONNEL \n\n")
+
+            sexe = data.get('sexe')
+            nomPersonnel = data.get('nomPersonnel')
+            prenomPersonnel = data.get('prenomPersonnel')
+            telephone = data.get('telephone')
+            email = data.get('email')
+            fonction = data.get('fonction')
+        
+            inserer_personnel(nomPersonnel, prenomPersonnel, sexe, telephone, email, fonction, monEcole)
+
+            return redirect(request.url)
+
+        if submit_type == 'Modifier' :
+            print("\n\n MODIFICATION PERSONNEL \n\n")
+
+            idPersonnel = data.get('idPersonnel')
+            sexe = data.get('sexe')
+            nomPersonnel = data.get('nomPersonnel')
+            prenomPersonnel = data.get('prenomPersonnel')
+            telephone = data.get('telephone')
+            email = data.get('email')
+            fonction = data.get('fonction')
+
+            update_personnel(idPersonnel, sexe, nomPersonnel, prenomPersonnel, telephone, email, fonction)
+
+            return redirect(request.url)
+    
+        if submit_type == 'Supprimer':
+            print("\n\n SUPPRESSION PERSONNEL \n\n")
+
+            idPersonnel = data.getlist('idPersonnel')
+            print("idpersonnel",idPersonnel)
+
+            supprimer_personnel(idPersonnel)
+
+            return redirect(request.url)
+
+    else :
         # méthode GET
-        return render_template("views/dashboard/referentPersonnel.html")
+        if username is not None and statut == 0 :
+            conn = sqlite3.connect(bdd_name).cursor().execute("""
+                                                              SELECT cycleScolaire
+                                                              FROM Ecole, Utilisateur
+                                                              WHERE Ecole.idEcole = Utilisateur.idEcole
+                                                                AND idUtilisateur = ?""", (id,)
+                                                            )
+            cycleScolaire = conn.fetchall()[0][0]
+            conn = sqlite3.connect(bdd_name).cursor().execute("""
+                                                    SELECT idPersonnel, Nom, Prenom, Sexe, Telephone, Email, Fonction, idClasse
+                                                    FROM Personnel p
+                                                    JOIN Utilisateur u ON p.idEcole = u.idEcole
+                                                    WHERE p.idEcole = ?""", (monEcole,)
+                                                              )
+            personnels = conn.fetchall()
+            conn.close()
+            return render_template("views/dashboard/referentPersonnel.html",
+                                   cycleScolaire = cycleScolaire,
+                                   personnels = personnels,
+                                   profs = chercher_profs(monEcole)
+                                   )
+        return redirect(url_for('dashboard'))
 
 
 # ############################################################################
-#                                   RECHERCHER UNE ECOLE                    
+#                          RECHERCHER UNE ECOLE                    
 # ############################################################################
 
 @app.route("/recherche", methods=["POST", "GET"])

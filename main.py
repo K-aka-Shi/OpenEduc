@@ -491,15 +491,8 @@ def referentClasse() :
                                                                 AND idUtilisateur = ?""", (id,)
                                                             )
             cycleScolaire = conn.fetchall()[0][0]
-            conn = sqlite3.connect(bdd_name).cursor().execute("""
-                                                              SELECT c.idClasse, c.niveauScolaire, p.Nom, p.Prenom, c.Effectif, c.Moyenne
-                                                              FROM Classe c
-                                                              JOIN Personnel p ON c.idPersonnel = p.idPersonnel
-                                                              JOIN Utilisateur u ON c.idEcole = u.idEcole
-                                                              WHERE u.idUtilisateur = ?""", (id,)
-                                                              )
-            classes = conn.fetchall()
             conn.close()
+            classes = chercher_classe(id)
             return render_template("views/dashboard/referentClasse.html",
                                    cycleScolaire = cycleScolaire,
                                    classes = classes,

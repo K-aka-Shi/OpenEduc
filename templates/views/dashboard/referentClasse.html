@@ -155,7 +155,7 @@
             <tr>
                 <th>ID</th>
                 <th>Niveaux</th>
-                <th>Nom de la classe</th>
+                <th>Nom de la classe (Professeur)</th>
                 <th>Effectifs</th>
                 <th>Moyenne</th>
                 <th>Action</th>
@@ -166,7 +166,7 @@
                 <tr>
                     <td value="classe[0]">{{ classe[0] }}</td>
                     <td value="classe[0]">{{ classe[1] }}</td>
-                    <td value="classe[0]">{{ classe[2].upper() }} {{ classe[3] }}</td>
+                    <td value="classe[0]">{{ classe[2].upper() if classe[2] }} {{ classe[3] }}</td>
                     <td value="classe[0]">{{ classe[4] }}</td>
                     <td value="classe[0]">{{ classe[5] if classe[5] }}</td>
                     <td>

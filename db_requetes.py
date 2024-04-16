@@ -497,6 +497,7 @@ def supprimer_personnel(ids) :
     conn = sqlite3.connect(bdd_name)
     cur = conn.cursor()
     for id in ids :
+        cur.execute("UPDATE Classe SET idPersonnel = NULL WHERE idPersonnel = ?", (id,) )
         cur.execute("DELETE FROM Personnel WHERE idPersonnel = ?", (id,) )        
     conn.commit()
     conn.close()
@@ -508,14 +509,15 @@ def chercher_classe(idUtilisateur) :
     conn = sqlite3.connect(bdd_name)
     cur = conn.cursor()
     res = cur.execute("""
-                      SELECT p.idPersonnel, p.Nom, p.Prenom, p.Sexe, p.Telephone, p.Email, p.Fonction, p.idEcole, p.idClasse
-                      FROM Personnel p
-                      INNER JOIN Utilisateur u ON p.idEcole = u.idEcole
-                      WHERE u.idUtilisateur = ?;
+                    SELECT c.idClasse, c.niveauScolaire, p.Nom, p.Prenom, c.Effectif, c.Moyenne
+                    FROM Classe c
+                    LEFT JOIN Personnel p ON c.idClasse = p.idClasse
+                    INNER JOIN Utilisateur u ON c.idEcole = u.idEcole
+                    WHERE u.idUtilisateur = ?;
                       """, (idUtilisateur,))
-    Personnel = res.fetchall()
+    Classe = res.fetchall()
     conn.close()
-    return Personnel
+    return Classe
 
 def inserer_classe(effectif, moyenne, niveau_scolaire, id_personnel, id_ecole):
     conn = sqlite3.connect(bdd_name)

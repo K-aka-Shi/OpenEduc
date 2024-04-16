@@ -336,6 +336,7 @@ def dashboardAdminEditEcole() :
             cycleScolaire = data.get('cycleScolaire')
             update_ecole(id_ecole, nomEcole, adresse, ville, codePostal, nbEleves, telephone, email, cycleScolaire)
             print("chercher",chercher_ecole_testVerifAdd(nomEcole, adresse, ville, codePostal))
+            flash("Ecole modifiée !", category='success')  # Affichage du message de succes
             return render_template("views/dashboard/adminEditEcole.html",
                                    utilisateurs=users,
                                    ville=ville, codePostal=codePostal, nbEleves=nbEleves, telephone=telephone, email=email, cycleScolaire=cycleScolaire
@@ -373,6 +374,8 @@ def dashboardAdminDeleteEcole() :
             ecoles = data.getlist('ecole_id')
             print("\n\nSELECTIONNE",ecoles)
             supprimer_ecoleByID(ecoles)
+            flash("Ecole supprimée !", category='success')  # Affichage du message de succes
+
             return redirect(request.url)
 
     else:
@@ -409,6 +412,7 @@ def referentEcole() :
         email = data.get('email')
         cycleScolaire = data.get('cycleScolaire')
         update_ecole(MonEcoleID, nomEcole, adresse, ville, codePostal, None, telephone, email, cycleScolaire)
+        flash("Ecole modifiée !", category='success')  # Affichage du message de succes
         return redirect(request.url)
     else:
         # méthode GET
@@ -453,6 +457,7 @@ def referentClasse() :
             moyenne = data.get('moyenne')
 
             inserer_classe(effectif, moyenne, niveauScolaire, prof, monEcole)
+            flash("Classe crée !", category='success')  # Affichage du message de succes
 
             return redirect(request.url)
 
@@ -467,6 +472,7 @@ def referentClasse() :
             moyenne = data.get('moyenne')
 
             update_classe(idClasse,niveauScolaire,prof,effectif,moyenne)
+            flash("Classe modifiée !", category='success')  # Affichage du message de succes
 
             return redirect(request.url)
     
@@ -478,6 +484,7 @@ def referentClasse() :
             print("idClasse",idClasse)
 
             supprimer_classe(idClasse)
+            flash("Classe supprimée !", category='success')  # Affichage du message de succes
 
             return redirect(request.url)
 
@@ -558,6 +565,7 @@ def referentPersonnel() :
             fonction = data.get('fonction')
         
             inserer_personnel(nomPersonnel, prenomPersonnel, sexe, telephone, email, fonction, monEcole)
+            flash(f"{fonction} crée !", category='success')  # Affichage du message de succes
 
             return redirect(request.url)
 
@@ -573,6 +581,7 @@ def referentPersonnel() :
             fonction = data.get('fonction')
 
             update_personnel(idPersonnel, sexe, nomPersonnel, prenomPersonnel, telephone, email, fonction)
+            flash(f"{nomPersonnel, prenomPersonnel} modifié !", category='success')  # Affichage du message de succes
 
             return redirect(request.url)
     
@@ -583,6 +592,7 @@ def referentPersonnel() :
             print("idpersonnel",idPersonnel)
 
             supprimer_personnel(idPersonnel)
+            flash(f"Personnel supprimé !", category='success')  # Affichage du message de succes
 
             return redirect(request.url)
 

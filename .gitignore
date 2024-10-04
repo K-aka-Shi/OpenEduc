@@ -6,6 +6,7 @@ __pycache__/
 
 # Répertoire virtuel Python
 env/
+.venv/
 
 # Fichiers de logs
 *.log
